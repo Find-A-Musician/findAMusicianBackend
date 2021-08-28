@@ -11,3 +11,4 @@ https://www.figma.com/file/HOpu5h8KqPTw0abgOWBM0i/Find-a-musicien?node-id=0%3A1
 
 - postgresql : https://glaucia86.medium.com/developing-a-crud-node-js-application-with-postgresql-d25febb1cc4
 
+- openAPI : https://www.google.com/amp/s/www.freecodecamp.org/news/how-to-build-explicit-apis-with-openapi/amp/
