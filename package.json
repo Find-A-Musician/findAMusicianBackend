@@ -8,12 +8,14 @@
     "express": "^4.17.1",
     "express-openapi": "^9.2.0"
   },
-  "type" : "module",
+  "type": "module",
   "devDependencies": {
+    "husky": "^7.0.2",
     "nodemon": "^2.0.12"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "test": "echo \" test runnning \" ",
     "start": "nodemon index.js"
   },
   "repository": {
