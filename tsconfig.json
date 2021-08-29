@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es6",
+      "moduleResolution": "node",
+      "noImplicitAny": false,
+      "removeComments": false,
+      "preserveConstEnums": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "declaration": true,
+      "rootDir": "./",
+      "outDir": "./build"
+    },
+    "include": [
+      "**/*.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  }
