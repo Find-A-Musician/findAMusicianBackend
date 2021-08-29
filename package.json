@@ -1,0 +1,29 @@
+{
+  "name": "findamusicien",
+  "version": "1.0.0",
+  "description": "A website for my school where the musicians can contact each others, create groups and register to play at events",
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-openapi": "^9.2.0"
+  },
+  "type" : "module",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomainGuarinoni/findAMusicien.git"
+  },
+  "author": "RomainGuarinoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RomainGuarinoni/findAMusicien/issues"
+  },
+  "homepage": "https://github.com/RomainGuarinoni/findAMusicien#readme"
+}
