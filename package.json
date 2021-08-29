@@ -8,7 +8,6 @@
     "express": "^4.17.1",
     "express-openapi": "^9.2.0"
   },
-  "type": "module",
   "devDependencies": {
     "husky": "^7.0.2",
     "nodemon": "^2.0.12"
