@@ -18,6 +18,18 @@ const apiDoc = {
       },
       required: ["id", "message"],
     },
+    Musicians: {
+      type: "object",
+      properties: {
+        id: { type: "number" },
+        email: { type: "string", format: "email" },
+        given_name: { type: "string" },
+        family_name: { type: "string" },
+        phone: { type: "number" },
+        facebook_url: { type: "string" },
+      },
+      required: ["id", "email"],
+    },
   },
   paths: {},
 };
