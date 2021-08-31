@@ -1,0 +1,15 @@
+{
+    "restartable": "rs",
+    "ignore": [
+      ".git",
+      "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "events": {
+      "restart": "echo 'yess '"
+    },
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,json,ts"
+  }

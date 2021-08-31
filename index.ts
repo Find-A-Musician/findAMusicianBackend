@@ -6,7 +6,7 @@ const httpApp = new http.Server(app);
 const PORT = process.env.PORT || 8000;
 
 app.get("/", (req, res, next) => {
-  res.status(200).send("oklm");
+  res.status(200).send("yesy");
 });
 
 if (process.env.NODE_ENV === "production") {
