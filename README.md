@@ -21,3 +21,5 @@ https://www.figma.com/file/HOpu5h8KqPTw0abgOWBM0i/Find-a-musicien?node-id=0%3A1
 - openAPI : https://github.com/mwangiKibui/node.js-rest-api-documentation
 
 - auth express : https://youtu.be/mbsmsi7l3r4
+
+- Eslint : https://dev.to/devdammak/setting-up-eslint-in-your-javascript-project-with-vs-code-2amf
