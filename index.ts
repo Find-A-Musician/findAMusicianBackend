@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import swaggerUi from 'swagger-ui-express';
+import createAPITypes from './command/generateType';
 import userRouter from './api/routes';
 import docs from './api/docs/index';
 const app = express();
@@ -10,6 +11,7 @@ export const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
+
 
 app.get('/', (req, res, next) => {
   res.status(200).send('yesy');
@@ -29,8 +31,12 @@ if (process.env.NODE_ENV === 'production') {
   // Handle SPA
   app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'));
 }
+
+createAPITypes();
+
 httpApp.listen(PORT, () => {
   console.log(' 🔌 Listening on port : http://localhost:' + PORT);
   console.log('📕 Swager documention : http://localhost:'+PORT+'/api-docs');
 });
+
 

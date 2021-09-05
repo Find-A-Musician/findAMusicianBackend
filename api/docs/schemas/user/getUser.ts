@@ -2,6 +2,7 @@ import {HandlerDefinition} from '../../../../typing';
 
 const schema:HandlerDefinition = {
   get: {
+    operationId: 'getUser',
     tags: ['test'],
     requestBody: {
       required: true,
