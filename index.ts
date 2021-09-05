@@ -44,4 +44,3 @@ httpApp.listen(PORT, () => {
   console.log('Listening on port : http://localhost:' + PORT);
 });
 
-const test = 'test';
