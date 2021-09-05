@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import swaggerUi from 'swagger-ui-express';
-import userRouter from './api/routes/test';
+import userRouter from './api/routes';
 import docs from './api/docs/index';
 const app = express();
 const httpApp = new http.Server(app);
@@ -16,6 +16,9 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/test', userRouter);
+app.get('/docs', (req, res)=>{
+  res.status(200).json(docs);
+});
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
 

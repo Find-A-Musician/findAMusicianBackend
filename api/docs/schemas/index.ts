@@ -1,8 +1,9 @@
+import getUser from './user/getUser';
+
 const handler = {
   paths: {
-    '/todos': {
-    },
-    '/todos/{id}': {
+    '/user': {
+      ...getUser,
     },
   }};
 
