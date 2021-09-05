@@ -20,7 +20,7 @@
     "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
-    "husky": "^7.0.2",
+    "husky": "^4.2.3",
     "jest": "^27.1.0",
     "nodemon": "^2.0.12",
     "openapi-types": "^9.3.0",
@@ -33,7 +33,7 @@
     "start": "node index.ts",
     "dev": "nodemon index.ts",
     "build": "tsc --project ./",
-    "lint" : "eslint './**/*.ts'"
+    "lint": "eslint './**/*.ts'"
   },
   "repository": {
     "type": "git",
