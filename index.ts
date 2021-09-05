@@ -43,3 +43,5 @@ if (process.env.NODE_ENV === 'production') {
 httpApp.listen(PORT, () => {
   console.log('Listening on port : http://localhost:' + PORT);
 });
+
+const test = 'test';
