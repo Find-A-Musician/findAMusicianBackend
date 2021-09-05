@@ -44,5 +44,11 @@
   "bugs": {
     "url": "https://github.com/RomainGuarinoni/findAMusicien/issues"
   },
-  "homepage": "https://github.com/RomainGuarinoni/findAMusicien#readme"
+  "homepage": "https://github.com/RomainGuarinoni/findAMusicien#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
 }
