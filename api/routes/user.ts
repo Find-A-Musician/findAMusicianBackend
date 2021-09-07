@@ -7,7 +7,7 @@ import {Response, Request} from 'express';
 
 type getUsers = operations['getUser'];
 type getUsersByIdBody = getUsers['requestBody']['content']['application/json'];
-type getUserByIdQuery = getUsers['parameters']['query'];
+type getUserByIdPath = getUsers['parameters']['path'];
 type getUserByIdResponse =
   getUsers['responses']['200']['content']['application/json'];
 
@@ -15,14 +15,15 @@ type getUserByIdResponse =
 const router = express.Router();
 
 router.post(
-    '/',
+    '/:other/:test',
     (
-        req : Request<{}, {}, getUsersByIdBody, getUserByIdQuery>,
+        req : Request<getUserByIdPath, {}, getUsersByIdBody, {}>,
         res : Response<getUserByIdResponse | HttpError, {}>,
     ) => {
-      console.log(`body : ${req.body.id}`);
-      console.log(`params : ${req.query.test} and ${req.query.other}`);
-
+      // console.log(`body : ${req.body.id}`);
+      // console.log(`params : ${req.query.} and ${req.query.other}`);
+      console.log(req.params.other);
+      console.log(req.params.test);
       res.status(200).json({id: 'it worksq'});
     },
 );

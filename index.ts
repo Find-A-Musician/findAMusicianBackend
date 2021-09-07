@@ -22,8 +22,7 @@ app.get('/docs', (req, res)=>{
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
-console.log(PORT);
-console.log(docs);
+
 if (process.env.NODE_ENV === 'production') {
   // Static folder
   app.use(express.static(__dirname + '/public/'));

@@ -12,7 +12,7 @@ const schema:HandlerDefinition = {
     parameters: [
       {
         name: 'test',
-        in: 'query',
+        in: 'path',
         required: true,
         schema: {
           type: 'number',
@@ -21,7 +21,7 @@ const schema:HandlerDefinition = {
       },
       {
         name: 'other',
-        in: 'query',
+        in: 'path',
         required: true,
         schema: {
           type: 'number',

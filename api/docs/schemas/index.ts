@@ -2,7 +2,7 @@ import postUser from './user/postUser';
 
 const handler = {
   paths: {
-    '/user': {
+    '/user/{other}/{test}': {
       ...postUser,
     },
   }};

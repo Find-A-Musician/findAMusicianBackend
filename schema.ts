@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  "/user": {
+  "/user/{other}/{test}": {
     post: operations["getUser"];
   };
 }
@@ -21,7 +21,7 @@ export interface components {
 export interface operations {
   getUser: {
     parameters: {
-      query: {
+      path: {
         test: number;
         other: number;
       };
