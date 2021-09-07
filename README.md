@@ -23,3 +23,5 @@ https://www.figma.com/file/HOpu5h8KqPTw0abgOWBM0i/Find-a-musicien?node-id=0%3A1
 - auth express : https://youtu.be/mbsmsi7l3r4
 
 - Eslint : https://dev.to/devdammak/setting-up-eslint-in-your-javascript-project-with-vs-code-2amf
+
+- pgsql : https://jessitron.com/2020/05/25/develop-in-docker-node-js-express-postgresql-on-heroku/
