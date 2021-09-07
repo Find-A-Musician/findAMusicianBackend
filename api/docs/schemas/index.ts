@@ -1,9 +1,9 @@
-import getUser from './user/getUser';
+import postUser from './user/postUser';
 
 const handler = {
   paths: {
     '/user': {
-      ...getUser,
+      ...postUser,
     },
   }};
 

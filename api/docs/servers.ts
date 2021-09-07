@@ -1,9 +1,8 @@
-import {PORT} from '../../index';
 
 const server = {
   servers: [
     {
-      url: 'http://localhost:'+PORT,
+      url: `http://localhost:8000`,
       description: 'Local server',
     },
   ],

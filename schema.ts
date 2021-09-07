@@ -5,7 +5,7 @@
 
 export interface paths {
   "/user": {
-    get: operations["getUser"];
+    post: operations["getUser"];
   };
 }
 
@@ -20,14 +20,26 @@ export interface components {
 
 export interface operations {
   getUser: {
+    parameters: {
+      query: {
+        test: number;
+        other: number;
+      };
+    };
     responses: {
       /** good */
-      200: unknown;
+      200: {
+        content: {
+          "application/json": {
+            id: string;
+          };
+        };
+      };
     };
     requestBody: {
       content: {
         "application/json": {
-          id?: string;
+          id: string;
         };
       };
     };
