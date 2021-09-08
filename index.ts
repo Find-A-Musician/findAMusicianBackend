@@ -5,11 +5,24 @@ import swaggerUi from 'swagger-ui-express';
 import initializeTypes from './command/initializeTypes';
 import userRouter from './api/routes/user';
 import docs from './api/docs/index';
+import {Pool} from 'pg';
 
 export const PORT = process.env.PORT || 8000;
 
 const app = express();
 const httpApp = new http.Server(app);
+const pg = new Pool({
+  user: 'user',
+  host: '',
+  database: 'db',
+  password: 'pass',
+  port: 5432,
+});
+pg.connect(function(err) {
+  if (err) throw err;
+  console.log('Connected!');
+});
+
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +35,7 @@ app.get('/docs', (req, res)=>{
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
-
+console.log('coucou');
 if (process.env.NODE_ENV === 'production') {
   // Static folder
   app.use(express.static(__dirname + '/public/'));

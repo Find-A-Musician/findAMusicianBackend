@@ -4,6 +4,7 @@
   "description": "A website for my school where the musicians can contact each others, create groups and register to play at events",
   "main": "index.js",
   "dependencies": {
+    "@types/pg": "^8.6.1",
     "async": "^3.2.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
