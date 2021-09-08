@@ -8,7 +8,10 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "openapi-typescript": "^4.0.2",
-    "swagger-ui-express": "^4.1.6"
+    "pg": "^8.7.1",
+    "sql-template-strings": "^2.2.2",
+    "swagger-ui-express": "^4.1.6",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -31,7 +34,7 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node index.ts",
+    "start": "node ./build/index.js",
     "dev": "nodemon index.ts",
     "build": "tsc --project ./",
     "lint": "eslint './**/*.ts'",

@@ -7,9 +7,6 @@ const components = {
           message: {
             type: 'string',
           },
-          internal_code: {
-            type: 'string',
-          },
         },
       },
     },

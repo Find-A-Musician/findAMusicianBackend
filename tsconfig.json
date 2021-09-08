@@ -10,12 +10,18 @@
       "esModuleInterop": true,
       "declaration": true,
       "rootDir": "./",
-      "outDir": "./build"
+      "outDir": "./build",
+      "baseUrl" : ".",
+      "paths" : {
+        "@schema" : ["schema"],
+        "@typing" : ["typing"]
+      }
     },
     "include": [
       "**/*.ts"
     ],
     "exclude": [
       "node_modules"
-    ]
+    ],
+   
   }

@@ -8,5 +8,6 @@ export type HandlerDefinition=
 
 export type HttpError = {
     code : number,
-    msg?: string
+    msg: string,
+    stack?:string
 }
