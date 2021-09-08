@@ -33,9 +33,12 @@ if (process.env.NODE_ENV === 'production') {
 
 
 httpApp.listen(PORT, async () => {
-  await initializeTypes();
-  console.log(' 🔌 Listening on port : http://localhost:' + PORT);
-  console.log('📕 Swager documention : http://localhost:'+PORT+'/api-docs');
+  if (process.env.NODE_ENV==='development') {
+    await initializeTypes();
+    console.log('📕 Swager documention : http://localhost:'+PORT+'/api-docs');
+  } {
+    console.log(' 🔌 Listening on port : http://localhost:' + PORT);
+  }
 });
 
 

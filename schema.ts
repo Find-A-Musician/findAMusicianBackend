@@ -13,7 +13,6 @@ export interface components {
   schemas: {
     test: {
       message?: string;
-      internal_code?: string;
     };
   };
 }

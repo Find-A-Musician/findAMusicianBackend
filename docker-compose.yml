@@ -8,13 +8,12 @@ services:
     environment:
       DATABASE_URL: postgres://user:pass@postgres:5432/db
       NODE_ENV: development
-      PORT: 3000
+      PORT: 8000
     ports:
       - '8000:8000'
+    networks:
+      - default
     command: npm run dev
-    volumes:
-      - .:/app/
-      - /app/node_modules
 
   postgres:
     image: postgres:12.2
