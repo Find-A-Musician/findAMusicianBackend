@@ -10,6 +10,9 @@ export interface paths {
   "/register": {
     post: operations["register"];
   };
+  "/login": {
+    post: operations["login"];
+  };
 }
 
 export interface components {
@@ -68,6 +71,27 @@ export interface operations {
       content: {
         "application/json": components["schemas"]["musician"] & {
           password: string;
+        };
+      };
+    };
+  };
+  login: {
+    responses: {
+      /** Login successful */
+      200: {
+        content: {
+          "application/json": {
+            token?: string;
+            refresh_token?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          email?: string;
+          password?: string;
         };
       };
     };

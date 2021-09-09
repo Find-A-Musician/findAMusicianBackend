@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import initializeTypes from './command/initializeTypes';
 import userRouter from './api/routes/user';
 import registerRouter from './api/routes/register';
+import loginRouter from './api/routes/login';
 import docs from './api/docs/index';
 require('dotenv').config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 
 app.use('/user', userRouter);
 app.use('/register', registerRouter);
+app.use('/login', loginRouter);
 app.get('/docs', (req, res)=>{
   res.status(200).json(docs);
 });

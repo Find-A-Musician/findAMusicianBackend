@@ -16,27 +16,26 @@ type RegisterResponse =
 const router = express.Router();
 
 router.post(
-    '/',
-    (
+    '/', async (
         req: Request<{}, {}, RegisterBody, {}>,
         res: Response<RegisterResponse | HttpError, {}>,
     ) => {
       const body = req.body;
 
       const saltRound = 10;
-      bcrypt.hash(body.password, saltRound, function(err, hash) {
+      bcrypt.hash(body.password, saltRound, async function(err, hash) {
         if (err) {
           res
               .status(500)
               .json({
                 code: 500,
-                msg: 'Could not create hash',
+                msg: 'E_HASH_ERROR',
                 stack: JSON.stringify(err),
               });
         }
         const userId = uuidV4();
         try {
-          pg.query(
+          await pg.query(
               sql`INSERT INTO musicians (
           id,
           email,
@@ -75,7 +74,7 @@ router.post(
               .status(400)
               .json({
                 code: 400,
-                msg: 'cannot register this user',
+                msg: 'E_SQL_ERROR',
                 stack: JSON.stringify(err),
               });
         }
