@@ -3,7 +3,7 @@ import {HandlerDefinition} from '@typing';
 const schema:HandlerDefinition ={
   'post': {
     operationId: 'login',
-    tags: ['user'],
+    tags: ['auth'],
     requestBody: {
       required: true,
       content: {

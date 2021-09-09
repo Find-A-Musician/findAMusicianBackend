@@ -6,8 +6,9 @@ import swaggerUi from 'swagger-ui-express';
 import initializeTypes from './command/initializeTypes';
 import registerRouter from './api/routes/register';
 import loginRouter from './api/routes/login';
+import musiciansRouter from './api/routes/musicians';
 import docs from './api/docs/index';
-// import authenticateToken from 'api/auth/authenticateToken';
+import authenticateToken from './api/auth/authenticateToken';
 
 export const PORT = process.env.PORT || 8000;
 
@@ -18,9 +19,13 @@ const httpApp = new http.Server(app);
 app.use(cors());
 app.use(express.json());
 
-
+// auth routes
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
+
+// musicians route
+app.use('/musicians', authenticateToken, musiciansRouter);
+
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));

@@ -1,5 +1,6 @@
 import register from './register';
 import login from './login';
+import musicians from './musicians';
 const handler = {
   paths: {
     '/register': {
@@ -7,6 +8,9 @@ const handler = {
     },
     '/login': {
       ...login,
+    },
+    '/musicians': {
+      ...musicians,
     },
   }};
 

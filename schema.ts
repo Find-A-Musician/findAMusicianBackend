@@ -10,6 +10,9 @@ export interface paths {
   "/login": {
     post: operations["login"];
   };
+  "/musicians": {
+    get: operations["getMusicians"];
+  };
 }
 
 export interface components {
@@ -66,6 +69,16 @@ export interface operations {
         "application/json": {
           email?: string;
           password?: string;
+        };
+      };
+    };
+  };
+  getMusicians: {
+    responses: {
+      /** A list of all the musicians */
+      200: {
+        content: {
+          "application/json": components["schemas"]["musician"][];
         };
       };
     };
