@@ -2,7 +2,7 @@
   "name": "findamusicien",
   "version": "1.0.0",
   "description": "A website for my school where the musicians can contact each others, create groups and register to play at events",
-  "main": "index.js",
+  "main": "index.ts",
   "dependencies": {
     "@types/pg": "^8.6.1",
     "async": "^3.2.1",
@@ -36,7 +36,7 @@
   "scripts": {
     "test": "jest",
     "start": "node ./build/index.js",
-    "dev": "nodemon index.ts",
+    "dev": "nodemon -L",
     "build": "tsc --project ./",
     "lint": "eslint './**/*.ts'",
     "prepare": "husky install"

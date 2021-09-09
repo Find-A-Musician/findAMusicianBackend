@@ -22,7 +22,6 @@ router.post(
       console.log(req.params.test);
       console.log(req.body.id);
 
-
       res.status(200).json({id: 'it works'});
     },
 );

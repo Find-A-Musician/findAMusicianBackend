@@ -11,16 +11,19 @@ export const PORT = process.env.PORT || 8000;
 
 const app = express();
 const httpApp = new http.Server(app);
+
 const pg = new Pool({
   user: 'user',
-  host: '',
+  host: 'postgres',
   database: 'db',
   password: 'pass',
   port: 5432,
 });
-pg.connect(function(err) {
-  if (err) throw err;
-  console.log('Connected!');
+pg.connect(function(err, client) {
+  if (err) {
+    console.log(err);
+  };
+  console.log('connected to the db');
 });
 
 
@@ -35,7 +38,7 @@ app.get('/docs', (req, res)=>{
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
-console.log('coucou');
+
 if (process.env.NODE_ENV === 'production') {
   // Static folder
   app.use(express.static(__dirname + '/public/'));
