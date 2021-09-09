@@ -7,12 +7,23 @@ export interface paths {
   "/user/{other}/{test}": {
     post: operations["getUser"];
   };
+  "/register": {
+    post: operations["register"];
+  };
 }
 
 export interface components {
   schemas: {
-    test: {
-      message?: string;
+    musician: {
+      email: string;
+      givenName: string;
+      familyName: string;
+      phone?: string;
+      facebookUrl?: string;
+      twitterUrl?: string;
+      instagramUrl?: string;
+      promotion: "L1" | "L2" | "L3" | "M1" | "M2";
+      location: "Douai" | "Lille";
     };
   };
 }
@@ -29,9 +40,7 @@ export interface operations {
       /** good */
       200: {
         content: {
-          "application/json": {
-            id: string;
-          };
+          "application/json": components["schemas"]["musician"];
         };
       };
     };
@@ -39,6 +48,26 @@ export interface operations {
       content: {
         "application/json": {
           id: string;
+        };
+      };
+    };
+  };
+  register: {
+    responses: {
+      /** The user has been registered in the db */
+      201: {
+        content: {
+          "application/json": {
+            token?: string;
+            refreshToken?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["musician"] & {
+          password: string;
         };
       };
     };
