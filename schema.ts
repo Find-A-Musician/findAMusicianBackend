@@ -4,9 +4,6 @@
  */
 
 export interface paths {
-  "/user/{other}/{test}": {
-    post: operations["getUser"];
-  };
   "/register": {
     post: operations["register"];
   };
@@ -32,29 +29,6 @@ export interface components {
 }
 
 export interface operations {
-  getUser: {
-    parameters: {
-      path: {
-        test: number;
-        other: number;
-      };
-    };
-    responses: {
-      /** good */
-      200: {
-        content: {
-          "application/json": components["schemas"]["musician"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          id: string;
-        };
-      };
-    };
-  };
   register: {
     responses: {
       /** The user has been registered in the db */

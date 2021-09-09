@@ -1,13 +1,13 @@
+require('dotenv').config();
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import swaggerUi from 'swagger-ui-express';
 import initializeTypes from './command/initializeTypes';
-import userRouter from './api/routes/user';
 import registerRouter from './api/routes/register';
 import loginRouter from './api/routes/login';
 import docs from './api/docs/index';
-require('dotenv').config();
+// import authenticateToken from 'api/auth/authenticateToken';
 
 export const PORT = process.env.PORT || 8000;
 
@@ -19,13 +19,10 @@ app.use(cors());
 app.use(express.json());
 
 
-app.use('/user', userRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-app.get('/docs', (req, res)=>{
-  res.status(200).json(docs);
-});
 
+// serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
 
 
