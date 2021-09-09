@@ -14,8 +14,12 @@ services:
     networks:
       - default
     command: npm run dev
+    volumes:
+      - .:/app/
+      - /app/node_modules
 
   postgres:
+    container_name: 'findAMusician_postgres'
     image: postgres:12.2
     ports:
       - '5432:5432'
