@@ -23,8 +23,7 @@ CREATE TABLE musicians (
     instagram_url text UNIQUE DEFAULT NULL,
     promotion promotions DEFAULT NULL,
     password text DEFAULT NULL,
-    salt text NOT NULL,
-    location locations[] DEFAULT NULL
+    location locations DEFAULT NULL
 );
 
 INSERT INTO musicians VALUES (
@@ -38,6 +37,5 @@ INSERT INTO musicians VALUES (
     NULL,
     'M1',
     NULL,
-    'some salt',
-    ARRAY['Douai'::locations, 'Lille'::locations]
+    'Douai'
 );

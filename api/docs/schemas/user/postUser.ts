@@ -1,4 +1,4 @@
-import {HandlerDefinition} from '../../../../typing';
+import {HandlerDefinition} from '@typing';
 
 const schema:HandlerDefinition = {
   post: {
@@ -52,11 +52,10 @@ const schema:HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'object',
-              required: ['id'],
-              properties: {
-                id: {type: 'string'},
-              },
+              $ref: '#/components/schemas/musician',
+            },
+            example: {
+              $ref: '#/components/example/musician',
             },
           },
         },

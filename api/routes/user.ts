@@ -1,9 +1,7 @@
 import express from 'express';
-// import getUserById from '../controller/user';
-import {operations} from '@schema';
 import {HttpError} from '@typing';
 import {Response, Request} from 'express';
-
+import type {operations} from '@schema';
 type getUsers = operations['getUser'];
 type getUsersByIdBody = getUsers['requestBody']['content']['application/json'];
 type getUserByIdPath = getUsers['parameters']['path'];
@@ -22,7 +20,17 @@ router.post(
       console.log(req.params.test);
       console.log(req.body.id);
 
-      res.status(200).json({id: 'it works oh yeah'});
+      res.status(200).json({
+        email: 'john.doe@gmail.com',
+        givenName: 'John',
+        familyName: 'Doe',
+        phone: '+33766072513',
+        facebookUrl: 'https://facebook/id',
+        twitterUrl: 'https://twitter/id',
+        instagramUrl: 'https://instagram/id',
+        promotion: 'L1',
+        location: 'Douai',
+      });
     },
 );
 
