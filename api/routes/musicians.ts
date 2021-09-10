@@ -14,10 +14,10 @@ router.get('/', async (
     req: Request,
     res: Response<GetMusicianResponse | HttpError, {}>,
 ) => {
-  const response = await pg.query(
+  const {rows} = await pg.query(
       sql `SELECT * FROM musicians`,
   );
-  console.log(response);
+  res.status(200).json((rows as GetMusicianResponse));
 });
 
 export default router;
