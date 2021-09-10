@@ -24,7 +24,10 @@ const schema:HandlerDefinition ={
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/token',
+              allOf: [
+                {$ref: '#/components/schemas/token'},
+                {$ref: '#/components/schemas/musician'},
+              ],
             },
           },
         },

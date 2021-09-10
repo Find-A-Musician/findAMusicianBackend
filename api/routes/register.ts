@@ -17,7 +17,8 @@ type RegisterResponse =
 const router = express.Router();
 
 router.post(
-    '/', async (
+    '/',
+    async (
         req: Request<{}, {}, RegisterBody, {}>,
         res: Response<RegisterResponse | HttpError, {}>,
     ) => {
@@ -26,13 +27,11 @@ router.post(
       const saltRound = 10;
       bcrypt.hash(body.password, saltRound, async function(err, hash) {
         if (err) {
-          res
-              .status(500)
-              .json({
-                code: 500,
-                msg: 'E_HASH_ERROR',
-                stack: JSON.stringify(err),
-              });
+          res.status(500).json({
+            code: 500,
+            msg: 'E_HASH_ERROR',
+            stack: JSON.stringify(err),
+          });
         }
         const userId = uuidV4();
         try {
@@ -62,25 +61,39 @@ router.post(
           ${hash},
           ${body.location}
         )
-        `);
-          const token = jwt.sign({
-            user: body.email,
-          }, process.env.ACCESS_TOKEN_SECRET);
+        `,
+          );
+          const token = jwt.sign(
+              {
+                user: body.email,
+              },
+              process.env.ACCESS_TOKEN_SECRET,
+          );
 
-          res.status(201).json({token: token, refresh_token: token});
+          res.status(201).json({
+            token: token,
+            refresh_token: token,
+            id: userId,
+            email: body.email,
+            givenName: body.givenName,
+            familyName: body.familyName,
+            phone: body.phone,
+            facebookUrl: body.facebookUrl,
+            instagramUrl: body.instagramUrl,
+            twitterUrl: body.twitterUrl,
+            promotion: body.promotion,
+            location: body.location,
+          });
         } catch (err) {
           console.log(err);
-          res
-              .status(400)
-              .json({
-                code: 400,
-                msg: 'E_SQL_ERROR',
-                stack: JSON.stringify(err),
-              });
+          res.status(400).json({
+            code: 400,
+            msg: 'E_SQL_ERROR',
+            stack: JSON.stringify(err),
+          });
         }
       });
     },
 );
-
 
 export default router;
