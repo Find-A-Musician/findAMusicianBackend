@@ -4,12 +4,14 @@ import cors from 'cors';
 import http from 'http';
 import swaggerUi from 'swagger-ui-express';
 import initializeTypes from './command/initializeTypes';
-import registerRouter from './api/routes/register';
-import loginRouter from './api/routes/login';
-import musiciansRouter from './api/routes/musicians';
 import docs from './api/docs/index';
 import authenticateToken from './api/auth/authenticateToken';
 
+// router import
+import registerRouter from './api/routes/register';
+import loginRouter from './api/routes/login';
+import musiciansRouter from './api/routes/musicians';
+import instrumentRouter from './api/routes/instruments';
 export const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -25,7 +27,7 @@ app.use('/login', loginRouter);
 
 // musicians route
 app.use('/musicians', authenticateToken, musiciansRouter);
-
+app.use('/instruments', authenticateToken, instrumentRouter);
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));

@@ -10,13 +10,13 @@ CREATE TABLE musicians_genres (
 
 INSERT INTO genres VALUES (
         'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
-        'Rock'
+        'rock'
     ), (
         '7d68d33c-3eff-4f5e-985b-c7d9e058e23a',
-        'Metal'
+        'metal'
     ), (
         '54d47edb-97e5-4f45-b2a1-f3048b038650',
-        'Jazz'
+        'jazz'
 );
 
 INSERT INTO musicians_genres VALUES (

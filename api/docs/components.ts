@@ -1,12 +1,20 @@
 import {Component} from '@typing';
 
-const components:Component = {
+const components: Component = {
   components: {
     schemas: {
       musician: {
         type: 'object',
-        required: ['email', 'givenName', 'familyName', 'promotion', 'location'],
+        required: [
+          'id',
+          'email',
+          'givenName',
+          'familyName',
+          'promotion',
+          'location',
+        ],
         properties: {
+          id: {type: 'string'},
           email: {
             type: 'string',
             format: 'email',
@@ -19,6 +27,14 @@ const components:Component = {
           instagramUrl: {type: 'string'},
           promotion: {type: 'string', enum: ['L1', 'L2', 'L3', 'M1', 'M2']},
           location: {type: 'string', enum: ['Douai', 'Lille']},
+        },
+      },
+      instruments: {
+        type: 'object',
+        required: ['name', 'id'],
+        properties: {
+          id: {type: 'string'},
+          name: {type: 'string'},
         },
       },
       token: {
@@ -38,6 +54,5 @@ const components:Component = {
       },
     },
   },
-
 };
 export default components;

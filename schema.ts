@@ -13,11 +13,15 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/instruments": {
+    get: operations["getInstruments"];
+  };
 }
 
 export interface components {
   schemas: {
     musician: {
+      id: string;
       email: string;
       givenName: string;
       familyName: string;
@@ -27,6 +31,10 @@ export interface components {
       instagramUrl?: string;
       promotion: "L1" | "L2" | "L3" | "M1" | "M2";
       location: "Douai" | "Lille";
+    };
+    instruments: {
+      id: string;
+      name: string;
     };
     token: {
       token: string;
@@ -77,6 +85,16 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["musician"][];
+        };
+      };
+    };
+  };
+  getInstruments: {
+    responses: {
+      /** A list of all the instruments */
+      200: {
+        content: {
+          "application/json": components["schemas"]["instruments"][];
         };
       };
     };
