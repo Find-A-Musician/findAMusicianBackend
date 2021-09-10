@@ -12,6 +12,8 @@ import registerRouter from './api/routes/register';
 import loginRouter from './api/routes/login';
 import musiciansRouter from './api/routes/musicians';
 import instrumentRouter from './api/routes/instruments';
+import musicianRouter from './api/routes/musician';
+
 export const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -26,8 +28,10 @@ app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 
 // musicians route
+app.use('/musician', authenticateToken, musicianRouter);
 app.use('/musicians', authenticateToken, musiciansRouter);
 app.use('/instruments', authenticateToken, instrumentRouter);
+
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
@@ -44,8 +48,12 @@ if (process.env.NODE_ENV === 'production') {
 
 httpApp.listen(PORT, async () => {
   if (process.env.NODE_ENV==='development') {
-    await initializeTypes();
-    console.log('📕 Swager documention : http://localhost:'+PORT+'/api-docs');
+    try {
+      await initializeTypes();
+      console.log('📕 Swager documention : http://localhost:'+PORT+'/api-docs');
+    } catch (err) {
+      throw new Error('E_TYPEs_FAILED');
+    }
   } {
     console.log(' 🔌 Listening on port : http://localhost:' + PORT);
   }

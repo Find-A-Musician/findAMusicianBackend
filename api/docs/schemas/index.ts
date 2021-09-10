@@ -2,6 +2,7 @@ import register from './register';
 import login from './login';
 import musicians from './musicians';
 import instruments from './instruments';
+import musician from './musician';
 const handler = {
   paths: {
     '/register': {
@@ -12,6 +13,9 @@ const handler = {
     },
     '/musicians': {
       ...musicians,
+    },
+    '/musician/{musicianId}': {
+      ...musician,
     },
     '/instruments': {
       ...instruments,

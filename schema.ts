@@ -13,6 +13,9 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/musician/{musicianId}": {
+    patch: operations["patchMusician"];
+  };
   "/instruments": {
     get: operations["getInstruments"];
   };
@@ -49,7 +52,8 @@ export interface operations {
       /** The user has been registered in the db */
       201: {
         content: {
-          "application/json": components["schemas"]["token"];
+          "application/json": components["schemas"]["token"] &
+            components["schemas"]["musician"];
         };
       };
     };
@@ -66,7 +70,8 @@ export interface operations {
       /** Login successful */
       200: {
         content: {
-          "application/json": components["schemas"]["token"];
+          "application/json": components["schemas"]["token"] &
+            components["schemas"]["musician"];
         };
       };
     };
@@ -85,6 +90,32 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["musician"][];
+        };
+      };
+    };
+  };
+  patchMusician: {
+    parameters: {
+      path: {
+        musicianId?: unknown;
+      };
+    };
+    responses: {
+      /** The musician information has been updated */
+      201: unknown;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          email?: string;
+          givenName?: string;
+          familyName?: string;
+          phone?: string;
+          facebookUrl?: string;
+          twitterUrl?: string;
+          instagramUrl?: string;
+          promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
+          location?: "Douai" | "Lille";
         };
       };
     };
