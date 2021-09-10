@@ -2,6 +2,36 @@
 
 A website for my school where the musicians can contact each others, create groups and register to play at events
 
+## Development
+
+To run the API in development mode , run rhis command :
+
+```bash
+docker-compose up
+```
+
+Every changes you maketo the database restart the server and recreate types.
+
+## Useful commands
+
+### Reset the postgres database
+
+```bash
+command/pg_reset.sh
+```
+
+### lint the project
+
+```bash
+npm run lint
+```
+
+### get a random uuid
+
+```bash
+npm run uuid
+```
+
 ## DB architecture
 
 see the DB architecture there : https://app.diagrams.net/#G1qQYCvZrO-_BE1svWz_xGW_J_nBfvSYip
