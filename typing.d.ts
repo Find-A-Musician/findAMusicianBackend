@@ -11,3 +11,7 @@ export type HttpError = {
     msg: string,
     stack?:string
 }
+
+export type Component ={
+    components : OpenAPIV3.ComponentsObject
+}

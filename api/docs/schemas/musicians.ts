@@ -5,7 +5,7 @@ const schema : HandlerDefinition = {
     operationId: 'getMusicians',
     tags: ['musician'],
     security: [
-      {'bearerAuth': []},
+      {'BearerAuth': []},
     ],
     responses: {
       200: {

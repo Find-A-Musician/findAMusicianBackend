@@ -1,4 +1,6 @@
-const components = {
+import {Component} from '@typing';
+
+const components:Component = {
   components: {
     schemas: {
       musician: {
@@ -20,19 +22,14 @@ const components = {
         },
       },
     },
-    example: {
-      musician: {
-        email: 'john.doe@gmail.com',
-        givenName: 'John',
-        familyName: 'Doe',
-        phone: '+33766072513',
-        facebookUrl: 'https://facebook/id',
-        twitterUrl: 'https://twitter/id',
-        instagramUrl: 'https://instagram/id',
-        promotion: 'L1',
-        location: 'Douai',
+    securitySchemes: {
+      BearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
       },
     },
   },
+
 };
 export default components;
