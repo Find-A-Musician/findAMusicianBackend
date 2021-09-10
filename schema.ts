@@ -28,6 +28,10 @@ export interface components {
       promotion: "L1" | "L2" | "L3" | "M1" | "M2";
       location: "Douai" | "Lille";
     };
+    token: {
+      token: string;
+      refresh_token: string;
+    };
   };
 }
 
@@ -37,10 +41,7 @@ export interface operations {
       /** The user has been registered in the db */
       201: {
         content: {
-          "application/json": {
-            token?: string;
-            refreshToken?: string;
-          };
+          "application/json": components["schemas"]["token"];
         };
       };
     };
@@ -57,10 +58,7 @@ export interface operations {
       /** Login successful */
       200: {
         content: {
-          "application/json": {
-            token?: string;
-            refresh_token?: string;
-          };
+          "application/json": components["schemas"]["token"];
         };
       };
     };

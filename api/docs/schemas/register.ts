@@ -30,11 +30,7 @@ const schema:HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'object',
-              properties: {
-                token: {type: 'string'},
-                refreshToken: {type: 'string'},
-              },
+              $ref: '#/components/schemas/token',
             },
           },
         },

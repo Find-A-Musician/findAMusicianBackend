@@ -21,6 +21,14 @@ const components:Component = {
           location: {type: 'string', enum: ['Douai', 'Lille']},
         },
       },
+      token: {
+        type: 'object',
+        required: ['token', 'refresh_token'],
+        properties: {
+          token: {type: 'string'},
+          refresh_token: {type: 'string'},
+        },
+      },
     },
     securitySchemes: {
       BearerAuth: {

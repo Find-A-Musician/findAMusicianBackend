@@ -24,11 +24,7 @@ const schema:HandlerDefinition ={
         content: {
           'application/json': {
             schema: {
-              type: 'object',
-              properties: {
-                token: {type: 'string'},
-                refresh_token: {type: 'string'},
-              },
+              $ref: '#/components/schemas/token',
             },
           },
         },

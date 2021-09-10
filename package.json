@@ -43,6 +43,7 @@
   },
   "scripts": {
     "test": "jest",
+    "coverage" : "jest --coverage",
     "start": "node ./build/index.js",
     "dev": "nodemon -L",
     "build": "tsc --project ./",
