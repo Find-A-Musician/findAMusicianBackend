@@ -1,6 +1,7 @@
 //  documentation for bcrypt : https://www.npmjs.com/package/bcrypt
 
 import express, {Request, Response} from 'express';
+
 import bcrypt from 'bcrypt';
 import {v4 as uuidV4} from 'uuid';
 import type {operations} from '@schema';
@@ -62,7 +63,6 @@ router.post(
           ${body.location}
         )
         `);
-          console.log(process.env.ACCESS_TOKEN_SECRET);
           const token = jwt.sign({
             user: body.email,
           }, process.env.ACCESS_TOKEN_SECRET);

@@ -15,7 +15,7 @@ export default function authenticateToken(
     if (err) {
       res.status(403).json({code: 403, msg: 'E_TOKEN_INVALID'});
     }
-    console.log(result);
+    req.user=result.user;
     next();
   });
 };

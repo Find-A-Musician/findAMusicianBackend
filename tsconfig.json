@@ -12,11 +12,16 @@
       "rootDir": "./",
       "outDir": "./build",
       "baseUrl" : ".",
+      "typeRoots": [
+        "@types",
+        "./node_modules/@types",
+      ],
       "paths" : {
         "@schema" : ["schema"],
         "@typing" : ["typing"],
         "@postgres" : ["api/postgres"]
-      }
+      },
+      
     },
     "include": [
       "**/*.ts"
