@@ -4,21 +4,20 @@ import sql from 'sql-template-strings';
 import type {operations} from '@schema';
 import {HttpError} from '@typing';
 
-type GetInstruments = operations['getInstruments'];
-type GetInstrumentsResponse =
-  GetInstruments['responses']['200']['content']['application/json'];
-
 const router = express.Router();
+
+type GetGenres = operations['getGenres'];
+type GetGenresResponse =
+  GetGenres['responses']['200']['content']['application/json'];
 
 router.get(
     '/',
-    async (
-        req: Request,
-        res: Response<GetInstrumentsResponse | HttpError, {}>,
-    ) => {
+    async (req: Request, res: Response<GetGenresResponse | HttpError, {}>) => {
       try {
-        const {rows} = await pg.query(sql`SELECT * FROM instruments`);
-        res.status(200).json(rows as GetInstrumentsResponse);
+        const {rows} = await pg.query(sql`
+        SELECT * FROM genres
+    `);
+        res.status(200).json(rows);
       } catch (err) {
         res.status(500).json({code: 500, msg: 'E_SQL_ERROR', stack: err});
       }

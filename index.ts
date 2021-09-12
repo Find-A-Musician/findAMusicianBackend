@@ -13,7 +13,7 @@ import loginRouter from './api/routes/login';
 import musiciansRouter from './api/routes/musicians';
 import instrumentRouter from './api/routes/instruments';
 import musicianRouter from './api/routes/musician';
-
+import genresRouter from './api/routes/genres';
 export const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -31,7 +31,7 @@ app.use('/login', loginRouter);
 app.use('/musician', authenticateToken, musicianRouter);
 app.use('/musicians', authenticateToken, musiciansRouter);
 app.use('/instruments', authenticateToken, instrumentRouter);
-
+app.use('/genres', authenticateToken, genresRouter);
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));

@@ -5,14 +5,7 @@ const components: Component = {
     schemas: {
       musician: {
         type: 'object',
-        required: [
-          'id',
-          'email',
-          'givenName',
-          'familyName',
-          'promotion',
-          'location',
-        ],
+        required: ['email'],
         properties: {
           id: {type: 'string'},
           email: {
@@ -29,9 +22,17 @@ const components: Component = {
           location: {type: 'string', enum: ['Douai', 'Lille']},
         },
       },
-      instruments: {
+      instrument: {
         type: 'object',
         required: ['name', 'id'],
+        properties: {
+          id: {type: 'string'},
+          name: {type: 'string'},
+        },
+      },
+      genre: {
+        type: 'object',
+        required: ['id', 'name'],
         properties: {
           id: {type: 'string'},
           name: {type: 'string'},

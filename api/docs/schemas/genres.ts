@@ -2,20 +2,21 @@ import {HandlerDefinition} from '@typing';
 
 const schema:HandlerDefinition = {
   'get': {
-    operationId: 'getInstruments',
-    tags: ['instruments'],
+    operationId: 'getGenres',
+    description: 'Get a list of all genres',
+    tags: ['genres'],
     security: [
       {'BearerAuth': []},
     ],
     responses: {
       200: {
-        description: 'A list of all the instruments',
+        description: 'A list of all genres',
         content: {
           'application/json': {
             schema: {
               type: 'array',
               items: {
-                $ref: '#/components/schemas/instrument',
+                $ref: '#/components/schemas/genre',
               },
             },
           },
@@ -24,6 +25,5 @@ const schema:HandlerDefinition = {
     },
   },
 };
-
 
 export default schema;

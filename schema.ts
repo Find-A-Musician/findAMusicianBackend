@@ -19,23 +19,31 @@ export interface paths {
   "/instruments": {
     get: operations["getInstruments"];
   };
+  "/genres": {
+    /** Get a list of all genres */
+    get: operations["getGenres"];
+  };
 }
 
 export interface components {
   schemas: {
     musician: {
-      id: string;
+      id?: string;
       email: string;
-      givenName: string;
-      familyName: string;
+      givenName?: string;
+      familyName?: string;
       phone?: string;
       facebookUrl?: string;
       twitterUrl?: string;
       instagramUrl?: string;
-      promotion: "L1" | "L2" | "L3" | "M1" | "M2";
-      location: "Douai" | "Lille";
+      promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
+      location?: "Douai" | "Lille";
     };
-    instruments: {
+    instrument: {
+      id: string;
+      name: string;
+    };
+    genre: {
       id: string;
       name: string;
     };
@@ -125,7 +133,18 @@ export interface operations {
       /** A list of all the instruments */
       200: {
         content: {
-          "application/json": components["schemas"]["instruments"][];
+          "application/json": components["schemas"]["instrument"][];
+        };
+      };
+    };
+  };
+  /** Get a list of all genres */
+  getGenres: {
+    responses: {
+      /** A list of all genres */
+      200: {
+        content: {
+          "application/json": components["schemas"]["genre"][];
         };
       };
     };
