@@ -40,10 +40,10 @@ const components: Component = {
       },
       token: {
         type: 'object',
-        required: ['token', 'refresh_token'],
+        required: ['accessToken', 'refreshToken'],
         properties: {
-          token: {type: 'string'},
-          refresh_token: {type: 'string'},
+          accessToken: {type: 'string'},
+          refreshToken: {type: 'string'},
         },
       },
     },

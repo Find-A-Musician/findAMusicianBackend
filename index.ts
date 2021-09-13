@@ -14,6 +14,8 @@ import musiciansRouter from './api/routes/musicians';
 import instrumentRouter from './api/routes/instruments';
 import musicianRouter from './api/routes/musician';
 import genresRouter from './api/routes/genres';
+import refreshTokenRouter from './api/routes/refreshToken';
+
 export const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -26,6 +28,7 @@ app.use(express.json());
 // auth routes
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
+app.use('/refresh_token', refreshTokenRouter);
 
 // musicians route
 app.use('/musician', authenticateToken, musicianRouter);

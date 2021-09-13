@@ -1,8 +1,9 @@
 import {HandlerDefinition} from '@typing';
 
-const schema:HandlerDefinition ={
+const schema:HandlerDefinition={
   'post': {
-    operationId: 'login',
+    operationId: 'postRefreshToken',
+    description: 'Send a new access token',
     tags: ['auth'],
     requestBody: {
       required: true,
@@ -10,29 +11,24 @@ const schema:HandlerDefinition ={
         'application/json': {
           schema: {
             type: 'object',
+            required: ['refreshToken'],
             properties: {
-              email: {type: 'string', format: 'email'},
-              password: {type: 'string'},
+              refreshToken: {type: 'string'},
             },
-          },
-          example: {
-            email: 'john.doe@gmail.com',
-            password: 'password',
           },
         },
       },
     },
     responses: {
       200: {
-        description: 'Login successful',
+        description: 'a new access token',
         content: {
           'application/json': {
             schema: {
               type: 'object',
-              required: ['token', 'musician'],
+              required: ['accessToken'],
               properties: {
-                token: {$ref: '#/components/schemas/token'},
-                musician: {$ref: '#/components/schemas/musician'},
+                accessToken: {type: 'string'},
               },
             },
           },

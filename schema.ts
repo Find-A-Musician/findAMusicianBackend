@@ -24,7 +24,7 @@ export interface paths {
     get: operations["getGenres"];
   };
   "/refresh_token": {
-    /** Send a new token and a new refresh token */
+    /** Send a new access token */
     post: operations["postRefreshToken"];
   };
 }
@@ -52,8 +52,8 @@ export interface components {
       name: string;
     };
     token: {
-      token: string;
-      refresh_token: string;
+      accessToken: string;
+      refreshToken: string;
     };
   };
 }
@@ -89,8 +89,10 @@ export interface operations {
       /** Login successful */
       200: {
         content: {
-          "application/json": components["schemas"]["token"] &
-            components["schemas"]["musician"];
+          "application/json": {
+            token: components["schemas"]["token"];
+            musician: components["schemas"]["musician"];
+          };
         };
       };
     };
@@ -160,15 +162,14 @@ export interface operations {
       };
     };
   };
-  /** Send a new token and a new refresh token */
+  /** Send a new access token */
   postRefreshToken: {
     responses: {
-      /** a new token and a new refresh_token */
+      /** a new access token */
       200: {
         content: {
           "application/json": {
-            token?: string;
-            refresh_token?: string;
+            accessToken: string;
           };
         };
       };
@@ -176,7 +177,7 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          refresh_token?: string;
+          refreshToken: string;
         };
       };
     };

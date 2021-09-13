@@ -88,17 +88,34 @@ router.post(
             `);
           }
 
-          const token = jwt.sign(
+          const accessToken = jwt.sign(
               {
-                user: userId,
+                userId: userId,
               },
               process.env.ACCESS_TOKEN_SECRET,
+              {expiresIn: '1h'},
           );
+
+          const refreshToken = jwt.sign({
+            userId: userId,
+          }, process.env.REFRESH_TOKEN_SECRET);
+
+          await pg.query(sql`
+            INSERT INTO tokens (
+              id,
+              token,
+              musician
+            ) VALUES (
+              ${uuidV4()},
+              ${refreshToken},
+              ${userId}
+            )
+          `);
 
           res.status(201).json({
             token: {
-              token,
-              refresh_token: token,
+              accessToken,
+              refreshToken,
             },
             musician: {
               id: userId,

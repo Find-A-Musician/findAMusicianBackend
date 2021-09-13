@@ -43,7 +43,7 @@ const schema: HandlerDefinition = {
               promotion: 'L1',
               location: 'Douai',
             },
-            password: 'test',
+            password: 'password',
             genres: [
               {
                 id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
