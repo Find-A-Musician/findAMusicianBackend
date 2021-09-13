@@ -1,8 +1,7 @@
 import {HandlerDefinition} from '@typing';
 
-
-const schema:HandlerDefinition = {
-  'post': {
+const schema: HandlerDefinition = {
+  post: {
     operationId: 'register',
     tags: ['auth'],
     requestBody: {
@@ -10,14 +9,55 @@ const schema:HandlerDefinition = {
       content: {
         'application/json': {
           schema: {
-            allOf: [
-              {$ref: '#/components/schemas/musician'},
-              {
-                type: 'object',
-                required: ['password'],
-                properties: {
-                  password: {type: 'string'},
+            type: 'object',
+            required: ['musician', 'password', 'genres', 'instruments'],
+            properties: {
+              musician: {
+                $ref: '#/components/schemas/musician',
+              },
+              password: {type: 'string'},
+              genres: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/genre',
                 },
+              },
+              instruments: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/instrument',
+                },
+              },
+            },
+          },
+          example: {
+            musician: {
+              email: 'john.doe@gmail.com',
+              givenName: 'John',
+              familyName: 'Doe',
+              phone: '0760072513',
+              facebookUrl: 'https://facebook.com',
+              twitterUrl: 'https://twitter.com',
+              instagramUrl: 'https://instagram.com',
+              promotion: 'L1',
+              location: 'Douai',
+            },
+            password: 'test',
+            genres: [
+              {
+                id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
+                name: 'rock',
+              },
+              {id: '7d68d33c-3eff-4f5e-985b-c7d9e058e23a', name: 'metal'},
+            ],
+            instruments: [
+              {
+                id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
+                name: 'batterie',
+              },
+              {
+                id: 'e345114e-7723-42eb-8ed1-f26cd2f9d084',
+                name: 'guitare',
               },
             ],
           },
@@ -30,11 +70,19 @@ const schema:HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              allOf: [
-                {$ref: '#/components/schemas/token'},
-                {$ref: '#/components/schemas/musician'},
-              ],
-
+              type: 'object',
+              properties: {
+                token: {$ref: '#/components/schemas/token'},
+                musician: {$ref: '#/components/schemas/musician'},
+                genres: {
+                  type: 'array',
+                  items: {$ref: '#/components/schemas/genre'},
+                },
+                instruments: {
+                  type: 'array',
+                  items: {$ref: '#/components/schemas/instrument'},
+                },
+              },
             },
           },
         },

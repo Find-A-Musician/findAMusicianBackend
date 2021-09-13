@@ -60,15 +60,22 @@ export interface operations {
       /** The user has been registered in the db */
       201: {
         content: {
-          "application/json": components["schemas"]["token"] &
-            components["schemas"]["musician"];
+          "application/json": {
+            token?: components["schemas"]["token"];
+            musician?: components["schemas"]["musician"];
+            genres?: components["schemas"]["genre"][];
+            instruments?: components["schemas"]["instrument"][];
+          };
         };
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["musician"] & {
+        "application/json": {
+          musician: components["schemas"]["musician"];
           password: string;
+          genres: components["schemas"]["genre"][];
+          instruments: components["schemas"]["instrument"][];
         };
       };
     };

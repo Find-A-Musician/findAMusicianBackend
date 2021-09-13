@@ -50,39 +50,70 @@ router.post(
           location
         ) VALUES (
           ${userId},
-          ${body.email},
-          ${body.givenName},
-          ${body.familyName},
-          ${body.phone || null},
-          ${body.facebookUrl || null},
-          ${body.twitterUrl || null},
-          ${body.instagramUrl || null},
-          ${body.promotion},
+          ${body.musician.email},
+          ${body.musician.givenName},
+          ${body.musician.familyName},
+          ${body.musician.phone || null},
+          ${body.musician.facebookUrl || null},
+          ${body.musician.twitterUrl || null},
+          ${body.musician.instagramUrl || null},
+          ${body.musician.promotion},
           ${hash},
-          ${body.location}
+          ${body.musician.location}
         )
         `,
           );
+          for (let i=0; i<body.genres.length; i++) {
+            await pg.query(sql `
+              INSERT INTO musicians_genres (
+                musician,
+                genre
+              ) VALUES  (
+                ${userId},
+                ${body.genres[i].id}
+              )
+
+            `);
+          }
+          for (let i=0; i<body.instruments.length; i++) {
+            await pg.query(sql `
+              INSERT INTO musicians_instruments (
+                musician,
+                instrument
+              ) VALUES  (
+                ${userId},
+                ${body.instruments[i].id}
+              )
+
+            `);
+          }
+
           const token = jwt.sign(
               {
-                user: body.email,
+                user: body.musician.email,
               },
               process.env.ACCESS_TOKEN_SECRET,
           );
 
           res.status(201).json({
-            token: token,
-            refresh_token: token,
-            id: userId,
-            email: body.email,
-            givenName: body.givenName,
-            familyName: body.familyName,
-            phone: body.phone,
-            facebookUrl: body.facebookUrl,
-            instagramUrl: body.instagramUrl,
-            twitterUrl: body.twitterUrl,
-            promotion: body.promotion,
-            location: body.location,
+            token: {
+              token,
+              refresh_token: token,
+            },
+            musician: {
+              id: userId,
+              email: body.musician.email,
+              givenName: body.musician.givenName,
+              familyName: body.musician.familyName,
+              phone: body.musician.phone,
+              facebookUrl: body.musician.facebookUrl,
+              instagramUrl: body.musician.instagramUrl,
+              twitterUrl: body.musician.twitterUrl,
+              promotion: body.musician.promotion,
+              location: body.musician.location,
+            },
+            genres: body.genres,
+            instruments: body.instruments,
           });
         } catch (err) {
           console.log(err);
