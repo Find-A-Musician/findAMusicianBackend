@@ -15,9 +15,9 @@ CREATE TYPE locations AS ENUM(
 CREATE TABLE musicians (
     id uuid PRIMARY KEY,
     email varchar(255) UNIQUE NOT NULL,
-    given_name text DEFAULT NULL,
-    family_name text DEFAULT NULL,
-    phone varchar(50) UNIQUE DEFAULT NULL,
+    given_name VARCHAR DEFAULT NULL,
+    family_name VARCHAR DEFAULT NULL,
+    phone VARCHAR(50) UNIQUE DEFAULT NULL,
     facebook_url text UNIQUE DEFAULT NULL,
     twitter_url text UNIQUE DEFAULT NULL,
     instagram_url text UNIQUE DEFAULT NULL,

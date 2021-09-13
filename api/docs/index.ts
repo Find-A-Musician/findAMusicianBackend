@@ -2,14 +2,15 @@ import basicInfo from './basicInfo';
 import servers from './servers';
 import components from './components';
 import tags from './tags';
-import schema from './schemas/index';
+import schemas from './schemas';
+
 
 const docs = {
   ...basicInfo,
   ...servers,
   ...components,
   ...tags,
-  ...schema,
+  ...schemas,
 };
 
 export default docs;

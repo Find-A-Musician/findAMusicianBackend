@@ -2,10 +2,10 @@
 
 CREATE TABLE instruments (
     id uuid PRIMARY KEY,
-    name text UNIQUE
+    name VARCHAR  UNIQUE
 );
 
-CREATE TABLE musicians_instruments(
+CREATE TABLE musicians_instruments (
     musician uuid REFERENCES musicians (id),
     instrument uuid REFERENCES instruments (id)
 );

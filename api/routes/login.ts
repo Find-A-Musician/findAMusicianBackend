@@ -41,7 +41,7 @@ router.post(
           res.status(401).json({code: 400, msg: 'E_INVALID_PASSWORD'});
         }
         const token = jwt.sign(
-            {user: body.email},
+            {user: rows[0].id},
             process.env.ACCESS_TOKEN_SECRET,
         );
         res.status(200).json({token: token, refresh_token: token, ...rows[0]});

@@ -32,6 +32,7 @@ const schema: HandlerDefinition = {
           },
           example: {
             musician: {
+              id: 'uuid',
               email: 'john.doe@gmail.com',
               givenName: 'John',
               familyName: 'Doe',

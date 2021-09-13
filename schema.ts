@@ -23,6 +23,10 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/refresh_token": {
+    /** Send a new token and a new refresh token */
+    post: operations["postRefreshToken"];
+  };
 }
 
 export interface components {
@@ -152,6 +156,27 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["genre"][];
+        };
+      };
+    };
+  };
+  /** Send a new token and a new refresh token */
+  postRefreshToken: {
+    responses: {
+      /** a new token and a new refresh_token */
+      200: {
+        content: {
+          "application/json": {
+            token?: string;
+            refresh_token?: string;
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          refresh_token?: string;
         };
       };
     };

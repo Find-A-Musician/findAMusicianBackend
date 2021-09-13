@@ -90,7 +90,7 @@ router.post(
 
           const token = jwt.sign(
               {
-                user: body.musician.email,
+                user: userId,
               },
               process.env.ACCESS_TOKEN_SECRET,
           );
