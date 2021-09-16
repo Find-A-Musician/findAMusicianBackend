@@ -21,4 +21,7 @@ INSERT INTO instruments VALUES (
 INSERT INTO musicians_instruments VALUES (
     '8f6c1dd5-7444-46c9-b673-840731bfd041',
     'cd836a31-1663-4a11-8a88-0a249aa70793'
+), (
+    '8f6c1dd5-7444-46c9-b673-840731bfd041',
+    'e345114e-7723-42eb-8ed1-f26cd2f9d084'
 );

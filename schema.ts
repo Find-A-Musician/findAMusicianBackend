@@ -32,7 +32,7 @@ export interface paths {
 export interface components {
   schemas: {
     musician: {
-      id?: string;
+      id: string;
       email: string;
       givenName?: string;
       familyName?: string;
@@ -42,6 +42,7 @@ export interface components {
       instagramUrl?: string;
       promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
       location?: "Douai" | "Lille";
+      instruments?: components["schemas"]["instrument"][];
     };
     instrument: {
       id: string;

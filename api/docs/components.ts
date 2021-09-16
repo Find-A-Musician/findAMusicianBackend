@@ -5,7 +5,7 @@ const components: Component = {
     schemas: {
       musician: {
         type: 'object',
-        required: ['email'],
+        required: ['email', 'id'],
         properties: {
           id: {type: 'string'},
           email: {
@@ -20,6 +20,12 @@ const components: Component = {
           instagramUrl: {type: 'string'},
           promotion: {type: 'string', enum: ['L1', 'L2', 'L3', 'M1', 'M2']},
           location: {type: 'string', enum: ['Douai', 'Lille']},
+          instruments: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/instrument',
+            },
+          },
         },
       },
       instrument: {
