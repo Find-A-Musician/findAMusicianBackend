@@ -13,3 +13,4 @@ DROP TABLE IF EXISTS groups;
 DROP TYPE IF EXISTS locations;
 DROP TYPE IF EXISTS promotions;
 DROP TYPE IF EXISTS membership_status;
+DROP TYPE IF EXISTS group_roles;

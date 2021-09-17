@@ -15,6 +15,8 @@ import instrumentRouter from './api/routes/instruments';
 import musicianRouter from './api/routes/musician';
 import genresRouter from './api/routes/genres';
 import refreshTokenRouter from './api/routes/refreshToken';
+import groupInvite from './api/routes/groupMusician';
+
 
 export const PORT = process.env.PORT || 8000;
 
@@ -35,6 +37,7 @@ app.use('/musician', authenticateToken, musicianRouter);
 app.use('/musicians', authenticateToken, musiciansRouter);
 app.use('/instruments', authenticateToken, instrumentRouter);
 app.use('/genres', authenticateToken, genresRouter);
+app.use('/group/invitation', authenticateToken, groupInvite);
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));

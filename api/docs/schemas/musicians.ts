@@ -1,6 +1,8 @@
 import {HandlerDefinition} from '@typing';
 
 const schema : HandlerDefinition = {
+  'path': '/musicians',
+
   'get': {
     operationId: 'getMusicians',
     tags: ['musician'],

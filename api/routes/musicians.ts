@@ -26,8 +26,6 @@ router.get('/', async (
       ON instruments.id = musicians_instruments.instrument
       WHERE musicians_instruments.musician= ${rows[i].id}
     `);
-    console.log(rows[i].id);
-    console.log(genreRows);
     rows[i]['instruments']=genreRows;
   }
 

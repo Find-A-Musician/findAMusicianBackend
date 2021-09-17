@@ -1,6 +1,8 @@
 import {HandlerDefinition} from '@typing';
 
 const schema:HandlerDefinition = {
+  'path': '/instruments',
+
   'get': {
     operationId: 'getInstruments',
     tags: ['instruments'],

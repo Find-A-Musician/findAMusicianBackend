@@ -5,6 +5,7 @@ import instruments from './schemas/instruments';
 import musician from './schemas/musician';
 import genres from './schemas/genres';
 import refreshToken from './schemas/refreshToken';
+import groupMusician from './schemas/groupMusician';
 const handler = {
   paths: {
     '/register': {
@@ -27,6 +28,9 @@ const handler = {
     },
     '/refresh_token': {
       ...refreshToken,
+    },
+    '/group/invitation': {
+      ...groupMusician,
     },
   }};
 
