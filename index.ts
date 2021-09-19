@@ -4,7 +4,7 @@ import cors from 'cors';
 import http from 'http';
 import swaggerUi from 'swagger-ui-express';
 import initializeTypes from './command/initializeTypes';
-import docs from './api/docs/index';
+import docs from './api/docs/config/index';
 import authenticateToken from './api/auth/authenticateToken';
 
 // router import

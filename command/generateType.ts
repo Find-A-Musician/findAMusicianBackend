@@ -1,11 +1,10 @@
-import docs from '../api/docs/index';
+import docs from '../api/docs/config/index';
 import fs from 'fs';
 import {series} from 'async';
 import {exec} from 'child_process';
 import {readdir} from 'fs/promises';
 import path from 'path';
-import schema from '../api/docs/schemas';
-import assert from 'assert';
+
 // import schemas from '../api/docs/schemas';
 
 export default function createAPITypes() {
@@ -17,6 +16,7 @@ export default function createAPITypes() {
     } = {paths: {}};
 
     try {
+      console.log('🔧 building the paths object...');
       // get every files of the schemas directory
       const schemaFiles = await readdir('./api/docs/schemas');
 
@@ -31,18 +31,10 @@ export default function createAPITypes() {
         schemaObject['paths'][schema.path] = {...schema};
       }
 
-      // fs.writeFileSync(
-      //     './api/docs/test.ts',
-      //     'export default '+ JSON.stringify(schemaObject),
-      // );
-
-
-      try {
-        assert.deepEqual(schemaObject, schema);
-        console.log('SUCCESS');
-      } catch (err) {
-        console.error(err);
-      }
+      fs.writeFileSync(
+          './api/docs/config/schemas.ts',
+          'export default '+ JSON.stringify(schemaObject),
+      );
 
       console.log('🚧 Writing the JSON API file...');
       fs.writeFileSync('doc.json', JSON.stringify(docs));

@@ -1,3 +1,4 @@
 schema.ts
 doc.json
 build/*
+api/docs/config/schemas.ts
