@@ -1,4 +1,4 @@
-import {HandlerDefinition} from '@typing';
+import {HandlerDefinition} from 'api/types/typing';
 
 const schema:HandlerDefinition={
   'path': '/refresh_token',

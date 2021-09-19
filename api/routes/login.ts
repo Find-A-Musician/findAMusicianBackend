@@ -4,7 +4,7 @@ import sql from 'sql-template-strings';
 import pg from '../postgres';
 // import jwt from 'jsonwebtoken';
 import type {operations} from '@schema';
-import {HttpError} from '@typing';
+import {HttpError} from 'api/types/typing';
 import jwt from 'jsonwebtoken';
 import {v4 as uuidV4} from 'uuid';
 

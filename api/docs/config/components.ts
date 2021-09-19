@@ -1,4 +1,4 @@
-import {Component} from '@typing';
+import {Component} from 'api/types/typing';
 
 const components: Component = {
   components: {

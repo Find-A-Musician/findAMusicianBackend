@@ -1,4 +1,4 @@
-schema.ts
-doc.json
+api/types/schema.ts
+api/types/doc.json
 build/*
 api/docs/config/schemas.ts

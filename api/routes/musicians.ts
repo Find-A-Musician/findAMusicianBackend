@@ -2,7 +2,7 @@ import express, {Request, Response} from 'express';
 import pg from '../postgres';
 import sql from 'sql-template-strings';
 import type {operations} from '@schema';
-import {HttpError} from '@typing';
+import {HttpError} from 'api/types/typing';
 
 type GetMusician = operations['getMusicians'];
 type GetMusicianResponse =

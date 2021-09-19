@@ -10,9 +10,9 @@ import path from 'path';
 export default function createAPITypes() {
   return new Promise(async (resolve, reject) => {
     const schemaObject: {
-      paths : {
+      paths: {
         [key: string]: string;
-      }
+      };
     } = {paths: {}};
 
     try {
@@ -33,14 +33,19 @@ export default function createAPITypes() {
 
       fs.writeFileSync(
           './api/docs/config/schemas.ts',
-          'export default '+ JSON.stringify(schemaObject),
+          'export default ' + JSON.stringify(schemaObject),
       );
 
       console.log('🚧 Writing the JSON API file...');
-      fs.writeFileSync('doc.json', JSON.stringify(docs));
+      fs.writeFileSync('./api/types/doc.json', JSON.stringify(docs));
       console.log('⏳ writing the types from the JSON file...');
+
       series([
-        () => exec('npx openapi-typescript doc.json --output schema.ts'),
+        () =>
+          exec(
+              // eslint-disable-next-line
+              'npx openapi-typescript ./api/types/doc.json --output ./api/types/schema.ts',
+          ),
       ]);
 
       console.log('✅ API Types have been generated ! ');

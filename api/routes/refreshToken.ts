@@ -2,7 +2,7 @@ import pg from '../postgres';
 import sql from 'sql-template-strings';
 import {operations} from '@schema';
 import express, {Request, Response} from 'express';
-import {HttpError} from '@typing';
+import {HttpError} from 'api/types/typing';
 import jwt from 'jsonwebtoken';
 
 type PostToken = operations['postRefreshToken'];
