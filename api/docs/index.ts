@@ -8,7 +8,7 @@ const docs = {
   ...servers,
   ...components,
   ...tags,
-  schemas,
+  ...schemas,
 };
 
 export default docs;
