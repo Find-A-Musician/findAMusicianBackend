@@ -1,10 +1,16 @@
 import type {OpenAPIV3} from 'openapi-types';
 
 
-// the type for every OPENAPI chema in api/docs/schema folder
-export type HandlerDefinition = Partial<
-  Record<'get' | 'post' | 'put' | 'patch' | 'delete', OpenAPIV3.OperationObject>
+ type HandlerDefinitionSchema = Partial<
+  Record<
+    'get' | 'post' | 'put' | 'patch' | 'delete',
+    OpenAPIV3.OperationObject
+  >
 >;
+
+export type HandlerDefinition = HandlerDefinitionSchema & {
+  path: string;
+};
 
 // the type to the classic HTTP error
 export type HttpError = {
@@ -19,4 +25,3 @@ export type Component = {
 };
 
 // the type for the express extends request
-

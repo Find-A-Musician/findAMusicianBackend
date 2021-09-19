@@ -1,6 +1,8 @@
 import {HandlerDefinition} from '@typing';
 
 const schema:HandlerDefinition ={
+  'path': '/login',
+
   'post': {
     operationId: 'login',
     tags: ['auth'],

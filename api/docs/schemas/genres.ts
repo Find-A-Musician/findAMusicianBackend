@@ -1,6 +1,8 @@
 import {HandlerDefinition} from '@typing';
 
 const schema:HandlerDefinition = {
+  'path': '/genres',
+
   'get': {
     operationId: 'getGenres',
     description: 'Get a list of all genres',

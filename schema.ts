@@ -4,28 +4,32 @@
  */
 
 export interface paths {
-  "/register": {
-    post: operations["register"];
-  };
-  "/login": {
-    post: operations["login"];
-  };
-  "/musicians": {
-    get: operations["getMusicians"];
-  };
-  "/musician/{musicianId}": {
-    patch: operations["patchMusician"];
-  };
-  "/instruments": {
-    get: operations["getInstruments"];
-  };
   "/genres": {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/group/invitation": {
+    /** Invite a musician in a group */
+    post: operations["inviteInAGroup"];
+  };
+  "/instruments": {
+    get: operations["getInstruments"];
+  };
+  "/login": {
+    post: operations["login"];
+  };
+  "/musician/{musicianId}": {
+    patch: operations["patchMusician"];
+  };
+  "/musicians": {
+    get: operations["getMusicians"];
+  };
   "/refresh_token": {
     /** Send a new access token */
     post: operations["postRefreshToken"];
+  };
+  "/register": {
+    post: operations["register"];
   };
 }
 
@@ -60,27 +64,39 @@ export interface components {
 }
 
 export interface operations {
-  register: {
+  /** Get a list of all genres */
+  getGenres: {
     responses: {
-      /** The user has been registered in the db */
-      201: {
+      /** A list of all genres */
+      200: {
         content: {
-          "application/json": {
-            token?: components["schemas"]["token"];
-            musician?: components["schemas"]["musician"];
-            genres?: components["schemas"]["genre"][];
-            instruments?: components["schemas"]["instrument"][];
-          };
+          "application/json": components["schemas"]["genre"][];
         };
       };
+    };
+  };
+  /** Invite a musician in a group */
+  inviteInAGroup: {
+    responses: {
+      /** The user has been invited */
+      201: unknown;
     };
     requestBody: {
       content: {
         "application/json": {
-          musician: components["schemas"]["musician"];
-          password: string;
-          genres: components["schemas"]["genre"][];
-          instruments: components["schemas"]["instrument"][];
+          groupId: string;
+          musicianId: string;
+          instrumentId: string;
+        };
+      };
+    };
+  };
+  getInstruments: {
+    responses: {
+      /** A list of all the instruments */
+      200: {
+        content: {
+          "application/json": components["schemas"]["instrument"][];
         };
       };
     };
@@ -102,16 +118,6 @@ export interface operations {
         "application/json": {
           email?: string;
           password?: string;
-        };
-      };
-    };
-  };
-  getMusicians: {
-    responses: {
-      /** A list of all the musicians */
-      200: {
-        content: {
-          "application/json": components["schemas"]["musician"][];
         };
       };
     };
@@ -142,23 +148,12 @@ export interface operations {
       };
     };
   };
-  getInstruments: {
+  getMusicians: {
     responses: {
-      /** A list of all the instruments */
+      /** A list of all the musicians */
       200: {
         content: {
-          "application/json": components["schemas"]["instrument"][];
-        };
-      };
-    };
-  };
-  /** Get a list of all genres */
-  getGenres: {
-    responses: {
-      /** A list of all genres */
-      200: {
-        content: {
-          "application/json": components["schemas"]["genre"][];
+          "application/json": components["schemas"]["musician"][];
         };
       };
     };
@@ -179,6 +174,31 @@ export interface operations {
       content: {
         "application/json": {
           refreshToken: string;
+        };
+      };
+    };
+  };
+  register: {
+    responses: {
+      /** The user has been registered in the db */
+      201: {
+        content: {
+          "application/json": {
+            token?: components["schemas"]["token"];
+            musician?: components["schemas"]["musician"];
+            genres?: components["schemas"]["genre"][];
+            instruments?: components["schemas"]["instrument"][];
+          };
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          musician: components["schemas"]["musician"];
+          password: string;
+          genres: components["schemas"]["genre"][];
+          instruments: components["schemas"]["instrument"][];
         };
       };
     };

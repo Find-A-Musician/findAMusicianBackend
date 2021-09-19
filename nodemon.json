@@ -4,12 +4,10 @@
       ".git",
       "node_modules/**/node_modules",
       "schema.ts",
-      "doc.json"
+      "doc.json",
+      "api/docs/config"
     ],
     "verbose": true,
-    "events": {
-      "restart": "echo 'yess '"
-    },
     "env": {
       "NODE_ENV": "development"
     },
