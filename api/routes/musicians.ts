@@ -29,7 +29,8 @@ router.get('/', async (
     rows[i]['instruments']=genreRows;
   }
 
-  res.status(200).json((rows as GetMusicianResponse));
+  res.status(200).setHeader('content-type', 'application/json')
+      .json((rows as GetMusicianResponse));
 });
 
 export default router;

@@ -18,6 +18,10 @@ export interface paths {
   "/login": {
     post: operations["login"];
   };
+  "/me": {
+    /** Get the user connected information */
+    get: operations["me"];
+  };
   "/musician/{musicianId}": {
     patch: operations["patchMusician"];
   };
@@ -118,6 +122,23 @@ export interface operations {
         "application/json": {
           email?: string;
           password?: string;
+        };
+      };
+    };
+  };
+  /** Get the user connected information */
+  me: {
+    responses: {
+      /** The user information */
+      200: {
+        content: {
+          "application/json": {
+            musician: components["schemas"]["musician"];
+            genres: components["schemas"]["genre"][];
+            instruments: components["schemas"]["instrument"][];
+          } & {
+            password: unknown;
+          };
         };
       };
     };

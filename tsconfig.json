@@ -17,8 +17,8 @@
         "./node_modules/@types",
       ],
       "paths" : {
-        "@schema" : ["schema"],
-        "@typing" : ["typing"],
+        "@schema" : ["./api/types/schema"],
+        "@typing" : ["./api/types/typing"],
         "@postgres" : ["api/postgres"]
       },
       
