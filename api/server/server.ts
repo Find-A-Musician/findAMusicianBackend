@@ -9,6 +9,7 @@ import authenticateToken from '../auth/authenticateToken';
 // router import
 import registerRouter from '../routes/register';
 import loginRouter from '../routes/login';
+import logoutRouter from '../routes/logout';
 import musiciansRouter from '../routes/musicians';
 import instrumentRouter from '../routes/instruments';
 import musicianRouter from '../routes/musician';
@@ -33,6 +34,7 @@ app.get('/test', authenticateToken, (req, res)=>{
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/refresh_token', refreshTokenRouter);
+app.use('/logout', authenticateToken, logoutRouter);
 
 // musicians route
 app.use('/me', authenticateToken, meRouter);

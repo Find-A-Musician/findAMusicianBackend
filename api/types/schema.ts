@@ -18,6 +18,10 @@ export interface paths {
   "/login": {
     post: operations["login"];
   };
+  "/logout": {
+    /** Logout the current user */
+    delete: operations["logout"];
+  };
   "/me": {
     /** Get the user connected information */
     get: operations["me"];
@@ -124,6 +128,13 @@ export interface operations {
           password?: string;
         };
       };
+    };
+  };
+  /** Logout the current user */
+  logout: {
+    responses: {
+      /** All the token has been deleted */
+      200: unknown;
     };
   };
   /** Get the user connected information */
