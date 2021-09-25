@@ -19,14 +19,24 @@ router.get('/', async (
   );
 
   for (let i=0; i<rows.length; i++) {
-    const {rows: genreRows} = await pg.query(sql`
+    const {rows: instrumentsRows} = await pg.query(sql`
       SELECT instruments.* 
       FROM instruments
       INNER JOIN musicians_instruments
       ON instruments.id = musicians_instruments.instrument
       WHERE musicians_instruments.musician= ${rows[i].id}
     `);
-    rows[i]['instruments']=genreRows;
+    rows[i]['instruments']=instrumentsRows;
+  }
+  for (let i=0; i<rows.length; i++) {
+    const {rows: genreRows} = await pg.query(sql`
+       SELECT genres.* 
+        FROM genres
+        INNER JOIN musicians_genres
+        ON musicians_genres.genre=genres.id
+        WHERE musicians_genres.musician = ${rows[i].id}
+    `);
+    rows[i]['genres']=genreRows;
   }
 
   res.status(200).setHeader('content-type', 'application/json')
