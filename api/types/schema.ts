@@ -68,6 +68,10 @@ export interface components {
       accessToken: string;
       refreshToken: string;
     };
+    httpError: {
+      msg: string;
+      stack?: string;
+    };
   };
 }
 
@@ -81,6 +85,12 @@ export interface operations {
           "application/json": components["schemas"]["genre"][];
         };
       };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
   };
   /** Invite a musician in a group */
@@ -88,6 +98,7 @@ export interface operations {
     responses: {
       /** The user has been invited */
       201: unknown;
+      403: components["schemas"]["httpError"];
     };
     requestBody: {
       content: {

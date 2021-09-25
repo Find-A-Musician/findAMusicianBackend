@@ -31,6 +31,10 @@ const schema: HandlerDefinition = {
       201: {
         description: 'The user has been invited',
       },
+      403: {
+        $ref: '#/components/schemas/httpError',
+      },
+
     },
   },
 };
