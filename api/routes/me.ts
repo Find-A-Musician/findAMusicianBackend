@@ -20,24 +20,26 @@ router.get('/', async (
             WHERE musicians.id = ${req.userId}
         `);
 
-    const {rows: [instrumentsResponse]} = await pg.query(sql`
-        SELECT * FROM instruments
+    const {rows: instrumentsResponse} = await pg.query(sql`
+        SELECT instruments.* 
+        FROM instruments
         INNER JOIN musicians_instruments
-        ON musicians_instruments.instrument=instruments.id
-        WHERE musicians_instruments.musician = ${req.userId}
+        ON instruments.id = musicians_instruments.instrument
+        WHERE musicians_instruments.musician= ${req.userId}
     `);
 
-    // const {rows: [genresResponse]} = await pg.query(sql`
-    //     SELECT * FROM genres
-    //     INNER JOIN musicians_genres
-    //     ON musicians_genres.genre=genress.id
-    //     WHERE musicians_genres.musician = ${req.userId}
-    // `);
+    const {rows: genresResponse} = await pg.query(sql`
+        SELECT genres.* 
+        FROM genres
+        INNER JOIN musicians_genres
+        ON musicians_genres.genre=genres.id
+        WHERE musicians_genres.musician = ${req.userId}
+    `);
 
     const response = {
       'musician': musicianResponse,
       'instruments': instrumentsResponse,
-      // 'genres': genresResponse,
+      'genres': genresResponse,
     };
 
     res.status(200).json(response as MeResponse);

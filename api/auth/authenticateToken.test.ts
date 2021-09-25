@@ -19,10 +19,6 @@ describe('Test the Bearer token authentification middleware', () => {
               '8f6c1dd5-7444-46c9-b673-840731bfd041',
           );
         });
-    // await supertest(app)
-    //     .get('/musicians')
-    //     .set('Authorization', authorization)
-    //     .expect(200);
   });
 
   it('reject the Bearer token', async () => {
