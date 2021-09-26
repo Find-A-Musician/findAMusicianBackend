@@ -1,4 +1,4 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
 const schema: HandlerDefinition = {
   path: '/musician/{musicianId}',
@@ -6,10 +6,8 @@ const schema: HandlerDefinition = {
   patch: {
     operationId: 'patchMusician',
     tags: ['musician'],
-    parameters: [{name: 'musicianId', in: 'path'}],
-    security: [
-      {'BearerAuth': []},
-    ],
+    parameters: [{ name: 'musicianId', in: 'path' }],
+    security: [{ BearerAuth: [] }],
     requestBody: {
       required: true,
       content: {
@@ -21,18 +19,21 @@ const schema: HandlerDefinition = {
                 type: 'string',
                 format: 'email',
               },
-              givenName: {type: 'string'},
-              familyName: {type: 'string'},
-              phone: {type: 'string'},
-              facebookUrl: {type: 'string'},
-              twitterUrl: {type: 'string'},
-              instagramUrl: {type: 'string'},
-              promotion: {type: 'string', enum: ['L1', 'L2', 'L3', 'M1', 'M2']},
-              location: {type: 'string', enum: ['Douai', 'Lille']}},
+              givenName: { type: 'string' },
+              familyName: { type: 'string' },
+              phone: { type: 'string' },
+              facebookUrl: { type: 'string' },
+              twitterUrl: { type: 'string' },
+              instagramUrl: { type: 'string' },
+              promotion: {
+                type: 'string',
+                enum: ['L1', 'L2', 'L3', 'M1', 'M2'],
+              },
+              location: { type: 'string', enum: ['Douai', 'Lille'] },
+            },
           },
         },
       },
-
     },
     responses: {
       201: {

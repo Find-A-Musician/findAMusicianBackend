@@ -1,11 +1,7 @@
-import type {OpenAPIV3} from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
-
- type HandlerDefinitionSchema = Partial<
-  Record<
-    'get' | 'post' | 'put' | 'patch' | 'delete',
-    OpenAPIV3.OperationObject
-  >
+type HandlerDefinitionSchema = Partial<
+  Record<'get' | 'post' | 'put' | 'patch' | 'delete', OpenAPIV3.OperationObject>
 >;
 
 export type HandlerDefinition = HandlerDefinitionSchema & {

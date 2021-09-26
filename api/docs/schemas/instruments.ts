@@ -1,14 +1,12 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
-const schema:HandlerDefinition = {
-  'path': '/instruments',
+const schema: HandlerDefinition = {
+  path: '/instruments',
 
-  'get': {
+  get: {
     operationId: 'getInstruments',
     tags: ['instruments'],
-    security: [
-      {'BearerAuth': []},
-    ],
+    security: [{ BearerAuth: [] }],
     responses: {
       200: {
         description: 'A list of all the instruments',
@@ -26,6 +24,5 @@ const schema:HandlerDefinition = {
     },
   },
 };
-
 
 export default schema;

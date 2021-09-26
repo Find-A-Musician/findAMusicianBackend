@@ -1,14 +1,12 @@
-import {HandlerDefinition} from '@typing';
+import { HandlerDefinition } from '@typing';
 
-const schema:HandlerDefinition={
-  'path': '/me',
-  'get': {
+const schema: HandlerDefinition = {
+  path: '/me',
+  get: {
     description: 'Get the user connected information',
     operationId: 'me',
     tags: ['musician'],
-    security: [
-      {'BearerAuth': []},
-    ],
+    security: [{ BearerAuth: [] }],
     responses: {
       '200': {
         description: 'The user information',
@@ -41,6 +39,5 @@ const schema:HandlerDefinition={
     },
   },
 };
-
 
 export default schema;

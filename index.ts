@@ -1,4 +1,3 @@
-require('dotenv').config();
 import express from 'express';
 import initializeTypes from './command/initializeTypes';
 import server from './api/server/server';
@@ -22,7 +21,7 @@ httpApp.listen(PORT, async () => {
     try {
       await initializeTypes();
       console.log(
-          '📕 Swager documention : http://localhost:' + PORT + '/api-docs',
+        '📕 Swager documention : http://localhost:' + PORT + '/api-docs',
       );
     } catch (err) {
       throw new Error('E_TYPEs_FAILED');
@@ -32,4 +31,3 @@ httpApp.listen(PORT, async () => {
     console.log(' 🔌 Listening on port : http://localhost:' + PORT);
   }
 });
-

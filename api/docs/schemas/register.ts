@@ -1,4 +1,4 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
 const schema: HandlerDefinition = {
   path: '/register',
@@ -17,7 +17,7 @@ const schema: HandlerDefinition = {
               musician: {
                 $ref: '#/components/schemas/musician',
               },
-              password: {type: 'string'},
+              password: { type: 'string' },
               genres: {
                 type: 'array',
                 items: {
@@ -51,7 +51,7 @@ const schema: HandlerDefinition = {
                 id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
                 name: 'rock',
               },
-              {id: '7d68d33c-3eff-4f5e-985b-c7d9e058e23a', name: 'metal'},
+              { id: '7d68d33c-3eff-4f5e-985b-c7d9e058e23a', name: 'metal' },
             ],
             instruments: [
               {
@@ -75,15 +75,15 @@ const schema: HandlerDefinition = {
             schema: {
               type: 'object',
               properties: {
-                token: {$ref: '#/components/schemas/token'},
-                musician: {$ref: '#/components/schemas/musician'},
+                token: { $ref: '#/components/schemas/token' },
+                musician: { $ref: '#/components/schemas/musician' },
                 genres: {
                   type: 'array',
-                  items: {$ref: '#/components/schemas/genre'},
+                  items: { $ref: '#/components/schemas/genre' },
                 },
                 instruments: {
                   type: 'array',
-                  items: {$ref: '#/components/schemas/instrument'},
+                  items: { $ref: '#/components/schemas/instrument' },
                 },
               },
             },

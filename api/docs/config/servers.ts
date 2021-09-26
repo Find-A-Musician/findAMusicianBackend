@@ -1,4 +1,3 @@
-
 const server = {
   servers: [
     {
@@ -7,6 +6,5 @@ const server = {
     },
   ],
 };
-
 
 export default server;

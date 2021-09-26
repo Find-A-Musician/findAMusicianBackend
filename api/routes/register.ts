@@ -1,11 +1,11 @@
 //  documentation for bcrypt : https://www.npmjs.com/package/bcrypt
 
-import express, {Request, Response} from 'express';
+import express, { Request, Response } from 'express';
 
 import bcrypt from 'bcrypt';
-import {v4 as uuidV4} from 'uuid';
-import type {operations} from '@schema';
-import {HttpError} from 'api/types/typing';
+import { v4 as uuidV4 } from 'uuid';
+import type { operations } from '@schema';
+import { HttpError } from 'api/types/typing';
 import sql from 'sql-template-strings';
 import pg from '../postgres';
 import jwt from 'jsonwebtoken';
@@ -17,26 +17,31 @@ type RegisterResponse =
 const router = express.Router();
 
 router.post(
-    '/',
-    async (
-        req: Request<{}, {}, RegisterBody, {}>,
-        res: Response<RegisterResponse | HttpError, {}>,
-    ) => {
-      const body = req.body;
+  '/',
+  async (
+    req: Request<
+      Pick<string, never>,
+      Pick<string, never>,
+      RegisterBody,
+      Pick<string, never>
+    >,
+    res: Response<RegisterResponse | HttpError, Pick<string, never>>,
+  ) => {
+    const body = req.body;
 
-      const saltRound = 10;
-      bcrypt.hash(body.password, saltRound, async function(err, hash) {
-        if (err) {
-          res.status(500).json({
-            code: 500,
-            msg: 'E_HASH_ERROR',
-            stack: JSON.stringify(err),
-          });
-        }
-        const userId = uuidV4();
-        try {
-          await pg.query(
-              sql`INSERT INTO musicians (
+    const saltRound = 10;
+    bcrypt.hash(body.password, saltRound, async function (err, hash) {
+      if (err) {
+        res.status(500).json({
+          code: 500,
+          msg: 'E_HASH_ERROR',
+          stack: JSON.stringify(err),
+        });
+      }
+      const userId = uuidV4();
+      try {
+        await pg.query(
+          sql`INSERT INTO musicians (
           id,
           email,
           given_name,
@@ -62,9 +67,9 @@ router.post(
           ${body.musician.location}
         )
         `,
-          );
-          for (let i=0; i<body.genres.length; i++) {
-            await pg.query(sql `
+        );
+        for (let i = 0; i < body.genres.length; i++) {
+          await pg.query(sql`
               INSERT INTO musicians_genres (
                 musician,
                 genre
@@ -74,9 +79,9 @@ router.post(
               )
 
             `);
-          }
-          for (let i=0; i<body.instruments.length; i++) {
-            await pg.query(sql `
+        }
+        for (let i = 0; i < body.instruments.length; i++) {
+          await pg.query(sql`
               INSERT INTO musicians_instruments (
                 musician,
                 instrument
@@ -86,21 +91,24 @@ router.post(
               )
 
             `);
-          }
+        }
 
-          const accessToken = jwt.sign(
-              {
-                userId: userId,
-              },
-              process.env.ACCESS_TOKEN_SECRET,
-              {expiresIn: '1h'},
-          );
-
-          const refreshToken = jwt.sign({
+        const accessToken = jwt.sign(
+          {
             userId: userId,
-          }, process.env.REFRESH_TOKEN_SECRET);
+          },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: '1h' },
+        );
 
-          await pg.query(sql`
+        const refreshToken = jwt.sign(
+          {
+            userId: userId,
+          },
+          process.env.REFRESH_TOKEN_SECRET,
+        );
+
+        await pg.query(sql`
             INSERT INTO tokens (
               id,
               token,
@@ -112,36 +120,36 @@ router.post(
             )
           `);
 
-          res.status(201).json({
-            token: {
-              accessToken,
-              refreshToken,
-            },
-            musician: {
-              id: userId,
-              email: body.musician.email,
-              givenName: body.musician.givenName,
-              familyName: body.musician.familyName,
-              phone: body.musician.phone,
-              facebookUrl: body.musician.facebookUrl,
-              instagramUrl: body.musician.instagramUrl,
-              twitterUrl: body.musician.twitterUrl,
-              promotion: body.musician.promotion,
-              location: body.musician.location,
-            },
-            genres: body.genres,
-            instruments: body.instruments,
-          });
-        } catch (err) {
-          console.log(err);
-          res.status(400).json({
-            code: 400,
-            msg: 'E_SQL_ERROR',
-            stack: JSON.stringify(err),
-          });
-        }
-      });
-    },
+        res.status(201).json({
+          token: {
+            accessToken,
+            refreshToken,
+          },
+          musician: {
+            id: userId,
+            email: body.musician.email,
+            givenName: body.musician.givenName,
+            familyName: body.musician.familyName,
+            phone: body.musician.phone,
+            facebookUrl: body.musician.facebookUrl,
+            instagramUrl: body.musician.instagramUrl,
+            twitterUrl: body.musician.twitterUrl,
+            promotion: body.musician.promotion,
+            location: body.musician.location,
+          },
+          genres: body.genres,
+          instruments: body.instruments,
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(400).json({
+          code: 400,
+          msg: 'E_SQL_ERROR',
+          stack: JSON.stringify(err),
+        });
+      }
+    });
+  },
 );
 
 export default router;
