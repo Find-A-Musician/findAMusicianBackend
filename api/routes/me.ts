@@ -1,11 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import pg from '../postgres';
 import sql from 'sql-template-strings';
-import { operations } from '@schema';
-import { HttpError } from '@typing';
+import type { operations } from '@schema';
+import type { Request } from 'express';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getResponsesBody } from '@typing';
 
 type Me = operations['me'];
-type MeResponse = Me['responses']['200']['content']['application/json'];
 
 const router = express.Router();
 
@@ -13,7 +14,11 @@ router.get(
   '/',
   async (
     req: Request,
-    res: Response<MeResponse | HttpError, Pick<string, never>>,
+    res: core.Response<
+      getResponsesBody<Me>,
+      Pick<string, never>,
+      getHTTPCode<Me>
+    >,
   ) => {
     try {
       const {
@@ -46,9 +51,9 @@ router.get(
         genres: genresResponse,
       };
 
-      res.status(200).json(response as MeResponse);
+      res.status(200).json(response as getResponsesBody<Me>);
     } catch (err) {
-      res.status(500).json({ code: 500, msg: 'E_SQL_ERROR', stack: err });
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

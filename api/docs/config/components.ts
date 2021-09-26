@@ -59,8 +59,8 @@ const components: Component = {
         type: 'object',
         required: ['msg'],
         properties: {
-          msg: {type: 'string'},
-          stack: {type: 'string'},
+          msg: { type: 'string' },
+          stack: { type: 'string' },
         },
       },
     },

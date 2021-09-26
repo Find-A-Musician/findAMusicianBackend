@@ -1,13 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import pg from '../postgres';
 import sql from 'sql-template-strings';
-import { operations } from '@schema';
-import { HttpError } from 'api/types/typing';
+import type core from 'express-serve-static-core';
+import { Request } from 'express';
+import type { operations } from '@schema';
+import type { getHTTPCode, getResponsesBody, getRequestBody } from '@typing';
 
 type inviteUserInGroup = operations['inviteInAGroup'];
-type inviteUserInGroupBody =
-  inviteUserInGroup['requestBody']['content']['application/json'];
-type inviteUserInGroupResponse = inviteUserInGroup['responses']['201'];
 
 const router = express.Router();
 
@@ -17,10 +16,14 @@ router.post(
     req: Request<
       Record<string, never>,
       Record<string, never>,
-      inviteUserInGroupBody,
+      getRequestBody<inviteUserInGroup>,
       Record<string, never>
     >,
-    res: Response<HttpError | inviteUserInGroupResponse, Pick<string, never>>,
+    res: core.Response<
+      getResponsesBody<any>,
+      Record<string, never>,
+      getHTTPCode<inviteUserInGroup>
+    >,
   ) => {
     const musicianId = req.body.musicianId;
     const groupId = req.body.groupId;
@@ -33,17 +36,14 @@ router.post(
             AND musician=${musicianId}
         `);
       if (musicianGroupResult.length !== 0) {
-        res.status(403).json({ code: 403, msg: 'E_ALREADY_INVITED' });
+        res.status(400).json({ msg: 'E_ALREADY_INVITED' });
       }
-
       const { rows: invitorInfo } = await pg.query(sql`
           SELECT role FROM groups_musicians
           WHERE musician = ${invitorId}
         `);
-
       if (invitorInfo.length == 0 || invitorInfo[0].role) {
-        res.status(403).json({
-          code: 403,
+        res.status(401).json({
           msg: 'E_UNAUTHORIZE_INVITOR',
         });
       }
@@ -62,13 +62,11 @@ router.post(
           'member'
         )
         `);
-
       // créer une notification
-
       res.sendStatus(201);
     } catch (err) {
       console.log(err);
-      res.status(500).json({ code: 500, msg: 'E_SQL_ERROR', stack: err });
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

@@ -40,6 +40,36 @@ const schema: HandlerDefinition = {
           },
         },
       },
+      400: {
+        description: 'The user is not find',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      401: {
+        description: 'invalid password',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
     },
   },
 };

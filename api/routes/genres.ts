@@ -1,24 +1,23 @@
-import express, { Request } from 'express';
-import core from 'express-serve-static-core';
+import express from 'express';
 import pg from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
-import { getCode } from '@typing';
+import type { getHTTPCode, getResponsesBody } from '@typing';
+import type core from 'express-serve-static-core';
 
 const router = express.Router();
 
 type GetGenres = operations['getGenres'];
-type GetGenresResponse = GetGenres['responses'];
-
-type getGenreResponseBody =
-  | GetGenresResponse['200']['content']['application/json']
-  | GetGenresResponse['500']['content']['application/json'];
 
 router.get(
   '/',
   async (
-    req: Request,
-    res: core.Response<getGenreResponseBody, {}, getCode<GetGenres>>,
+    req: core.Request,
+    res: core.Response<
+      getResponsesBody<GetGenres>,
+      Record<string, never>,
+      getHTTPCode<GetGenres>
+    >,
   ) => {
     try {
       const { rows } = await pg.query(sql`

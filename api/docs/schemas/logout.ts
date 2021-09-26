@@ -10,6 +10,23 @@ const schema: HandlerDefinition = {
     responses: {
       200: {
         description: 'All the token has been deleted',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
       },
     },
   },

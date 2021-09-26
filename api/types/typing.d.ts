@@ -1,6 +1,4 @@
 import type { OpenAPIV3 } from 'openapi-types';
-import type { operations } from '@schema';
-
 type HandlerDefinitionSchema = Partial<
   Record<'get' | 'post' | 'put' | 'patch' | 'delete', OpenAPIV3.OperationObject>
 >;
@@ -23,7 +21,7 @@ export type Component = {
  * @description extract the body object types from an OpenAPI type definition
  * @param T An OpenAPI type definition
  */
-export type GetBody<T> = T extends {
+export type getRequestBody<T> = T extends {
   requestBody: { content: { 'application/json': Record<string, unknown> } };
 }
   ? T['requestBody']['content']['application/json']
@@ -35,7 +33,7 @@ export type GetBody<T> = T extends {
  * @param T An OpenAPI type definition
  *
  */
-export type getCode<T> = T extends { responses: Record<string, unknown> }
+export type getHTTPCode<T> = T extends { responses: Record<string, unknown> }
   ? keyof T['responses']
   : never;
 
@@ -44,8 +42,20 @@ export type getCode<T> = T extends { responses: Record<string, unknown> }
  *              of the OpenAPI definition
  * @param T An OpenAPI type definition
  */
-type getResponses<T> = T extends {
+type getResponsesBody<T> = T extends {
   responses: { [code: string]: { content: Record<string, unknown> } };
 }
   ? T['responses'][keyof T['responses']]['content']['application/json']
+  : never;
+
+/**
+ * @description Return an union of all the paths value available in the request
+ *              of the OpenAPI definition
+ * @param T An OpenAPI type definition
+ *
+ */
+export type getPathParams<T> = T extends {
+  parameters: { path: Record<string, unknown> };
+}
+  ? T['parameters']['path']
   : never;

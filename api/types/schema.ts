@@ -97,8 +97,29 @@ export interface operations {
   inviteInAGroup: {
     responses: {
       /** The user has been invited */
-      201: unknown;
-      403: components["schemas"]["httpError"];
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user is already invited */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** User that invite doesn't have the access */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
     requestBody: {
       content: {
@@ -118,6 +139,12 @@ export interface operations {
           "application/json": components["schemas"]["instrument"][];
         };
       };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
   };
   login: {
@@ -129,6 +156,24 @@ export interface operations {
             token: components["schemas"]["token"];
             musician: components["schemas"]["musician"];
           };
+        };
+      };
+      /** The user is not find */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** invalid password */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -145,7 +190,17 @@ export interface operations {
   logout: {
     responses: {
       /** All the token has been deleted */
-      200: unknown;
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
   };
   /** Get the user connected information */
@@ -163,6 +218,12 @@ export interface operations {
           };
         };
       };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
   };
   patchMusician: {
@@ -173,7 +234,23 @@ export interface operations {
     };
     responses: {
       /** The musician information has been updated */
-      201: unknown;
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** user is unauthorized */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
     requestBody: {
       content: {
@@ -199,6 +276,12 @@ export interface operations {
           "application/json": components["schemas"]["musician"][];
         };
       };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
     };
   };
   /** Send a new access token */
@@ -210,6 +293,18 @@ export interface operations {
           "application/json": {
             accessToken: string;
           };
+        };
+      };
+      /** Invalid refresh token */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -232,6 +327,12 @@ export interface operations {
             genres?: components["schemas"]["genre"][];
             instruments?: components["schemas"]["instrument"][];
           };
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
