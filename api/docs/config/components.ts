@@ -55,6 +55,14 @@ const components: Component = {
           refreshToken: { type: 'string' },
         },
       },
+      httpError: {
+        type: 'object',
+        required: ['msg'],
+        properties: {
+          msg: { type: 'string' },
+          stack: { type: 'string' },
+        },
+      },
     },
     securitySchemes: {
       BearerAuth: {

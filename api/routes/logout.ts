@@ -1,12 +1,12 @@
 import pg from '../postgres';
 import sql from 'sql-template-strings';
-import { operations } from '@schema';
-import { HttpError } from '@typing';
-import express, { Request } from 'express';
-import * as core from 'express-serve-static-core';
+import express from 'express';
+import type core from 'express-serve-static-core';
+import type { Request } from 'express';
+import type { operations } from '@schema';
+import type { getHTTPCode, getResponsesBody } from '@typing';
 
 type Logout = operations['logout'];
-type code = keyof Logout['responses'];
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ router.delete(
   async (
     req: Request,
     res: core.Response<
-      HttpError | Pick<string, never>,
+      getResponsesBody<Logout>,
       Pick<string, never>,
-      code | number
+      getHTTPCode<Logout>
     >,
   ) => {
     try {
@@ -25,9 +25,9 @@ router.delete(
             DELETE FROM tokens
             WHERE musician = ${req.userId}
         `);
-      res.sendStatus(200);
+      res.status(200).json('the user has been logout');
     } catch (err) {
-      res.status(500).json({ code: 500, msg: 'E_SQL_ERROR', stack: err });
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

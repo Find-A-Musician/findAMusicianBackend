@@ -1,19 +1,18 @@
 //  documentation for bcrypt : https://www.npmjs.com/package/bcrypt
 
-import express, { Request, Response } from 'express';
-
+import express from 'express';
 import bcrypt from 'bcrypt';
 import { v4 as uuidV4 } from 'uuid';
-import type { operations } from '@schema';
-import { HttpError } from 'api/types/typing';
 import sql from 'sql-template-strings';
 import pg from '../postgres';
 import jwt from 'jsonwebtoken';
+import type { Request } from 'express';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
+import type { operations } from '@schema';
 
 type Register = operations['register'];
-type RegisterBody = Register['requestBody']['content']['application/json'];
-type RegisterResponse =
-  Register['responses']['201']['content']['application/json'];
+
 const router = express.Router();
 
 router.post(
@@ -22,10 +21,14 @@ router.post(
     req: Request<
       Pick<string, never>,
       Pick<string, never>,
-      RegisterBody,
+      getRequestBody<Register>,
       Pick<string, never>
     >,
-    res: Response<RegisterResponse | HttpError, Pick<string, never>>,
+    res: core.Response<
+      getResponsesBody<Register>,
+      Pick<string, never>,
+      getHTTPCode<Register>
+    >,
   ) => {
     const body = req.body;
 
@@ -33,7 +36,6 @@ router.post(
     bcrypt.hash(body.password, saltRound, async function (err, hash) {
       if (err) {
         res.status(500).json({
-          code: 500,
           msg: 'E_HASH_ERROR',
           stack: JSON.stringify(err),
         });
@@ -141,9 +143,7 @@ router.post(
           instruments: body.instruments,
         });
       } catch (err) {
-        console.log(err);
-        res.status(400).json({
-          code: 400,
+        res.status(500).json({
           msg: 'E_SQL_ERROR',
           stack: JSON.stringify(err),
         });

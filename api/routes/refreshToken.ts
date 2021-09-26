@@ -1,14 +1,13 @@
 import pg from '../postgres';
 import sql from 'sql-template-strings';
-import { operations } from '@schema';
-import express, { Request, Response } from 'express';
-import { HttpError } from 'api/types/typing';
+import express from 'express';
 import jwt from 'jsonwebtoken';
+import type { operations } from '@schema';
+import { Request } from 'express';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 
 type PostToken = operations['postRefreshToken'];
-type PostTokenBody = PostToken['requestBody']['content']['application/json'];
-type PostTokenResponse =
-  PostToken['responses']['200']['content']['application/json'];
 
 const router = express.Router();
 
@@ -18,10 +17,14 @@ router.post(
     req: Request<
       Pick<string, never>,
       Pick<string, never>,
-      PostTokenBody,
+      getRequestBody<PostToken>,
       Pick<string, never>
     >,
-    res: Response<PostTokenResponse | HttpError, Pick<string, never>>,
+    res: core.Response<
+      getResponsesBody<PostToken>,
+      Pick<string, never>,
+      getHTTPCode<PostToken>
+    >,
   ) => {
     try {
       const { rows } = await pg.query(sql`
@@ -29,7 +32,7 @@ router.post(
         WHERE token=${req.body.refreshToken}
     `);
       if (rows.length === 0) {
-        res.status(401).json({ code: 401, msg: 'E_INVALID_REFRESH_TOKEN' });
+        res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
       }
 
       jwt.verify(
@@ -37,7 +40,7 @@ router.post(
         process.env.REFRESH_TOKEN_SECRET,
         (err, result) => {
           if (err) {
-            res.status(401).json({ code: 401, msg: 'E_INVALID_REFRESH_TOKEN' });
+            res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
           }
           const accessToken = jwt.sign(
             { userId: result.userId },
@@ -48,10 +51,8 @@ router.post(
           res.status(200).json({ accessToken });
         },
       );
-
-      res.status(200).json({ accessToken: 'copucou' });
     } catch (err) {
-      res.status(500).json({ code: 500, msg: 'E_SQL_ERROR', stack: err });
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

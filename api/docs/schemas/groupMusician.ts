@@ -30,6 +30,39 @@ const schema: HandlerDefinition = {
     responses: {
       201: {
         description: 'The user has been invited',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      401: {
+        description: "User that invite doesn't have the access",
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/httpError' },
+          },
+        },
+      },
+      400: {
+        description: 'The user is already invited',
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/httpError' },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
       },
     },
   },

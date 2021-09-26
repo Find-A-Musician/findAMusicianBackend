@@ -36,8 +36,35 @@ const schema: HandlerDefinition = {
       },
     },
     responses: {
-      201: {
+      200: {
         description: 'The musician information has been updated',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      403: {
+        description: 'user is unauthorized',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
       },
     },
   },

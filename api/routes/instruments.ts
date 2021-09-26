@@ -1,12 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import pg from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
-import { HttpError } from 'api/types/typing';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getResponsesBody } from '@typing';
+import type { Request } from 'express';
 
 type GetInstruments = operations['getInstruments'];
-type GetInstrumentsResponse =
-  GetInstruments['responses']['200']['content']['application/json'];
 
 const router = express.Router();
 
@@ -14,13 +14,24 @@ router.get(
   '/',
   async (
     req: Request,
-    res: Response<GetInstrumentsResponse | HttpError, Pick<string, never>>,
+    res: core.Response<
+      getResponsesBody<GetInstruments>,
+      Pick<string, never>,
+      getHTTPCode<GetInstruments>
+    >,
   ) => {
     try {
-      const { rows } = await pg.query(sql`SELECT * FROM instruments`);
-      res.status(200).json(rows as GetInstrumentsResponse);
+      const {
+        rows,
+      }: {
+        rows: {
+          id: string;
+          name: string;
+        }[];
+      } = await pg.query(sql`SELECT * FROM instruments`);
+      res.status(200).json(rows);
     } catch (err) {
-      res.status(500).json({ code: 500, msg: 'E_SQL_ERROR', stack: err });
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

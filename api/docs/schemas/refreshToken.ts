@@ -36,6 +36,26 @@ const schema: HandlerDefinition = {
           },
         },
       },
+      401: {
+        description: 'Invalid refresh token',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
     },
   },
 };
