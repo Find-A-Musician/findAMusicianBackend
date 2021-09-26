@@ -24,7 +24,7 @@ export type Component = {
  * @param T An OpenAPI type definition
  */
 export type GetBody<T> = T extends {
-  requestBody: { content: { 'application/json': object } };
+  requestBody: { content: { 'application/json': Record<string, unknown> } };
 }
   ? T['requestBody']['content']['application/json']
   : never;
@@ -35,24 +35,17 @@ export type GetBody<T> = T extends {
  * @param T An OpenAPI type definition
  *
  */
-export type getCode<T> = T extends { responses: object }
+export type getCode<T> = T extends { responses: Record<string, unknown> }
   ? keyof T['responses']
   : never;
 
-type getResponses<T> = T extends { responses: object }
-  ? T['responses'][keyof T['responses']]
-  : never;
-
-type getResponsesExp<T> = T extends {
-  responses: { [code: string]: { content: { 'application/json': object } } };
+/**
+ * @description Return an union of all the response body available in the responses
+ *              of the OpenAPI definition
+ * @param T An OpenAPI type definition
+ */
+type getResponses<T> = T extends {
+  responses: { [code: string]: { content: Record<string, unknown> } };
 }
-  ? T
+  ? T['responses'][keyof T['responses']]['content']['application/json']
   : never;
-
-type test = operations['getGenres'];
-type oui = GetBody<test>;
-type code = getCode<test>;
-type res = getResponses<test>;
-type res = getResponsesExp<test>;
-
-type ouii = Pick<res, 'content'>;
