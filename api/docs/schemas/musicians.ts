@@ -1,14 +1,12 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
-const schema : HandlerDefinition = {
-  'path': '/musicians',
+const schema: HandlerDefinition = {
+  path: '/musicians',
 
-  'get': {
+  get: {
     operationId: 'getMusicians',
     tags: ['musician'],
-    security: [
-      {'BearerAuth': []},
-    ],
+    security: [{ BearerAuth: [] }],
     responses: {
       200: {
         description: 'A list of all the musicians',

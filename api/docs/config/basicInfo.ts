@@ -1,4 +1,4 @@
-const info= {
+const info = {
   openapi: '3.0.1',
   info: {
     version: '1.0.0',
@@ -11,6 +11,5 @@ const info= {
     },
   },
 };
-
 
 export default info;

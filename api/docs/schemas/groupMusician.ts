@@ -1,15 +1,12 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
-
-const schema:HandlerDefinition={
-  'path': '/group/invitation',
-  'post': {
+const schema: HandlerDefinition = {
+  path: '/group/invitation',
+  post: {
     operationId: 'inviteInAGroup',
     tags: ['groups'],
     description: 'Invite a musician in a group',
-    security: [
-      {'BearerAuth': []},
-    ],
+    security: [{ BearerAuth: [] }],
     requestBody: {
       content: {
         'application/json': {
@@ -17,9 +14,9 @@ const schema:HandlerDefinition={
             type: 'object',
             required: ['groupId', 'musicianId', 'instrumentId'],
             properties: {
-              groupId: {type: 'string'},
-              musicianId: {type: 'string'},
-              instrumentId: {type: 'string'},
+              groupId: { type: 'string' },
+              musicianId: { type: 'string' },
+              instrumentId: { type: 'string' },
             },
           },
           example: {

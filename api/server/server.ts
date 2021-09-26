@@ -1,10 +1,9 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import docs from '../docs/config/index';
 import authenticateToken from '../auth/authenticateToken';
-
 
 // router import
 import registerRouter from '../routes/register';
@@ -18,14 +17,14 @@ import refreshTokenRouter from '../routes/refreshToken';
 import groupInviteRouter from '../routes/groupMusician';
 import meRouter from '../routes/me';
 
+dotenv.config();
 const app = express();
-
 
 app.use(cors());
 app.use(express.json());
 
 // auth routes
-app.get('/test', authenticateToken, (req, res)=>{
+app.get('/test', authenticateToken, (req, res) => {
   const userId = req.userId;
   res.status(200).json({
     userId,

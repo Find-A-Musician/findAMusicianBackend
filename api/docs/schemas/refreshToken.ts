@@ -1,9 +1,9 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
-const schema:HandlerDefinition={
-  'path': '/refresh_token',
+const schema: HandlerDefinition = {
+  path: '/refresh_token',
 
-  'post': {
+  post: {
     operationId: 'postRefreshToken',
     description: 'Send a new access token',
     tags: ['auth'],
@@ -15,7 +15,7 @@ const schema:HandlerDefinition={
             type: 'object',
             required: ['refreshToken'],
             properties: {
-              refreshToken: {type: 'string'},
+              refreshToken: { type: 'string' },
             },
           },
         },
@@ -30,7 +30,7 @@ const schema:HandlerDefinition={
               type: 'object',
               required: ['accessToken'],
               properties: {
-                accessToken: {type: 'string'},
+                accessToken: { type: 'string' },
               },
             },
           },

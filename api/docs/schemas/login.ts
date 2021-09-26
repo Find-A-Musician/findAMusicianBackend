@@ -1,9 +1,9 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
-const schema:HandlerDefinition ={
-  'path': '/login',
+const schema: HandlerDefinition = {
+  path: '/login',
 
-  'post': {
+  post: {
     operationId: 'login',
     tags: ['auth'],
     requestBody: {
@@ -13,8 +13,8 @@ const schema:HandlerDefinition ={
           schema: {
             type: 'object',
             properties: {
-              email: {type: 'string', format: 'email'},
-              password: {type: 'string'},
+              email: { type: 'string', format: 'email' },
+              password: { type: 'string' },
             },
           },
           example: {
@@ -33,8 +33,8 @@ const schema:HandlerDefinition ={
               type: 'object',
               required: ['token', 'musician'],
               properties: {
-                token: {$ref: '#/components/schemas/token'},
-                musician: {$ref: '#/components/schemas/musician'},
+                token: { $ref: '#/components/schemas/token' },
+                musician: { $ref: '#/components/schemas/musician' },
               },
             },
           },

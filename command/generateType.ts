@@ -1,8 +1,8 @@
 import docs from '../api/docs/config/index';
 import fs from 'fs';
-import {series} from 'async';
-import {exec} from 'child_process';
-import {readdir} from 'fs/promises';
+import { series } from 'async';
+import { exec } from 'child_process';
+import { readdir } from 'fs/promises';
 import path from 'path';
 
 // import schemas from '../api/docs/schemas';
@@ -13,7 +13,7 @@ export default function createAPITypes() {
       paths: {
         [key: string]: string;
       };
-    } = {paths: {}};
+    } = { paths: {} };
 
     try {
       console.log('🔧 building the paths object...');
@@ -23,17 +23,17 @@ export default function createAPITypes() {
       for (let index = 0; index < schemaFiles.length; index++) {
         // get the default exported schema from the file
         const schema = require(path.join(
-            '../api/docs/schemas',
-            schemaFiles[index],
+          '../api/docs/schemas',
+          schemaFiles[index],
         )).default;
 
         // add the path as key and schema as value to the schemaObject
-        schemaObject['paths'][schema.path] = {...schema};
+        schemaObject['paths'][schema.path] = { ...schema };
       }
 
       fs.writeFileSync(
-          './api/docs/config/schemas.ts',
-          'export default ' + JSON.stringify(schemaObject),
+        './api/docs/config/schemas.ts',
+        'export default ' + JSON.stringify(schemaObject),
       );
 
       console.log('🚧 Writing the JSON API file...');
@@ -43,8 +43,8 @@ export default function createAPITypes() {
       series([
         () =>
           exec(
-              // eslint-disable-next-line
-              'npx openapi-typescript ./api/types/doc.json --output ./api/types/schema.ts',
+            // eslint-disable-next-line
+            'npx openapi-typescript ./api/types/doc.json --output ./api/types/schema.ts'
           ),
       ]);
 

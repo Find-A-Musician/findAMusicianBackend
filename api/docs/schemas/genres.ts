@@ -1,15 +1,13 @@
-import {HandlerDefinition} from 'api/types/typing';
+import { HandlerDefinition } from 'api/types/typing';
 
-const schema:HandlerDefinition = {
-  'path': '/genres',
+const schema: HandlerDefinition = {
+  path: '/genres',
 
-  'get': {
+  get: {
     operationId: 'getGenres',
     description: 'Get a list of all genres',
     tags: ['genres'],
-    security: [
-      {'BearerAuth': []},
-    ],
+    security: [{ BearerAuth: [] }],
     responses: {
       200: {
         description: 'A list of all genres',
