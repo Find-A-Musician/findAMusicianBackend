@@ -56,11 +56,13 @@
     "coverage": "jest --coverage",
     "start": "node ./build/index.js",
     "dev": "nodemon -L",
-    "build": " rimraf -f 'build' &&  tsc --project ./ && babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./",
+    "build": " rimraf -f 'build' && npm run types && npm run compile",
     "lint": "eslint --fix './**/*.ts'",
     "prepare": "husky install",
     "uuid": "echo `uuidgen`",
-    "prettier": "prettier --config .prettierrc './**/*.ts' --write"
+    "prettier": "prettier --config .prettierrc './**/*.ts' --write",
+    "types" : "tsc --project ./",
+    "compile" : "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
   },
   "repository": {
     "type": "git",

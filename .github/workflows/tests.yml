@@ -27,10 +27,12 @@ jobs:
         run: npm run lint
 
       - name: Run the docker containers
-        run: docker-compose up
+        run: docker-compose up -d
 
       - name: Run the jest tests
         run: npm run test
+        env:
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
 
       - name: Close the docker containers
         run: docker-compose stop
