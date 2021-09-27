@@ -15,6 +15,7 @@ import genresRouter from '../routes/genres';
 import refreshTokenRouter from '../routes/refreshToken';
 import groupInviteRouter from '../routes/groupMusician';
 import profilRouter from '../routes/profil';
+import groupsRouter from '../routes/groups';
 
 dotenv.config();
 const app = express();
@@ -47,7 +48,7 @@ app.use('/genres', authenticateToken, genresRouter);
 
 //group route
 app.use('/group/invitation', authenticateToken, groupInviteRouter);
-
+app.use('/groups', authenticateToken, groupsRouter);
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
 

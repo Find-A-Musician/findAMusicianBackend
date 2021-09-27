@@ -31,6 +31,29 @@ const components: Component = {
           },
         },
       },
+      group: {
+        type: 'object',
+        required: ['id', 'name', 'description', 'location'],
+        properties: {
+          id: { type: 'string' },
+          name: { type: 'string' },
+          desription: { type: 'string' },
+          location: { type: 'string', enum: ['Douai', 'Lille'] },
+          genre: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/genre' },
+          },
+        },
+      },
+      groupMember: {
+        type: 'object',
+        properties: {
+          givenName: { type: 'string' },
+          familyName: { type: 'string' },
+          instrument: { type: 'string' },
+          role: { type: 'string', enum: ['admin', 'member', 'declined'] },
+        },
+      },
       instrument: {
         type: 'object',
         required: ['name', 'id'],

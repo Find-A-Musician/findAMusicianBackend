@@ -56,7 +56,7 @@
     "coverage": "jest --coverage",
     "start": "node ./build/index.js",
     "dev": "nodemon -L",
-    "build": " rimraf -f 'build' &&  tsc --project ./ && babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules,build ./",
+    "build": " rimraf -f 'build' &&  tsc --project ./ && babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./",
     "lint": "eslint --fix './**/*.ts'",
     "prepare": "husky install",
     "uuid": "echo `uuidgen`",

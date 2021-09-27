@@ -12,6 +12,10 @@ export interface paths {
     /** Invite a musician in a group */
     post: operations["inviteInAGroup"];
   };
+  "/groups": {
+    /** Get a list of all the groups */
+    get: operations["getGroups"];
+  };
   "/instruments": {
     get: operations["getInstruments"];
   };
@@ -53,6 +57,21 @@ export interface components {
       promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
       location?: "Douai" | "Lille";
       instruments?: components["schemas"]["instrument"][];
+    };
+    group: {
+      id: string;
+      name: string;
+      desription?: string;
+      location: "Douai" | "Lille";
+      genre?: components["schemas"]["genre"][];
+    } & {
+      description: unknown;
+    };
+    groupMember: {
+      givenName?: string;
+      familyName?: string;
+      instrument?: string;
+      role?: "admin" | "member" | "declined";
     };
     instrument: {
       id: string;
@@ -125,6 +144,26 @@ export interface operations {
           groupId: string;
           musicianId: string;
           instrumentId: string;
+        };
+      };
+    };
+  };
+  /** Get a list of all the groups */
+  getGroups: {
+    responses: {
+      /** An array of groups */
+      200: {
+        content: {
+          "application/json": {
+            groupInformation: components["schemas"]["group"];
+            groupMembers: components["schemas"]["groupMember"][];
+          }[];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
