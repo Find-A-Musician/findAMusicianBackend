@@ -69,7 +69,7 @@ router.get(
     req: Request,
     res: core.Response<
       getResponsesBody<exampleOperation>,
-      Record<string, never>,
+      {},
       getHTTPCode<exampleOperation>
     >,
   ) => {

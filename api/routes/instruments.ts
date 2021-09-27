@@ -16,7 +16,7 @@ router.get(
     req: Request,
     res: core.Response<
       getResponsesBody<GetInstruments>,
-      Pick<string, never>,
+      {},
       getHTTPCode<GetInstruments>
     >,
   ) => {

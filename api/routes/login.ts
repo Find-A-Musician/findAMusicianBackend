@@ -16,17 +16,8 @@ const router = express.Router();
 router.post(
   '/',
   async (
-    req: Request<
-      Pick<string, never>,
-      getResponsesBody<Login>,
-      getRequestBody<Login>,
-      Pick<string, never>
-    >,
-    res: core.Response<
-      getResponsesBody<Login>,
-      Pick<string, never>,
-      getHTTPCode<Login>
-    >,
+    req: Request<{}, getResponsesBody<Login>, getRequestBody<Login>, {}>,
+    res: core.Response<getResponsesBody<Login>, {}, getHTTPCode<Login>>,
   ) => {
     const body = req.body;
 

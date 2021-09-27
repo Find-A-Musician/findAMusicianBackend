@@ -16,7 +16,7 @@ router.get(
     req: Request,
     res: core.Response<
       getResponsesBody<GetMusician>,
-      Pick<string, never>,
+      {},
       getHTTPCode<GetMusician>
     >,
   ) => {

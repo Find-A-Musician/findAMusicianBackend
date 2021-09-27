@@ -75,6 +75,18 @@ const schema: HandlerDefinition = {
                 enum: ['L1', 'L2', 'L3', 'M1', 'M2'],
               },
               location: { type: 'string', enum: ['Douai', 'Lille'] },
+              genres: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/genre',
+                },
+              },
+              instruments: {
+                type: 'array',
+                items: {
+                  $ref: '#/components/schemas/instrument',
+                },
+              },
             },
           },
         },
@@ -87,16 +99,6 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'string',
-            },
-          },
-        },
-      },
-      403: {
-        description: 'user is unauthorized',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
             },
           },
         },

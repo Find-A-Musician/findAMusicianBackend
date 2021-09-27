@@ -15,16 +15,12 @@ router.post(
   '/',
   async (
     req: Request<
-      Pick<string, never>,
+      {},
       getResponsesBody<PostToken>,
       getRequestBody<PostToken>,
-      Pick<string, never>
+      {}
     >,
-    res: core.Response<
-      getResponsesBody<PostToken>,
-      Pick<string, never>,
-      getHTTPCode<PostToken>
-    >,
+    res: core.Response<getResponsesBody<PostToken>, {}, getHTTPCode<PostToken>>,
   ) => {
     try {
       const { rows } = await pg.query(sql`

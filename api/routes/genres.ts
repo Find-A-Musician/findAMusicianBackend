@@ -13,11 +13,7 @@ router.get(
   '/',
   async (
     req: core.Request,
-    res: core.Response<
-      getResponsesBody<GetGenres>,
-      Record<string, never>,
-      getHTTPCode<GetGenres>
-    >,
+    res: core.Response<getResponsesBody<GetGenres>, {}, getHTTPCode<GetGenres>>,
   ) => {
     try {
       const { rows } = await pg.query(sql`

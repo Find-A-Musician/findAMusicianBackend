@@ -15,11 +15,7 @@ router.get(
   '/',
   async (
     req: Request,
-    res: core.Response<
-      getResponsesBody<getProfil>,
-      Record<string, never>,
-      getHTTPCode<getProfil>
-    >,
+    res: core.Response<getResponsesBody<getProfil>, {}, getHTTPCode<getProfil>>,
   ) => {
     try {
       const {
@@ -59,20 +55,17 @@ router.patch(
   '/',
   async (
     req: Request<
-      Record<string, never>,
+      {},
       getResponsesBody<patchProfil>,
       getRequestBody<patchProfil>,
-      Record<string, never>
+      {}
     >,
     res: core.Response<
       getResponsesBody<patchProfil>,
-      Record<string, never>,
+      {},
       getHTTPCode<patchProfil>
     >,
   ) => {
-    if (req.params.musicianId !== req.userId) {
-      res.status(403).json({ msg: 'E_UNAUTHORIZED_TOKEN' });
-    }
     try {
       if (req.body.email) {
         await pg.query(sql`
@@ -137,9 +130,57 @@ router.patch(
                                   WHERE id = ${req.userId}
                               `);
       }
+
+      //update the instruments of the user
+
+      try {
+        for (let index = 0; index < req.body.instruments.length; index++) {
+          await pg.query(sql`
+          DELETE FROM musicians_instruments
+          WHERE musician=${req.userId}
+            AND instrument = ${req.body.instruments[index].id}
+        `);
+          await pg.query(sql`
+            INSERT INTO musicians_instruments (
+              musician,
+              instrument
+            ) VALUES (
+              ${req.userId},
+              ${req.body.instruments[index].id}
+            )
+          `);
+        }
+      } catch (err) {
+        res.status(500).json({ msg: 'E_SQL_ERROR_INSTRUMENTS', stack: err });
+      }
+
+      // //update the genres of the user
+
+      try {
+        for (let index = 0; index < req.body.genres.length; index++) {
+          await pg.query(sql`
+            DELETE FROM musicians_genres
+            WHERE musician=${req.userId}
+              AND genre = ${req.body.genres[index].id}
+          `);
+          await pg.query(sql`
+          INSERT INTO musicians_genres (
+            musician,
+            genre
+          ) VALUES (
+            ${req.userId},
+            ${req.body.genres[index].id}
+          )
+        `);
+        }
+      } catch (err) {
+        res.status(500).json({ msg: 'E_SQL_ERROR_GENRES', stack: err });
+      }
+
       res.sendStatus(200);
     } catch (err) {
-      res.status(500).json({ msg: 'E_PG_QUERY', stack: err });
+      console.log(err);
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
