@@ -24,12 +24,12 @@ describe('Test the Bearer token authentification middleware', () => {
   it('reject the Bearer token', async () => {
     const token = 'fakeToken';
     await supertest(app)
-      .get('/me')
+      .get('/test')
       .set('Authorization', 'bearer ' + token)
       .expect(403);
   });
 
   it('notify the empty token', async () => {
-    await supertest(app).get('/me').expect(401);
+    await supertest(app).get('/test').expect(401);
   });
 });

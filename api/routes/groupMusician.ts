@@ -14,14 +14,14 @@ router.post(
   '/',
   async (
     req: Request<
-      Record<string, never>,
+      {},
       getResponsesBody<inviteUserInGroup>,
       getRequestBody<inviteUserInGroup>,
-      Record<string, never>
+      {}
     >,
     res: core.Response<
       getResponsesBody<inviteUserInGroup>,
-      Record<string, never>,
+      {},
       getHTTPCode<inviteUserInGroup>
     >,
   ) => {

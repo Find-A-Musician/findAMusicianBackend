@@ -11,11 +11,10 @@ import loginRouter from '../routes/login';
 import logoutRouter from '../routes/logout';
 import musiciansRouter from '../routes/musicians';
 import instrumentRouter from '../routes/instruments';
-import musicianRouter from '../routes/musician';
 import genresRouter from '../routes/genres';
 import refreshTokenRouter from '../routes/refreshToken';
 import groupInviteRouter from '../routes/groupMusician';
-import meRouter from '../routes/me';
+import profilRouter from '../routes/profil';
 
 dotenv.config();
 const app = express();
@@ -23,24 +22,30 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// auth routes
 app.get('/test', authenticateToken, (req, res) => {
   const userId = req.userId;
   res.status(200).json({
     userId,
   });
 });
+
+// auth routes
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/refresh_token', refreshTokenRouter);
 app.use('/logout', authenticateToken, logoutRouter);
 
 // musicians route
-app.use('/me', authenticateToken, meRouter);
-app.use('/musician', authenticateToken, musicianRouter);
+app.use('/profil', authenticateToken, profilRouter);
 app.use('/musicians', musiciansRouter);
+
+//instruments route
 app.use('/instruments', authenticateToken, instrumentRouter);
+
+//genre route
 app.use('/genres', authenticateToken, genresRouter);
+
+//group route
 app.use('/group/invitation', authenticateToken, groupInviteRouter);
 
 // serve the API documentation

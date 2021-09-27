@@ -22,13 +22,6 @@ export interface paths {
     /** Logout the current user */
     delete: operations["logout"];
   };
-  "/me": {
-    /** Get the user connected information */
-    get: operations["me"];
-  };
-  "/musician/{musicianId}": {
-    patch: operations["patchMusician"];
-  };
   "/musicians": {
     get: operations["getMusicians"];
   };
@@ -208,71 +201,6 @@ export interface operations {
       };
     };
   };
-  /** Get the user connected information */
-  me: {
-    responses: {
-      /** The user information */
-      200: {
-        content: {
-          "application/json": {
-            musician: components["schemas"]["musician"];
-            genres: components["schemas"]["genre"][];
-            instruments: components["schemas"]["instrument"][];
-          } & {
-            password: unknown;
-          };
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-  };
-  patchMusician: {
-    parameters: {
-      path: {
-        musicianId?: unknown;
-      };
-    };
-    responses: {
-      /** The musician information has been updated */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** user is unauthorized */
-      403: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          email?: string;
-          givenName?: string;
-          familyName?: string;
-          phone?: string;
-          facebookUrl?: string;
-          twitterUrl?: string;
-          instagramUrl?: string;
-          promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
-          location?: "Douai" | "Lille";
-        };
-      };
-    };
-  };
   getMusicians: {
     responses: {
       /** A list of all the musicians */
@@ -320,12 +248,6 @@ export interface operations {
           "application/json": string;
         };
       };
-      /** user is unauthorized */
-      403: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
       /** Error intern server */
       500: {
         content: {
@@ -345,6 +267,8 @@ export interface operations {
           instagramUrl?: string;
           promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
           location?: "Douai" | "Lille";
+          genres?: components["schemas"]["genre"][];
+          instruments?: components["schemas"]["instrument"][];
         };
       };
     };

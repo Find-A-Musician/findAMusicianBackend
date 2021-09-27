@@ -14,11 +14,7 @@ router.delete(
   '/',
   async (
     req: Request,
-    res: core.Response<
-      getResponsesBody<Logout>,
-      Pick<string, never>,
-      getHTTPCode<Logout>
-    >,
+    res: core.Response<getResponsesBody<Logout>, {}, getHTTPCode<Logout>>,
   ) => {
     try {
       await pg.query(sql`
