@@ -1,0 +1,36 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  tests:
+    name: run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.2.0'
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Lint the project
+        run: npm run lint
+
+      - name: Run the docker containers
+        run: docker-compose up
+
+      - name: Run the jest tests
+        run: npm run test
+
+      - name: Close the docker containers
+        run: docker-compose stop
