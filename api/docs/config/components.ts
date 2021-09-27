@@ -33,7 +33,7 @@ const components: Component = {
       },
       group: {
         type: 'object',
-        required: ['id', 'name', 'description', 'location'],
+        required: ['name', 'description', 'location'],
         properties: {
           id: { type: 'string' },
           name: { type: 'string' },

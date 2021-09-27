@@ -15,6 +15,8 @@ export interface paths {
   "/groups": {
     /** Get a list of all the groups */
     get: operations["getGroups"];
+    /** Create a new group */
+    post: operations["createGroup"];
   };
   "/instruments": {
     get: operations["getInstruments"];
@@ -59,7 +61,7 @@ export interface components {
       instruments?: components["schemas"]["instrument"][];
     };
     group: {
-      id: string;
+      id?: string;
       name: string;
       desription?: string;
       location: "Douai" | "Lille";
@@ -164,6 +166,38 @@ export interface operations {
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Create a new group */
+  createGroup: {
+    responses: {
+      /** The group has been created */
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** An error in the request body */
+      422: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          group: components["schemas"]["group"] &
+            components["schemas"]["genre"][];
+          instrument: components["schemas"]["instrument"];
         };
       };
     };

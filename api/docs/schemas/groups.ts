@@ -43,6 +43,84 @@ const schema: HandlerDefinition = {
       },
     },
   },
+  post: {
+    description: 'Create a new group',
+    operationId: 'createGroup',
+    tags: ['groups'],
+    security: [{ BearerAuth: [] }],
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: ['group', 'instrument'],
+            properties: {
+              group: {
+                allOf: [
+                  { $ref: '#/components/schemas/group' },
+                  {
+                    type: 'array',
+                    items: { $ref: '#/components/schemas/genre' },
+                  },
+                ],
+              },
+              instrument: { $ref: '#/components/schemas/instrument' },
+            },
+          },
+          example: {
+            group: {
+              name: 'Red Mustard',
+              description: 'the craziest group ever',
+              location: 'Lille',
+              genre: [
+                {
+                  id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
+                  name: 'rock',
+                },
+              ],
+            },
+            instrument: {
+              id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
+              name: 'batterie',
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      201: {
+        description: 'The group has been created',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      422: {
+        description: 'An error in the request body',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export default schema;
