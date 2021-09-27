@@ -15,12 +15,12 @@ router.post(
   async (
     req: Request<
       Record<string, never>,
-      Record<string, never>,
+      getResponsesBody<inviteUserInGroup>,
       getRequestBody<inviteUserInGroup>,
       Record<string, never>
     >,
     res: core.Response<
-      getResponsesBody<any>,
+      getResponsesBody<inviteUserInGroup>,
       Record<string, never>,
       getHTTPCode<inviteUserInGroup>
     >,

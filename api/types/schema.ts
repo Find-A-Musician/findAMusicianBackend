@@ -32,6 +32,11 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/profil": {
+    /** Get the user connected profil */
+    get: operations["getProfil"];
+    patch: operations["patchProfil"];
+  };
   "/refresh_token": {
     /** Send a new access token */
     post: operations["postRefreshToken"];
@@ -280,6 +285,66 @@ export interface operations {
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get the user connected profil */
+  getProfil: {
+    responses: {
+      /** The user profil information */
+      200: {
+        content: {
+          "application/json": {
+            musician: components["schemas"]["musician"];
+            genres: components["schemas"]["genre"][];
+            instruments: components["schemas"]["instrument"][];
+          } & {
+            password: unknown;
+          };
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  patchProfil: {
+    responses: {
+      /** The musician information has been updated */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** user is unauthorized */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          email?: string;
+          givenName?: string;
+          familyName?: string;
+          phone?: string;
+          facebookUrl?: string;
+          twitterUrl?: string;
+          instagramUrl?: string;
+          promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
+          location?: "Douai" | "Lille";
         };
       };
     };

@@ -16,7 +16,7 @@ router.post(
   async (
     req: Request<
       Pick<string, never>,
-      Pick<string, never>,
+      getResponsesBody<PostToken>,
       getRequestBody<PostToken>,
       Pick<string, never>
     >,

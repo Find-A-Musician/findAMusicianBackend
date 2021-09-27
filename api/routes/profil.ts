@@ -2,32 +2,72 @@ import express from 'express';
 import pg from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
-import type core from 'express-serve-static-core';
 import type { Request } from 'express';
-import type {
-  getHTTPCode,
-  getRequestBody,
-  getResponsesBody,
-  getPathParams,
-} from '@typing';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getResponsesBody, getRequestBody } from '@typing';
 
-type PatchMusician = operations['patchMusician'];
+type getProfil = operations['getProfil'];
+type patchProfil = operations['patchProfil'];
 
 const router = express.Router();
 
+router.get(
+  '/',
+  async (
+    req: Request,
+    res: core.Response<
+      getResponsesBody<getProfil>,
+      Record<string, never>,
+      getHTTPCode<getProfil>
+    >,
+  ) => {
+    try {
+      const {
+        rows: [musicianResponse],
+      } = await pg.query(sql`
+            SELECT *
+            FROM musicians
+            WHERE musicians.id = ${req.userId}
+        `);
+      const { rows: instrumentsResponse } = await pg.query(sql`
+        SELECT instruments.*
+        FROM instruments
+        INNER JOIN musicians_instruments
+        ON instruments.id = musicians_instruments.instrument
+        WHERE musicians_instruments.musician= ${req.userId}
+    `);
+      const { rows: genresResponse } = await pg.query(sql`
+        SELECT genres.*
+        FROM genres
+        INNER JOIN musicians_genres
+        ON musicians_genres.genre=genres.id
+        WHERE musicians_genres.musician = ${req.userId}
+    `);
+      const response = {
+        musician: musicianResponse,
+        instruments: instrumentsResponse,
+        genres: genresResponse,
+      };
+      res.status(200).json(response as getResponsesBody<getProfil>);
+    } catch (err) {
+      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+    }
+  },
+);
+
 router.patch(
-  '/:musicianId',
+  '/',
   async (
     req: Request<
-      getPathParams<PatchMusician>,
-      getResponsesBody<PatchMusician>,
-      getRequestBody<PatchMusician>,
-      Pick<string, never>
+      Record<string, never>,
+      getResponsesBody<patchProfil>,
+      getRequestBody<patchProfil>,
+      Record<string, never>
     >,
     res: core.Response<
-      getResponsesBody<PatchMusician>,
-      Pick<string, never>,
-      getHTTPCode<PatchMusician>
+      getResponsesBody<patchProfil>,
+      Record<string, never>,
+      getHTTPCode<patchProfil>
     >,
   ) => {
     if (req.params.musicianId !== req.userId) {
@@ -103,5 +143,4 @@ router.patch(
     }
   },
 );
-
 export default router;
