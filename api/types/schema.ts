@@ -203,7 +203,7 @@ export interface operations {
   };
   getMusicians: {
     responses: {
-      /** A list of all the musicians */
+      /** A list of all the musicians informations */
       200: {
         content: {
           "application/json": components["schemas"]["musician"][];

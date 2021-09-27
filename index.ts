@@ -1,5 +1,5 @@
 import express from 'express';
-import initializeTypes from './command/initializeTypes';
+import generateType from './api/command/generateType';
 import server from './api/server/server';
 import http from 'http';
 
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'production') {
 httpApp.listen(PORT, async () => {
   if (process.env.NODE_ENV === 'development') {
     try {
-      await initializeTypes();
+      await generateType();
       console.log(
         '📕 Swager documention : http://localhost:' + PORT + '/api-docs',
       );

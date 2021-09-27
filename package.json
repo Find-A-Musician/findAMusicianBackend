@@ -18,6 +18,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.15.7",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^13.1.0",
@@ -45,6 +46,7 @@
     "nodemon": "^2.0.12",
     "openapi-types": "^9.3.0",
     "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
     "supertest": "^6.1.6",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
@@ -54,11 +56,11 @@
     "coverage": "jest --coverage",
     "start": "node ./build/index.js",
     "dev": "nodemon -L",
-    "build": "tsc --project ./",
+    "build": " rimraf -f 'build' &&  tsc --project ./ && babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules,build ./",
     "lint": "eslint --fix './**/*.ts'",
     "prepare": "husky install",
     "uuid": "echo `uuidgen`",
-    "prettier":"prettier --config .prettierrc './**/*.ts' --write"
+    "prettier": "prettier --config .prettierrc './**/*.ts' --write"
   },
   "repository": {
     "type": "git",

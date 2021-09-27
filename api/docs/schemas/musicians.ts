@@ -9,7 +9,7 @@ const schema: HandlerDefinition = {
     security: [{ BearerAuth: [] }],
     responses: {
       200: {
-        description: 'A list of all the musicians',
+        description: 'A list of all the musicians informations',
         content: {
           'application/json': {
             schema: {
