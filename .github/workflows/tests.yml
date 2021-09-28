@@ -35,5 +35,8 @@ jobs:
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
 
+      - name: Run e2e tests
+        run: npm run e2e
+
       - name: Close the docker containers
         run: docker-compose stop
