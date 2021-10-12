@@ -55,8 +55,8 @@
     "typescript": "^4.4.2"
   },
   "scripts": {
-    "test": "jest",
-    "e2e" : "npx ts-node test/e2e.ts",
+    "test:unit": "jest ./api",
+    "test:integration" : "jest ./test --detectOpenHandles",
     "coverage": "jest --coverage",
     "start": "node ./build/index.js",
     "dev": "nodemon -L",
