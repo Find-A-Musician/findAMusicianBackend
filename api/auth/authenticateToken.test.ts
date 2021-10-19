@@ -1,13 +1,12 @@
-import jwt from 'jsonwebtoken';
 import supertest from 'supertest';
 import app from '../server/server';
+import generateToken, { GrantTypes } from './generateToken';
 
 describe('Test the Bearer token authentification middleware', () => {
   it('accept the Bearer token', async () => {
-    const token = jwt.sign(
-      { userId: '8f6c1dd5-7444-46c9-b673-840731bfd041' },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1d' },
+    const token = generateToken(
+      GrantTypes.AuthorizationCode,
+      '8f6c1dd5-7444-46c9-b673-840731bfd041',
     );
     const authorization = `Bearer ${token}`;
     await supertest(app)
@@ -21,8 +20,16 @@ describe('Test the Bearer token authentification middleware', () => {
       });
   });
 
-  it('reject the Bearer token', async () => {
+  it('reject the Bearer token because it is invalid token', async () => {
     const token = 'fakeToken';
+    await supertest(app)
+      .get('/test')
+      .set('Authorization', 'bearer ' + token)
+      .expect(403);
+  });
+
+  it('reject the Bearer token because it is a refresh token', async () => {
+    const token = generateToken(GrantTypes.RefreshToken, 'userId');
     await supertest(app)
       .get('/test')
       .set('Authorization', 'bearer ' + token)

@@ -2,8 +2,8 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import sql from 'sql-template-strings';
 import pg from '../postgres';
-import jwt from 'jsonwebtoken';
 import { v4 as uuidV4 } from 'uuid';
+import generateToken, { GrantTypes } from '../auth/generateToken';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
@@ -27,29 +27,28 @@ router.post(
             WHERE email=${body.email} 
         `,
     );
+
     if (rows.length === 0) {
       res.status(400).json({ msg: 'E_UNFOUND_USER' });
     }
+
     const password = rows[0].password;
+
     bcrypt.compare(body.password, password, async function (err, result) {
       if (err) {
         res.status(500).json({ msg: 'E_COMPARE_FAILED' });
       }
+
       if (!result) {
         res.status(401).json({ msg: 'E_INVALID_PASSWORD' });
       }
-      const accessToken = jwt.sign(
-        { userId: rows[0].id },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '1h' },
+
+      const accessToken = generateToken(
+        GrantTypes.AuthorizationCode,
+        rows[0].id,
       );
 
-      const refreshToken = jwt.sign(
-        {
-          userId: rows[0].id,
-        },
-        process.env.REFRESH_TOKEN_SECRET,
-      );
+      const refreshToken = generateToken(GrantTypes.RefreshToken, rows[0].id);
 
       await pg.query(sql`
         INSERT INTO tokens (
