@@ -8,15 +8,15 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
-  "/group/invitation": {
-    /** Invite a musician in a group */
-    post: operations["inviteInAGroup"];
-  };
   "/groups": {
     /** Get a list of all the groups */
     get: operations["getGroups"];
     /** Create a new group */
     post: operations["createGroup"];
+  };
+  "/groups/invitation/send": {
+    /** Invite a musician in a group */
+    post: operations["sendGroupInvitation"];
   };
   "/instruments": {
     get: operations["getInstruments"];
@@ -112,44 +112,6 @@ export interface operations {
       };
     };
   };
-  /** Invite a musician in a group */
-  inviteInAGroup: {
-    responses: {
-      /** The user has been invited */
-      201: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The user is already invited */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** User that invite doesn't have the access */
-      401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          groupId: string;
-          musicianId: string;
-          instrumentId: string;
-        };
-      };
-    };
-  };
   /** Get a list of all the groups */
   getGroups: {
     responses: {
@@ -198,6 +160,44 @@ export interface operations {
           group: components["schemas"]["group"] &
             components["schemas"]["genre"][];
           instrument: components["schemas"]["instrument"];
+        };
+      };
+    };
+  };
+  /** Invite a musician in a group */
+  sendGroupInvitation: {
+    responses: {
+      /** The user has been invited */
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user is already invited */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** User that invite doesn't have the access */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId: string;
+          musicianId: string;
+          instrumentId: string;
         };
       };
     };

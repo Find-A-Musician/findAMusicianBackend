@@ -6,12 +6,12 @@ import { Request } from 'express';
 import type { operations } from '@schema';
 import type { getHTTPCode, getResponsesBody, getRequestBody } from '@typing';
 
-type inviteUserInGroup = operations['inviteInAGroup'];
+type inviteUserInGroup = operations['sendGroupInvitation'];
 
 const router = express.Router();
 
 router.post(
-  '/',
+  '/send',
   async (
     req: Request<
       {},
@@ -42,7 +42,8 @@ router.post(
           SELECT role FROM groups_musicians
           WHERE musician = ${invitorId}
         `);
-      if (invitorInfo.length == 0 || invitorInfo[0].role) {
+      console.log(invitorInfo[0].role);
+      if (invitorInfo.length == 0 || invitorInfo[0].role === 'member') {
         res.status(401).json({
           msg: 'E_UNAUTHORIZE_INVITOR',
         });

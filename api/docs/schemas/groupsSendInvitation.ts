@@ -1,9 +1,9 @@
 import { HandlerDefinition } from 'api/types/typing';
 
 const schema: HandlerDefinition = {
-  path: '/group/invitation',
+  path: '/groups/invitation/send',
   post: {
-    operationId: 'inviteInAGroup',
+    operationId: 'sendGroupInvitation',
     tags: ['groups'],
     description: 'Invite a musician in a group',
     security: [{ BearerAuth: [] }],

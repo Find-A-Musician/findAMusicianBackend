@@ -50,4 +50,16 @@ INSERT INTO musicians VALUES (
     'M1',
     NULL,
     'Douai'
+) , (
+    '74f3d613-39e7-4891-8491-8114988f490c',
+    'dorian.viala@gmail.com',
+    'Dorian',
+    'Viala',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    'M1',
+    NULL,
+    'Douai'
 );
