@@ -4,8 +4,14 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import type { operations } from '@schema';
 import { Request } from 'express';
+import generateToken, { GrantTypes } from '../auth/generateToken';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
+
+type AuthTokenResult = {
+  userId: string;
+  grantType: GrantTypes;
+};
 
 type PostToken = operations['postRefreshToken'];
 
@@ -34,14 +40,13 @@ router.post(
       jwt.verify(
         req.body.refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        (err, result) => {
-          if (err) {
+        (err, result: AuthTokenResult) => {
+          if (err || result.grantType !== GrantTypes.RefreshToken) {
             res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
           }
-          const accessToken = jwt.sign(
-            { userId: result.userId },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1h' },
+          const accessToken = generateToken(
+            GrantTypes.AuthorizationCode,
+            result.userId,
           );
 
           res.status(200).json({ accessToken });

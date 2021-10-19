@@ -5,7 +5,8 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidV4 } from 'uuid';
 import sql from 'sql-template-strings';
 import pg from '../postgres';
-import jwt from 'jsonwebtoken';
+import generateToken from '../auth/generateToken';
+import { GrantTypes } from '../auth/generateToken';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
@@ -86,20 +87,9 @@ router.post(
             `);
         }
 
-        const accessToken = jwt.sign(
-          {
-            userId: userId,
-          },
-          process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '1h' },
-        );
+        const accessToken = generateToken(GrantTypes.AuthorizationCode, userId);
 
-        const refreshToken = jwt.sign(
-          {
-            userId: userId,
-          },
-          process.env.REFRESH_TOKEN_SECRET,
-        );
+        const refreshToken = generateToken(GrantTypes.RefreshToken, userId);
 
         await pg.query(sql`
             INSERT INTO tokens (
