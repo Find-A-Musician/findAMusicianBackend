@@ -60,6 +60,7 @@
     "lint": "eslint --fix './**/*.ts'",
     "prepare": "husky install",
     "uuid": "echo `uuidgen`",
+    "password" : "ts-node api/command/generateHash",
     "prettier": "prettier --config .prettierrc './**/*.ts' --write",
     "types" : "tsc --project ./",
     "compile" : "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
