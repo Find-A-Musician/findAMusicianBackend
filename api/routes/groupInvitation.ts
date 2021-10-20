@@ -29,6 +29,7 @@ router.post(
     const groupId = req.body.groupId;
     const invitorId = req.userId;
     const instrument = req.body.instrumentId;
+    const role = req.body.role;
     try {
       const { rows: musicianGroupResult } = await pg.query(sql`
           SELECT * FROM groups_musicians
@@ -36,15 +37,16 @@ router.post(
             AND musician=${musicianId}
         `);
       if (musicianGroupResult.length !== 0) {
-        res.status(400).json({ msg: 'E_ALREADY_INVITED' });
+        return res.status(400).json({ msg: 'E_ALREADY_INVITED' });
       }
       const { rows: invitorInfo } = await pg.query(sql`
           SELECT role FROM groups_musicians
           WHERE musician = ${invitorId}
         `);
-      console.log(invitorInfo[0].role);
-      if (invitorInfo.length == 0 || invitorInfo[0].role === 'member') {
-        res.status(401).json({
+      console.log(invitorInfo);
+      console.log(invitorInfo.length);
+      if (invitorInfo.length === 0 || invitorInfo[0].role === 'member') {
+        return res.status(401).json({
           msg: 'E_UNAUTHORIZE_INVITOR',
         });
       }
@@ -60,11 +62,11 @@ router.post(
           ${musicianId},
           ${instrument},
           'pending',
-          'member'
+          ${role}
         )
         `);
       // créer une notification
-      res.sendStatus(201);
+      res.status(201).json('The user has been invited');
     } catch (err) {
       console.log(err);
       res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });

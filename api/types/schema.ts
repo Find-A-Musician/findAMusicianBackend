@@ -198,6 +198,7 @@ export interface operations {
           groupId: string;
           musicianId: string;
           instrumentId: string;
+          role: "lite_admin" | "member";
         };
       };
     };

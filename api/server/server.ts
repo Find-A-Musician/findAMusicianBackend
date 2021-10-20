@@ -13,7 +13,6 @@ import musiciansRouter from '../routes/musicians';
 import instrumentRouter from '../routes/instruments';
 import genresRouter from '../routes/genres';
 import refreshTokenRouter from '../routes/refreshToken';
-import groupInviteRouter from '../routes/groupInvitation';
 import profilRouter from '../routes/profil';
 import groupsRouter from '../routes/groups';
 

@@ -23,8 +23,10 @@ router.get(
   ) => {
     try {
       const { rows: groups } = await pg.query(sql`
-            SELECT groups.* FROM groups
+            SELECT * FROM groups
         `);
+
+      console.log(groups);
 
       //get each genre for each group
       for (let index = 0; index < groups.length; index++) {
@@ -41,13 +43,12 @@ router.get(
       for (let index = 0; index < groups.length; index++) {
         const { rows: groupMembers } = await pg.query(sql`
             SELECT given_name, family_name, instruments.name as instrument, role, membership
-            FROM musicians
-            INNER JOIN groups_musicians
-            ON groups_musicians.musician = musicians.id
-            INNER JOIN instruments
-            ON groups_musicians.instrument=instruments.id
+            FROM groups_musicians
+            INNER JOIN musicians 
+              ON musicians.id = groups_musicians.musician
+            INNER JOIN instruments 
+              ON groups_musicians.instrument = instruments.id
             WHERE groups_musicians."group"=${groups[index].id}
-                AND groups_musicians.membership='member'
           `);
         groups[index]['groupMembers'] = groupMembers;
       }

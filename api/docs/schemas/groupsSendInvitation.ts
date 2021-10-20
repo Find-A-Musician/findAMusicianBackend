@@ -12,11 +12,12 @@ const schema: HandlerDefinition = {
         'application/json': {
           schema: {
             type: 'object',
-            required: ['groupId', 'musicianId', 'instrumentId'],
+            required: ['groupId', 'musicianId', 'instrumentId', 'role'],
             properties: {
               groupId: { type: 'string' },
               musicianId: { type: 'string' },
               instrumentId: { type: 'string' },
+              role: { type: 'string', enum: ['lite_admin', 'member'] },
             },
           },
           example: {
