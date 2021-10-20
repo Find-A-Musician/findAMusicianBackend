@@ -1,30 +1,26 @@
 import { HandlerDefinition } from 'api/types/typing';
 
 const schema: HandlerDefinition = {
-  path: '/groups/invitation/send',
+  path: '/groups/invitation/response',
   post: {
-    operationId: 'sendGroupInvitation',
+    operationId: 'responseGroupInvitation',
     tags: ['groups'],
-    description: 'Invite a musician in a group',
+    description: 'Respond to a group invitation',
     security: [{ BearerAuth: [] }],
     requestBody: {
       content: {
         'application/json': {
           schema: {
             type: 'object',
-            required: ['groupId', 'musicianId', 'instrumentId', 'role'],
+            required: [],
             properties: {
               groupId: { type: 'string' },
-              musicianId: { type: 'string' },
-              instrumentId: { type: 'string' },
-              role: { type: 'string', enum: ['lite_admin', 'member'] },
+              response: { type: 'string', enum: ['declined', 'member'] },
             },
-          },
-          example: {
-            groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-            musicianId: '8c9a685a-2be9-4cf0-a03c-0b316fc4b515',
-            instrumentId: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-            role: 'member',
+            example: {
+              groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+              response: 'member',
+            },
           },
         },
       },
@@ -41,7 +37,7 @@ const schema: HandlerDefinition = {
         },
       },
       401: {
-        description: "User that invite doesn't have the access",
+        description: "User can't respond to this invitation",
         content: {
           'application/json': {
             schema: { $ref: '#/components/schemas/httpError' },
@@ -49,7 +45,7 @@ const schema: HandlerDefinition = {
         },
       },
       400: {
-        description: 'The user is already invited',
+        description: 'The user has already responded',
         content: {
           'application/json': {
             schema: { $ref: '#/components/schemas/httpError' },

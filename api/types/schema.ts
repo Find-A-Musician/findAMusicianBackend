@@ -8,6 +8,10 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/groups/invitation/response": {
+    /** Respond to a group invitation */
+    post: operations["responseGroupInvitation"];
+  };
   "/groups": {
     /** Get a list of all the groups */
     get: operations["getGroups"];
@@ -108,6 +112,43 @@ export interface operations {
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Respond to a group invitation */
+  responseGroupInvitation: {
+    responses: {
+      /** The user has been invited */
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user is already invited */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** User can't respond to this invitation */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId?: string;
+          response?: "declined" | "member";
         };
       };
     };
