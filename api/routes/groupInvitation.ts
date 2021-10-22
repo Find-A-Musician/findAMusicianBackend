@@ -66,10 +66,10 @@ router.post(
         )
         `);
       // créer une notification
-      res.status(201).json('The user has been invited');
+      return res.status(201).json('The user has been invited');
     } catch (err) {
       console.log(err);
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

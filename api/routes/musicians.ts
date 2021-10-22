@@ -44,9 +44,12 @@ router.get(
         rows[i]['genres'] = genreRows;
       }
 
-      res.status(200).setHeader('content-type', 'application/json').json(rows);
+      return res
+        .status(200)
+        .setHeader('content-type', 'application/json')
+        .json(rows);
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERROR' });
+      return res.status(500).json({ msg: 'E_SQL_ERROR' });
     }
   },
 );

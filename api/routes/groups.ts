@@ -53,9 +53,9 @@ router.get(
         groups[index]['groupMembers'] = groupMembers;
       }
 
-      res.status(200).json(groups);
+      return res.status(200).json(groups);
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERR', stack: err });
     }
   },
 );
@@ -97,7 +97,7 @@ router.post(
       )
     `);
       } catch (err) {
-        res.status(422).json({ msg: 'E_GROUP_NAME_ALREADY_TAKEN' });
+        return res.status(422).json({ msg: 'E_GROUP_NAME_ALREADY_TAKEN' });
       }
 
       for (let index = 0; index < req.body.group.genre.length; index++) {
@@ -128,9 +128,9 @@ router.post(
         )
       `);
 
-      res.sendStatus(201);
+      return res.sendStatus(201);
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

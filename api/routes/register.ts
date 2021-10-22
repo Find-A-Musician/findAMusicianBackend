@@ -27,7 +27,7 @@ router.post(
     const saltRound = 10;
     bcrypt.hash(body.password, saltRound, async function (err, hash) {
       if (err) {
-        res.status(500).json({
+        return res.status(500).json({
           msg: 'E_HASH_ERROR',
           stack: JSON.stringify(err),
         });
@@ -103,7 +103,7 @@ router.post(
             )
           `);
 
-        res.status(201).json({
+        return res.status(201).json({
           token: {
             accessToken,
             refreshToken,
@@ -124,7 +124,7 @@ router.post(
           instruments: body.instruments,
         });
       } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
           msg: 'E_SQL_ERROR',
           stack: JSON.stringify(err),
         });

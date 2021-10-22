@@ -29,9 +29,9 @@ router.get(
           name: string;
         }[];
       } = await pg.query(sql`SELECT * FROM instruments`);
-      res.status(200).json(rows);
+      return res.status(200).json(rows);
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

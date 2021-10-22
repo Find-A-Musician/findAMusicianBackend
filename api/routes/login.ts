@@ -29,18 +29,18 @@ router.post(
     );
 
     if (rows.length === 0) {
-      res.status(400).json({ msg: 'E_UNFOUND_USER' });
+      return res.status(400).json({ msg: 'E_UNFOUND_USER' });
     }
 
     const password = rows[0].password;
 
     bcrypt.compare(body.password, password, async function (err, result) {
       if (err) {
-        res.status(500).json({ msg: 'E_COMPARE_FAILED' });
+        return res.status(500).json({ msg: 'E_COMPARE_FAILED' });
       }
 
       if (!result) {
-        res.status(401).json({ msg: 'E_INVALID_PASSWORD' });
+        return res.status(401).json({ msg: 'E_INVALID_PASSWORD' });
       }
 
       const accessToken = generateToken(
@@ -62,7 +62,7 @@ router.post(
         )
       `);
 
-      res.status(200).json({
+      return res.status(200).json({
         token: {
           accessToken,
           refreshToken,
