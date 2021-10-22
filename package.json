@@ -57,6 +57,7 @@
   "scripts": {
     "test:unit": "jest ./api",
     "test:integration" : "jest ./test --detectOpenHandles",
+    "pg_reset" : "api/command/pg_reset.sh",
     "coverage": "jest --coverage",
     "start": "node ./build/index.js",
     "dev": "nodemon -L",

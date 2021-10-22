@@ -1,10 +1,14 @@
-name: tests
+name: 🧪 tests
 
 on:
   push:
     branches:
       - main
     pull_request:
+
+env:
+  ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+  REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
 
 jobs:
   tests:
@@ -29,11 +33,14 @@ jobs:
       - name: 🛠️ Run the docker containers
         run: docker-compose up -d
 
+      - name: 🛠️ Run the server
+        run: npm run dev
+
       - name: 🧪 Run the jest tests
         run: npm run test:unit
-        env:
-          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+
+      - name: 🔄 Reset the pgsql database
+        run: npm run pg_reset
 
       - name: 🧪 Run e2e tests
         run: npm run test:integration
