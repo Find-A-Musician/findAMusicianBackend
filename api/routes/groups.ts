@@ -2,7 +2,7 @@ import pg from '../postgres';
 import sql from 'sql-template-strings';
 import express from 'express';
 import { v4 as uuidV4 } from 'uuid';
-
+import invitationRouter from './groupInvitation';
 import type { operations } from '@schema';
 import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 import type core from 'express-serve-static-core';
@@ -12,6 +12,7 @@ type getGroups = operations['getGroups'];
 
 const router = express.Router();
 
+router.use('/invitation', invitationRouter);
 //return a list of all the groups registered
 
 router.get(
@@ -22,8 +23,10 @@ router.get(
   ) => {
     try {
       const { rows: groups } = await pg.query(sql`
-            SELECT groups.* FROM groups
+            SELECT * FROM groups
         `);
+
+      console.log(groups);
 
       //get each genre for each group
       for (let index = 0; index < groups.length; index++) {
@@ -39,14 +42,13 @@ router.get(
       //get every musicians of each group
       for (let index = 0; index < groups.length; index++) {
         const { rows: groupMembers } = await pg.query(sql`
-            SELECT given_name,family_name, instruments.name as instrument, role
-            FROM musicians
-            INNER JOIN groups_musicians
-            ON groups_musicians.musician = musicians.id
-            INNER JOIN instruments
-            ON groups_musicians.instrument=instruments.id
+            SELECT given_name, family_name, instruments.name as instrument, role, membership
+            FROM groups_musicians
+            INNER JOIN musicians 
+              ON musicians.id = groups_musicians.musician
+            INNER JOIN instruments 
+              ON groups_musicians.instrument = instruments.id
             WHERE groups_musicians."group"=${groups[index].id}
-                AND groups_musicians.membership='member'
           `);
         groups[index]['groupMembers'] = groupMembers;
       }

@@ -26,6 +26,7 @@ CREATE TABLE musicians (
     location locations DEFAULT NULL
 );
 
+
 INSERT INTO musicians VALUES (
     '8f6c1dd5-7444-46c9-b673-840731bfd041',
     'romain.guar01@gmail.com',
@@ -36,7 +37,8 @@ INSERT INTO musicians VALUES (
     NULL,
     NULL,
     'M1',
-    NULL,
+    --mdp : Romain91210!*!
+    '$2b$10$LzZyNfdbSttj2TGhWVMZ4uQq1fbNU.V/y122l8Sx7EW2BXGTxCQlq',
     'Douai'
 ) , (
     '8c9a685a-2be9-4cf0-a03c-0b316fc4b515',
@@ -48,6 +50,20 @@ INSERT INTO musicians VALUES (
     NULL,
     NULL,
     'M1',
+    --mdp : guillaume123
+    '$2b$10$BYtlJ2MV8d59/wLABQZO6.n.CSb9bkegfUwmsARqISHePVK5zxbh6',
+    'Douai'
+) , (
+    '74f3d613-39e7-4891-8491-8114988f490c',
+    'dorian.viala@gmail.com',
+    'Dorian',
+    'Viala',
     NULL,
+    NULL,
+    NULL,
+    NULL,
+    'M1',
+    --mdp : dorian123
+    '$2b$10$ebn7aGHs7nvFmyg0PIeaU.z0NegP/ikxX9rt7na4nZuJh9NA60BIq',
     'Douai'
 );

@@ -32,7 +32,8 @@ CREATE TABLE groups_musicians (
     musician uuid REFERENCES musicians (id),
     instrument uuid REFERENCES instruments (id),
     membership membership_status NOT NULL DEFAULT 'pending',
-    role group_roles NOT NULL DEFAULT 'member'
+    role group_roles NOT NULL DEFAULT 'member',
+    CONSTRAINT unique_musician UNIQUE ("group" , musician)
 );  
 
 INSERT INTO groups VALUES (
