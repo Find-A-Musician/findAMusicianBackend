@@ -4,6 +4,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import docs from '../docs/config/index';
 import authenticateToken from '../auth/authenticateToken';
+import * as OpenApiValidator from 'express-openapi-validator';
 
 // router import
 import registerRouter from '../routes/register';
@@ -21,6 +22,14 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// app.use(
+//   OpenApiValidator.middleware({
+//     apiSpec: docs,
+//     validateRequests: true, // (default)
+//     validateResponses: true, // false by default
+//   }),
+// );
 
 app.get('/test', authenticateToken, (req, res) => {
   const userId = req.userId;
