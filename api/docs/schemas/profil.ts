@@ -115,6 +115,33 @@ const schema: HandlerDefinition = {
       },
     },
   },
+  delete: {
+    operationId: 'deleteProfil',
+    tags: ['profil'],
+    security: [{ BearerAuth: [] }],
+    responses: {
+      200: {
+        description: 'The musician information has been updated',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export default schema;

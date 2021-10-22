@@ -4,9 +4,12 @@ CREATE TABLE genres (
 );
 
 CREATE TABLE musicians_genres (
-    musician uuid REFERENCES musicians (id) NOT NULL,
-    genre uuid REFERENCES genres (id) NOT NULL
+    musician uuid NOT NULL,
+    genre uuid NOT NULL
 );
+
+ALTER TABLE musicians_genres ADD FOREIGN KEY (musician) REFERENCES musicians (id) ON DELETE CASCADE;
+ALTER TABLE musicians_genres ADD FOREIGN KEY (genre) REFERENCES genres (id) ON DELETE CASCADE;
 
 INSERT INTO genres VALUES (
         'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',

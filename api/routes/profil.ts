@@ -8,6 +8,7 @@ import type { getHTTPCode, getResponsesBody, getRequestBody } from '@typing';
 
 type getProfil = operations['getProfil'];
 type patchProfil = operations['patchProfil'];
+type deleteProfil = operations['deleteProfil'];
 
 const router = express.Router();
 
@@ -188,4 +189,32 @@ router.patch(
     }
   },
 );
+
+router.delete(
+  '/',
+  async (
+    req: core.Request<
+      {},
+      getResponsesBody<deleteProfil>,
+      getRequestBody<deleteProfil>
+    >,
+    res: core.Response<
+      getResponsesBody<deleteProfil>,
+      {},
+      getHTTPCode<deleteProfil>
+    >,
+  ) => {
+    try {
+      await pg.query(sql`
+        DELETE FROM musicians
+        WHERE id = ${req.userId}
+      `);
+
+      return res.status(200).json('The user has been deleted');
+    } catch (err) {
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+    }
+  },
+);
+
 export default router;

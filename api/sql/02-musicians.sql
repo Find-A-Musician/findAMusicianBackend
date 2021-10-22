@@ -37,8 +37,8 @@ INSERT INTO musicians VALUES (
     NULL,
     NULL,
     'M1',
-    --mdp : Romain91210!*!
-    '$2b$10$LzZyNfdbSttj2TGhWVMZ4uQq1fbNU.V/y122l8Sx7EW2BXGTxCQlq',
+    --mdp : romain123
+    '$2b$10$oSkbT5bDabLIuJ5ikcdKT.11kquR8q4MU7sbgo1tFWU67AgnOcppu',
     'Douai'
 ) , (
     '8c9a685a-2be9-4cf0-a03c-0b316fc4b515',

@@ -18,8 +18,8 @@ const schema: HandlerDefinition = {
             },
           },
           example: {
-            email: 'john.doe@gmail.com',
-            password: 'password',
+            email: 'romain.guar01@gmail.com',
+            password: 'romain123',
           },
         },
       },

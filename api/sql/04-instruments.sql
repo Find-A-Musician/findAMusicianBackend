@@ -6,9 +6,12 @@ CREATE TABLE instruments (
 );
 
 CREATE TABLE musicians_instruments (
-    musician uuid REFERENCES musicians (id),
-    instrument uuid REFERENCES instruments (id)
+    musician uuid  NOT NULL,
+    instrument uuid NOT NULL
 );
+
+ALTER TABLE musicians_instruments ADD FOREIGN KEY (musician) REFERENCES musicians (id) ON DELETE CASCADE;
+ALTER TABLE musicians_instruments ADD FOREIGN KEY (instrument) REFERENCES instruments (id) ON DELETE CASCADE;
 
 INSERT INTO instruments VALUES (
     'cd836a31-1663-4a11-8a88-0a249aa70793',

@@ -23,18 +23,25 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE groups_genres (
-    "group" uuid REFERENCES groups (id),
-    genre uuid REFERENCES genres (id)
+    "group" uuid NOT NULL,
+    genre uuid NOT NULL
 );
 
+ALTER TABLE groups_genres ADD FOREIGN KEY ("group") REFERENCES groups (id) ON DELETE CASCADE;
+ALTER TABLE groups_genres ADD FOREIGN KEY (genre) REFERENCES genres (id) ON DELETE CASCADE;
+
 CREATE TABLE groups_musicians (
-    "group" uuid REFERENCES groups (id), 
-    musician uuid REFERENCES musicians (id),
-    instrument uuid REFERENCES instruments (id),
+    "group" uuid NOT NULL, 
+    musician uuid NOT NULL,
+    instrument uuid NOT NULL,
     membership membership_status NOT NULL DEFAULT 'pending',
     role group_roles NOT NULL DEFAULT 'member',
     CONSTRAINT unique_musician UNIQUE ("group" , musician)
-);  
+); 
+
+ALTER TABLE groups_musicians ADD FOREIGN KEY ("group") REFERENCES groups (id) ON DELETE CASCADE;
+ALTER TABLE groups_musicians ADD FOREIGN KEY (musician) REFERENCES musicians (id) ON DELETE CASCADE;
+ALTER TABLE groups_musicians ADD FOREIGN KEY (instrument) REFERENCES instruments (id) ON DELETE CASCADE;
 
 INSERT INTO groups VALUES (
     '0bc1164f-c92b-48f3-aadf-a2be610819d8',

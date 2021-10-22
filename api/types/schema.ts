@@ -38,6 +38,7 @@ export interface paths {
   "/profil": {
     /** Get the user connected profil */
     get: operations["getProfil"];
+    delete: operations["deleteProfil"];
     patch: operations["patchProfil"];
   };
   "/refresh_token": {
@@ -345,6 +346,22 @@ export interface operations {
           } & {
             password: unknown;
           };
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  deleteProfil: {
+    responses: {
+      /** The musician information has been updated */
+      200: {
+        content: {
+          "application/json": string;
         };
       };
       /** Error intern server */
