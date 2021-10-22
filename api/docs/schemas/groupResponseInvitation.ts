@@ -12,7 +12,7 @@ const schema: HandlerDefinition = {
         'application/json': {
           schema: {
             type: 'object',
-            required: [],
+            required: ['groupId', 'response'],
             properties: {
               groupId: { type: 'string' },
               response: { type: 'string', enum: ['declined', 'member'] },
@@ -27,7 +27,7 @@ const schema: HandlerDefinition = {
     },
     responses: {
       201: {
-        description: 'The user has been invited',
+        description: 'The user membershhip has been updated',
         content: {
           'application/json': {
             schema: {

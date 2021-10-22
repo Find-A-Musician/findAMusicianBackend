@@ -119,13 +119,13 @@ export interface operations {
   /** Respond to a group invitation */
   responseGroupInvitation: {
     responses: {
-      /** The user has been invited */
+      /** The user membershhip has been updated */
       201: {
         content: {
           "application/json": string;
         };
       };
-      /** The user is already invited */
+      /** The user has already responded */
       400: {
         content: {
           "application/json": components["schemas"]["httpError"];
@@ -147,8 +147,8 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          groupId?: string;
-          response?: "declined" | "member";
+          groupId: string;
+          response: "declined" | "member";
         };
       };
     };
