@@ -21,9 +21,9 @@ router.delete(
             DELETE FROM tokens
             WHERE musician = ${req.userId}
         `);
-      res.status(200).json('the user has been logout');
+      return res.status(200).json('the user has been logout');
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

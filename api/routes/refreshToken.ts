@@ -34,7 +34,7 @@ router.post(
         WHERE token=${req.body.refreshToken}
     `);
       if (rows.length === 0) {
-        res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
+        return res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
       }
 
       jwt.verify(
@@ -42,18 +42,18 @@ router.post(
         process.env.REFRESH_TOKEN_SECRET,
         (err, result: AuthTokenResult) => {
           if (err || result.grantType !== GrantTypes.RefreshToken) {
-            res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
+            return res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
           }
           const accessToken = generateToken(
             GrantTypes.AuthorizationCode,
             result.userId,
           );
 
-          res.status(200).json({ accessToken });
+          return res.status(200).json({ accessToken });
         },
       );
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );

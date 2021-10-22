@@ -44,9 +44,9 @@ router.get(
         instruments: instrumentsResponse,
         genres: genresResponse,
       };
-      res.status(200).json(response as getResponsesBody<getProfil>);
+      return res.status(200).json(response as getResponsesBody<getProfil>);
     } catch (err) {
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
     }
   },
 );
@@ -151,7 +151,9 @@ router.patch(
           `);
         }
       } catch (err) {
-        res.status(500).json({ msg: 'E_SQL_ERROR_INSTRUMENTS', stack: err });
+        return res
+          .status(500)
+          .json({ msg: 'E_SQL_ERROR_INSTRUMENTS', stack: err });
       }
 
       // //update the genres of the user
@@ -174,13 +176,15 @@ router.patch(
         `);
         }
       } catch (err) {
-        res.status(500).json({ msg: 'E_SQL_ERROR_GENRES', stack: err });
+        return res.status(500).json({ msg: 'E_SQL_ERROR_GENRES', stack: err });
       }
 
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } catch (err) {
       console.log(err);
-      res.status(500).json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
