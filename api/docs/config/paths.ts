@@ -1,5 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
-const test: OpenAPIV3.PathsObject = {
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+
+const paths: OpenAPIV3.Document['paths'] = {
   '/genres': {
     get: {
       operationId: 'getGenres',
@@ -136,15 +137,15 @@ const test: OpenAPIV3.PathsObject = {
               type: 'object',
               required: ['group', 'instrument'],
               properties: {
-                group: {
-                  allOf: [
-                    { $ref: '#/components/schemas/group' },
-                    {
-                      type: 'array',
-                      items: { $ref: '#/components/schemas/genre' },
-                    },
-                  ],
-                },
+                // group: {
+                //   allOf: [
+                //     { $ref: '#/components/schemas/group' },
+                //     {
+                //       type: 'array',
+                //       items: { $ref: '#/components/schemas/genre' },
+                //     },
+                //   ],
+                // },
                 instrument: { $ref: '#/components/schemas/instrument' },
               },
             },
@@ -154,10 +155,7 @@ const test: OpenAPIV3.PathsObject = {
                 description: 'the craziest group ever',
                 location: 'Lille',
                 genre: [
-                  {
-                    id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
-                    name: 'rock',
-                  },
+                  { id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d', name: 'rock' },
                 ],
               },
               instrument: {
@@ -601,10 +599,7 @@ const test: OpenAPIV3.PathsObject = {
                   id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
                   name: 'batterie',
                 },
-                {
-                  id: 'e345114e-7723-42eb-8ed1-f26cd2f9d084',
-                  name: 'guitare',
-                },
+                { id: 'e345114e-7723-42eb-8ed1-f26cd2f9d084', name: 'guitare' },
               ],
             },
           },
@@ -645,5 +640,4 @@ const test: OpenAPIV3.PathsObject = {
     },
   },
 };
-
-export default test;
+export default paths;

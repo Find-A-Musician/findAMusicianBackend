@@ -1,16 +1,19 @@
-import basicInfo from './basicInfo';
+import info from './basicInfo';
 import servers from './servers';
 import components from './components';
 import tags from './tags';
-import schemas from './schemas';
-import { OpenAPIV3 } from 'openapi-types';
+import security from './security';
+import paths from './paths';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 
 const docs: OpenAPIV3.Document = {
-  ...basicInfo,
-  ...servers,
-  ...components,
-  ...tags,
-  paths: schemas,
+  openapi: '3.0.1',
+  info,
+  servers,
+  security,
+  components,
+  tags,
+  paths: paths,
 };
 
 export default docs;

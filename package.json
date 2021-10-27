@@ -9,7 +9,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-openapi-validator": "^4.13.0",
+    "express-openapi-validator": "^4.13.2",
     "jsonwebtoken": "^8.5.1",
     "openapi-typescript": "^4.0.2",
     "pg": "^8.7.1",
@@ -60,11 +60,11 @@
     "lint": "eslint --fix './**/*.ts'",
     "prepare": "husky install",
     "uuid": "echo `uuidgen`",
-    "password" : "ts-node api/command/generateHash",
+    "password": "ts-node api/command/generateHash",
     "prettier": "prettier --config .prettierrc './**/*.ts' --write",
-    "types" : "tsc --project ./",
-    "generateTypes" : "ts-node api/command/generateType",
-    "compile" : "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
+    "types": "tsc --project ./",
+    "generateTypes": "ts-node api/command/generateType",
+    "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
   },
   "repository": {
     "type": "git",

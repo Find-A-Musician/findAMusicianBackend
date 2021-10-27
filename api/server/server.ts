@@ -23,13 +23,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// app.use(
-//   OpenApiValidator.middleware({
-//     apiSpec: docs,
-//     validateRequests: true, // (default)
-//     validateResponses: true, // false by default
-//   }),
-// );
+app.use(
+  OpenApiValidator.middleware({
+    apiSpec: docs,
+    validateRequests: true, // (default)
+    validateResponses: true, // false by default
+  }),
+);
 
 app.get('/test', authenticateToken, (req, res) => {
   const userId = req.userId;
