@@ -23,11 +23,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// serve the API documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
+
 app.use(
   OpenApiValidator.middleware({
     apiSpec: docs,
-    validateRequests: true, // (default)
-    validateResponses: true, // false by default
+    validateRequests: true,
+    validateResponses: true,
   }),
 );
 
@@ -56,7 +59,13 @@ app.use('/genres', authenticateToken, genresRouter);
 
 //group route
 app.use('/groups', authenticateToken, groupsRouter);
-// serve the API documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
+
+app.use((err, req, res, next) => {
+  // format error
+  res.status(err.status || 500).json({
+    message: err.message,
+    errors: err.errors,
+  });
+});
 
 export default app;

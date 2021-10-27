@@ -70,7 +70,6 @@ export interface components {
       name: string;
       desription?: string;
       location: "Douai" | "Lille";
-      genre?: components["schemas"]["genre"][];
     } & {
       description: unknown;
     };
@@ -199,9 +198,9 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          group: components["schemas"]["group"] &
-            components["schemas"]["genre"][];
           instrument: components["schemas"]["instrument"];
+        } & {
+          group: unknown;
         };
       };
     };

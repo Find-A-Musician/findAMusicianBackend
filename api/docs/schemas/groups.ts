@@ -57,13 +57,11 @@ const schema: HandlerDefinition = {
             required: ['group', 'instrument'],
             properties: {
               group: {
-                allOf: [
-                  { $ref: '#/components/schemas/group' },
-                  {
-                    type: 'array',
-                    items: { $ref: '#/components/schemas/genre' },
-                  },
-                ],
+                $ref: '#/components/schemas/group',
+              },
+              genres: {
+                type: 'array',
+                items: { $ref: '#/components/schemas/genre' },
               },
               instrument: { $ref: '#/components/schemas/instrument' },
             },

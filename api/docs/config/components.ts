@@ -38,10 +38,6 @@ const components: OpenAPIV3.Document['components'] = {
         name: { type: 'string' },
         desription: { type: 'string' },
         location: { type: 'string', enum: ['Douai', 'Lille'] },
-        genre: {
-          type: 'array',
-          items: { $ref: '#/components/schemas/genre' },
-        },
       },
     },
     groupMember: {

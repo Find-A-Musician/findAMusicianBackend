@@ -13,7 +13,7 @@ const docs: OpenAPIV3.Document = {
   security,
   components,
   tags,
-  paths: paths,
+  paths,
 };
 
 export default docs;

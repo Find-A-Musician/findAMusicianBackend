@@ -64,75 +64,75 @@ type postGroups = operations['createGroup'];
 
 // create a new group
 
-router.post(
-  '/',
-  async (
-    req: Request<
-      {},
-      getResponsesBody<postGroups>,
-      getRequestBody<postGroups>,
-      {}
-    >,
-    res: core.Response<
-      getResponsesBody<postGroups>,
-      {},
-      getHTTPCode<postGroups>
-    >,
-  ) => {
-    try {
-      const groupId = uuidV4();
+// router.post(
+//   '/',
+//   async (
+//     req: Request<
+//       {},
+//       getResponsesBody<postGroups>,
+//       getRequestBody<postGroups>,
+//       {}
+//     >,
+//     res: core.Response<
+//       getResponsesBody<postGroups>,
+//       {},
+//       getHTTPCode<postGroups>
+//     >,
+//   ) => {
+//     try {
+//       const groupId = uuidV4();
 
-      try {
-        await pg.query(sql`
-      INSERT INTO groups (
-        id,
-        name,
-        description,
-        location 
-      ) VALUES (
-        ${groupId},
-        ${req.body.group.name},
-        ${req.body.group.description},
-        ${req.body.group.location}
-      )
-    `);
-      } catch (err) {
-        return res.status(422).json({ msg: 'E_GROUP_NAME_ALREADY_TAKEN' });
-      }
+//       try {
+//         await pg.query(sql`
+//       INSERT INTO groups (
+//         id,
+//         name,
+//         description,
+//         location
+//       ) VALUES (
+//         ${groupId},
+//         ${req.body.group.name},
+//         ${req.body.group.description},
+//         ${req.body.group.location}
+//       )
+//     `);
+//       } catch (err) {
+//         return res.status(422).json({ msg: 'E_GROUP_NAME_ALREADY_TAKEN' });
+//       }
 
-      for (let index = 0; index < req.body.group.genre.length; index++) {
-        await pg.query(sql`
-          INSERT INTO groups_genres (
-            "group",
-            genre
-          ) VALUES (
-            ${groupId},
-            ${req.body.group.genre[index].id}
-          )
-        `);
-      }
+//       for (let index = 0; index < req.body.group.genre.length; index++) {
+//         await pg.query(sql`
+//           INSERT INTO groups_genres (
+//             "group",
+//             genre
+//           ) VALUES (
+//             ${groupId},
+//             ${req.body.group.genre[index].id}
+//           )
+//         `);
+//       }
 
-      await pg.query(sql`
-        INSERT INTO groups_musicians (
-          "group",
-          musician,
-          instrument,
-          membership,
-          role
-        ) VALUES (
-          ${groupId},
-          ${req.userId},
-          ${req.body.instrument.id},
-          'member',
-          'admin'
-        )
-      `);
+//       await pg.query(sql`
+//         INSERT INTO groups_musicians (
+//           "group",
+//           musician,
+//           instrument,
+//           membership,
+//           role
+//         ) VALUES (
+//           ${groupId},
+//           ${req.userId},
+//           ${req.body.instrument.id},
+//           'member',
+//           'admin'
+//         )
+//       `);
 
-      return res.sendStatus(201);
-    } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
-    }
-  },
-);
+//       return res.sendStatus(201);
+//     } catch (err) {
+//       return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+//     }
+//   },
+// );
 
 export default router;
