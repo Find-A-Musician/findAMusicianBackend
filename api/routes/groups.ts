@@ -21,12 +21,20 @@ router.get(
     req: Request<{}, getResponsesBody<getGroups>, {}, {}>,
     res: core.Response<getResponsesBody<getGroups>, {}, getHTTPCode<getGroups>>,
   ) => {
+    const response: getResponsesBody<getGroups> = [];
     try {
+      // Get all the groups and their information
       const { rows: groups } = await pg.query(sql`
             SELECT * FROM groups
         `);
 
-      console.log(groups);
+      // Assigning each groupInformation key/values
+      groups.forEach((group, index) => {
+        response[index] = {
+          groupInformation: group,
+          groupMembers: [],
+        };
+      });
 
       //get each genre for each group
       for (let index = 0; index < groups.length; index++) {
@@ -36,7 +44,7 @@ router.get(
             ON groups_genres.genre=genres.id
             WHERE groups_genres."group"=${groups[index].id}
         `);
-        groups[index]['genres'] = genres;
+        response[index].groupInformation.genre = genres;
       }
 
       //get every musicians of each group
@@ -50,10 +58,9 @@ router.get(
               ON groups_musicians.instrument = instruments.id
             WHERE groups_musicians."group"=${groups[index].id}
           `);
-        groups[index]['groupMembers'] = groupMembers;
+        response[index].groupMembers = groupMembers;
       }
-
-      return res.status(200).json(groups);
+      return res.status(200).json(response);
     } catch (err) {
       return res.status(500).json({ msg: 'E_SQL_ERR', stack: err });
     }

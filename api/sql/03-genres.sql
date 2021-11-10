@@ -1,6 +1,6 @@
 CREATE TABLE genres (
     id uuid PRIMARY KEY,
-    VARCHAR text NOT NULL UNIQUE
+    name text NOT NULL UNIQUE
 );
 
 CREATE TABLE musicians_genres (

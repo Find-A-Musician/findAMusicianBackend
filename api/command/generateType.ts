@@ -34,7 +34,7 @@ export default async function createAPITypes(): Promise<void> {
     }
 
     fs.writeFileSync(
-      './api/docs/config/schemas.ts',
+      './api/docs/config/paths.ts',
       "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const paths:OpenAPIV3.Document['paths'] = " +
         JSON.stringify(schemaObject) +
         '; export default paths',

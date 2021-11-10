@@ -13,10 +13,10 @@ const components: OpenAPIV3.Document['components'] = {
         },
         givenName: { type: 'string' },
         familyName: { type: 'string' },
-        phone: { type: 'string' },
-        facebookUrl: { type: 'string' },
-        twitterUrl: { type: 'string' },
-        instagramUrl: { type: 'string' },
+        phone: { type: 'string', nullable: true },
+        facebook_url: { type: 'string', nullable: true },
+        twitter_url: { type: 'string', nullable: true },
+        instagram_url: { type: 'string', nullable: true },
         promotion: {
           type: 'string',
           enum: ['L1', 'L2', 'L3', 'M1', 'M2'],
@@ -32,12 +32,16 @@ const components: OpenAPIV3.Document['components'] = {
     },
     group: {
       type: 'object',
-      required: ['name', 'description', 'location'],
+      required: ['name', 'description', 'location', 'genre'],
       properties: {
         id: { type: 'string' },
         name: { type: 'string' },
         desription: { type: 'string' },
         location: { type: 'string', enum: ['Douai', 'Lille'] },
+        genre: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/genre' },
+        },
       },
     },
     groupMember: {
