@@ -8,10 +8,8 @@ import path from 'path';
 
 export default async function createAPITypes(): Promise<void> {
   const schemaObject: {
-    paths: {
-      [key: string]: string;
-    };
-  } = { paths: {} };
+    [key: string]: string;
+  } = {};
 
   try {
     console.log('🔧 building the paths object...');
@@ -24,7 +22,9 @@ export default async function createAPITypes(): Promise<void> {
         .then(
           // add the path as key and schema as value to the schemaObject
           (module) => {
-            schemaObject['paths'][module.default.path] = { ...module.default };
+            const path = module.default.path;
+            delete module.default.path;
+            schemaObject[path] = { ...module.default };
           },
         )
         .catch((err) => {
@@ -34,8 +34,10 @@ export default async function createAPITypes(): Promise<void> {
     }
 
     fs.writeFileSync(
-      './api/docs/config/schemas.ts',
-      'export default ' + JSON.stringify(schemaObject),
+      './api/docs/config/paths.ts',
+      "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const paths:OpenAPIV3.Document['paths'] = " +
+        JSON.stringify(schemaObject) +
+        '; export default paths',
     );
 
     console.log('🚧 Writing the JSON API file...');
@@ -46,7 +48,7 @@ export default async function createAPITypes(): Promise<void> {
       () =>
         exec(
           // eslint-disable-next-line
-          'npx openapi-typescript ./api/types/doc.json --output ./api/types/schema.ts'
+          'npx openapi-typescript ./api/types/doc.json --output ./api/types/schema.ts',
         ),
     ]);
 

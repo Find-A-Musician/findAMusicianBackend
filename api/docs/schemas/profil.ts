@@ -14,7 +14,7 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'object',
-              required: ['musician', 'password', 'genres', 'instruments'],
+              required: ['musician', 'genres', 'instruments'],
               properties: {
                 musician: {
                   $ref: '#/components/schemas/musician',
@@ -67,9 +67,9 @@ const schema: HandlerDefinition = {
               givenName: { type: 'string' },
               familyName: { type: 'string' },
               phone: { type: 'string' },
-              facebookUrl: { type: 'string' },
-              twitterUrl: { type: 'string' },
-              instagramUrl: { type: 'string' },
+              facebook_url: { type: 'string' },
+              twitter_url: { type: 'string' },
+              instagram_url: { type: 'string' },
               promotion: {
                 type: 'string',
                 enum: ['L1', 'L2', 'L3', 'M1', 'M2'],

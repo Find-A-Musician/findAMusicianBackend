@@ -57,10 +57,10 @@ export interface components {
       email: string;
       givenName?: string;
       familyName?: string;
-      phone?: string;
-      facebookUrl?: string;
-      twitterUrl?: string;
-      instagramUrl?: string;
+      phone?: string | null;
+      facebook_url?: string | null;
+      twitter_url?: string | null;
+      instagram_url?: string | null;
       promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
       location?: "Douai" | "Lille";
       instruments?: components["schemas"]["instrument"][];
@@ -70,7 +70,7 @@ export interface components {
       name: string;
       desription?: string;
       location: "Douai" | "Lille";
-      genre?: components["schemas"]["genre"][];
+      genre: components["schemas"]["genre"][];
     } & {
       description: unknown;
     };
@@ -199,8 +199,8 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          group: components["schemas"]["group"] &
-            components["schemas"]["genre"][];
+          group: components["schemas"]["group"];
+          genres?: components["schemas"]["genre"][];
           instrument: components["schemas"]["instrument"];
         };
       };
@@ -343,8 +343,6 @@ export interface operations {
             musician: components["schemas"]["musician"];
             genres: components["schemas"]["genre"][];
             instruments: components["schemas"]["instrument"][];
-          } & {
-            password: unknown;
           };
         };
       };
@@ -394,9 +392,9 @@ export interface operations {
           givenName?: string;
           familyName?: string;
           phone?: string;
-          facebookUrl?: string;
-          twitterUrl?: string;
-          instagramUrl?: string;
+          facebook_url?: string;
+          twitter_url?: string;
+          instagram_url?: string;
           promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
           location?: "Douai" | "Lille";
           genres?: components["schemas"]["genre"][];

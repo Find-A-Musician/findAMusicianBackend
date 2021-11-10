@@ -75,24 +75,24 @@ router.patch(
                   WHERE id = ${req.userId}
               `);
       }
-      if (req.body.facebookUrl) {
+      if (req.body.facebook_url) {
         await pg.query(sql`
                     UPDATE musicians
-                    SET facebook_url = ${req.body.facebookUrl}
+                    SET facebook_url = ${req.body.facebook_url}
                     WHERE id = ${req.userId}
                 `);
       }
-      if (req.body.instagramUrl) {
+      if (req.body.instagram_url) {
         await pg.query(sql`
                       UPDATE musicians
-                      SET instagrams_url = ${req.body.instagramUrl}
+                      SET instagrams_url = ${req.body.instagram_url}
                       WHERE id = ${req.userId}
                   `);
       }
-      if (req.body.twitterUrl) {
+      if (req.body.twitter_url) {
         await pg.query(sql`
                         UPDATE musicians
-                        SET twitter_url = ${req.body.twitterUrl}
+                        SET twitter_url = ${req.body.twitter_url}
                         WHERE id = ${req.userId}
                     `);
       }

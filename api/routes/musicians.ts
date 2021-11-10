@@ -44,10 +44,29 @@ router.get(
         rows[i]['genres'] = genreRows;
       }
 
+      // The array used in the returned in the response
+      // object is filtered to delete all the key/value
+      // that are null , for example {phone : null}
+      // is deleted
+
+      console.log(rows[1].phone);
+      console.log(typeof rows[1].phone);
+
+      console.log('--------\n');
+
+      console.log(rows[1].facebook_url);
+      console.log(typeof rows[1].facebook_url);
+
       return res
         .status(200)
         .setHeader('content-type', 'application/json')
-        .json(rows);
+        .json(
+          rows.map((musician) => {
+            return Object.fromEntries(
+              Object.entries(musician).filter(([k]) => k !== 'phone'),
+            );
+          }) as getResponsesBody<GetMusician>,
+        );
     } catch (err) {
       return res.status(500).json({ msg: 'E_SQL_ERROR' });
     }
