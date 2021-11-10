@@ -4,6 +4,7 @@ import sql from 'sql-template-strings';
 import pg from '../postgres';
 import { v4 as uuidV4 } from 'uuid';
 import generateToken, { GrantTypes } from '../auth/generateToken';
+import cookie from 'cookie';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
@@ -61,6 +62,25 @@ router.post(
           ${rows[0].id}
         )
       `);
+
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('accessToken', accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== 'development',
+          sameSite: 'strict',
+          maxAge: 60,
+        }),
+      );
+
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== 'development',
+          sameSite: 'strict',
+        }),
+      );
 
       return res.status(200).json({
         token: {

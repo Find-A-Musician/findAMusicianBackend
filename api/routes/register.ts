@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidV4 } from 'uuid';
 import sql from 'sql-template-strings';
 import pg from '../postgres';
+import cookie from 'cookie';
 import generateToken from '../auth/generateToken';
 import { GrantTypes } from '../auth/generateToken';
 import type { Request } from 'express';
@@ -102,6 +103,25 @@ router.post(
               ${userId}
             )
           `);
+
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'strict',
+            maxAge: 60,
+          }),
+        );
+
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'strict',
+          }),
+        );
 
         return res.status(201).json({
           token: {
