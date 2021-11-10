@@ -13,5 +13,9 @@ const tags: OpenAPIV3.Document['tags'] = [
     name: 'test',
     description: 'Route for test',
   },
+  {
+    name: 'events',
+    description: 'Everything related to the events',
+  },
 ];
 export default tags;
