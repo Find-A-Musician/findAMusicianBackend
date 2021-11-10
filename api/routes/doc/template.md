@@ -36,3 +36,40 @@ router.get(
 
 export default router;
 ```
+
+### Classic OpenApi schema
+
+```ts
+import { HandlerDefinition } from 'api/types/typing';
+
+const schema: HandlerDefinition = {
+  path: '/',
+  post: {
+    operationId: '',
+    tags: [''],
+    description: '',
+    security: [{ BearerAuth: [] }],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {},
+        },
+      },
+    },
+    responses: {
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export default schema;
+```
