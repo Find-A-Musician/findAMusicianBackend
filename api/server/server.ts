@@ -18,6 +18,7 @@ import profilRouter from '../routes/profil';
 import groupsRouter from '../routes/groups';
 
 dotenv.config();
+
 const app = express();
 
 app.use(cors());
