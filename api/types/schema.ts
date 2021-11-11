@@ -8,6 +8,10 @@ export interface paths {
     /** A simple get route for testing */
     get: operations["test"];
   };
+  "/events": {
+    /** Get a list of all the events */
+    get: operations["getEvents"];
+  };
   "/genres": {
     /** Get a list of all genres */
     get: operations["getGenres"];
@@ -92,6 +96,14 @@ export interface components {
       id: string;
       name: string;
     };
+    event: {
+      id: string;
+      name: string;
+      description: string;
+      start_date: string;
+      end_date: string;
+      adress: string;
+    };
     token: {
       accessToken: string;
       refreshToken: string;
@@ -125,6 +137,23 @@ export interface operations {
       403: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get a list of all the events */
+  getEvents: {
+    responses: {
+      /** A list of all the events */
+      200: {
+        content: {
+          "application/json": components["schemas"]["event"][];
         };
       };
       /** Error intern server */
