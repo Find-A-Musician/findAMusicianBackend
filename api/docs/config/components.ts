@@ -71,14 +71,7 @@ const components: OpenAPIV3.Document['components'] = {
     },
     event: {
       type: 'object',
-      required: [
-        'id',
-        'name',
-        'description',
-        'start_date',
-        'end_date',
-        'adress',
-      ],
+      required: ['name', 'description', 'start_date', 'end_date', 'adress'],
       properties: {
         id: { type: 'string' },
         name: { type: 'string' },

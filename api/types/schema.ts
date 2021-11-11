@@ -11,6 +11,8 @@ export interface paths {
   "/events": {
     /** Get a list of all the events */
     get: operations["getEvents"];
+    /** Post a new event */
+    post: operations["postEvents"];
   };
   "/genres": {
     /** Get a list of all genres */
@@ -97,7 +99,7 @@ export interface components {
       name: string;
     };
     event: {
-      id: string;
+      id?: string;
       name: string;
       description: string;
       start_date: string;
@@ -161,6 +163,34 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
+      };
+    };
+  };
+  /** Post a new event */
+  postEvents: {
+    responses: {
+      /** The event has been created */
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** Event already created */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["event"];
       };
     };
   };

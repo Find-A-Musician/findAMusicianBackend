@@ -50,6 +50,7 @@ const schema: HandlerDefinition = {
     description: '',
     security: [{ BearerAuth: [] }],
     requestBody: {
+      required: true,
       content: {
         'application/json': {
           schema: {},
