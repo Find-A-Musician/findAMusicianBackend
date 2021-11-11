@@ -79,6 +79,7 @@ const components: OpenAPIV3.Document['components'] = {
         start_date: { type: 'string', format: 'date-time' },
         end_date: { type: 'string', format: 'date-time' },
         adress: { type: 'string' },
+        admin: { $ref: '#/components/schemas/musician' },
       },
     },
     token: {

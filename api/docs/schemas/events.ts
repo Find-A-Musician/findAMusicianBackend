@@ -87,6 +87,71 @@ const schema: HandlerDefinition = {
       },
     },
   },
+  delete: {
+    operationId: 'deleteEvents',
+    tags: ['events'],
+    description: 'Delete an event',
+    security: [{ BearerAuth: [] }],
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: ['event'],
+            properties: {
+              event: { type: 'string' },
+            },
+            example: {
+              event: '1f8e6640-8074-4525-997d-808f304b52e8',
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'The event has been deleted',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      403: {
+        description: 'The user does not have the right',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      404: {
+        description: 'The event does not exist',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export default schema;

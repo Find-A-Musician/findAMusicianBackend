@@ -60,7 +60,7 @@ app.use('/groups', authenticateToken, groupsRouter);
 
 // event route
 
-app.use('/events', eventsRoute);
+app.use('/events', authenticateToken, eventsRoute);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

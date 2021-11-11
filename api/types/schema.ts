@@ -13,6 +13,8 @@ export interface paths {
     get: operations["getEvents"];
     /** Post a new event */
     post: operations["postEvents"];
+    /** Delete an event */
+    delete: operations["deleteEvents"];
   };
   "/genres": {
     /** Get a list of all genres */
@@ -105,6 +107,7 @@ export interface components {
       start_date: string;
       end_date: string;
       adress: string;
+      admin?: components["schemas"]["musician"];
     };
     token: {
       accessToken: string;
@@ -191,6 +194,42 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["event"];
+      };
+    };
+  };
+  /** Delete an event */
+  deleteEvents: {
+    responses: {
+      /** The event has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          event: string;
+        };
       };
     };
   };

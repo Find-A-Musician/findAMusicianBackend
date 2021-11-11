@@ -1,5 +1,6 @@
 -- Drop all the database  
 DROP TABLE IF EXISTS musicians_instruments;
+DROP TABLE IF EXISTS events_admin;
 DROP TABLE IF EXISTS musicians_genres;
 DROP TABLE IF EXISTS events_genres;
 DROP TABLE IF EXISTS events_groups;

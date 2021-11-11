@@ -25,6 +25,15 @@ ALTER TABLE events_groups ADD FOREIGN KEY (event) REFERENCES events (id) ON DELE
 ALTER TABLE events_groups ADD FOREIGN KEY ("group") REFERENCES groups (id) ON DELETE CASCADE;
 
 
+CREATE TABLE events_admin (
+    event uuid NOT NULL,
+    admin uuid NOT NULL
+);
+
+
+ALTER TABLE events_admin ADD FOREIGN KEY (event) REFERENCES events (id) ON DELETE CASCADE;
+ALTER TABLE events_admin ADD FOREIGN KEY (admin) REFERENCES musicians (id) ON DELETE CASCADE;
+
 INSERT INTO events VALUES (
     '1f8e6640-8074-4525-997d-808f304b52e8',
     'IMT Tremplin',
@@ -42,4 +51,9 @@ INSERT INTO events_genres VALUES (
 INSERT INTO events_groups VALUES (
     '1f8e6640-8074-4525-997d-808f304b52e8',
     '0bc1164f-c92b-48f3-aadf-a2be610819d8'
+);
+
+INSERT INTO events_admin VALUES (
+    '1f8e6640-8074-4525-997d-808f304b52e8',
+    '8f6c1dd5-7444-46c9-b673-840731bfd041'
 );
