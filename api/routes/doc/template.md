@@ -26,7 +26,7 @@ router.get(
   async (
     req: core.Request<
       {},
-      getResponseBody<Foo>,
+      getResponsesBody<Foo>,
       getRequestBody<Foo>,
       getPathParams<Foo>
     >,

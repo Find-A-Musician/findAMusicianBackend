@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import docs from '../docs/config/index';
 import authenticateToken from '../auth/authenticateToken';
 import * as OpenApiValidator from 'express-openapi-validator';
-
+import type { Request, Response, NextFunction } from 'express';
 // router import
 import registerRouter from '../routes/register';
 import loginRouter from '../routes/login';
@@ -16,6 +16,7 @@ import genresRouter from '../routes/genres';
 import refreshTokenRouter from '../routes/refreshToken';
 import profilRouter from '../routes/profil';
 import groupsRouter from '../routes/groups';
+import testRouter from '../routes/apiTest';
 
 dotenv.config();
 
@@ -35,12 +36,8 @@ app.use(
   }),
 );
 
-app.get('/test', authenticateToken, (req, res) => {
-  const userId = req.userId;
-  res.status(200).json({
-    userId,
-  });
-});
+// test route
+app.use('/test', authenticateToken, testRouter);
 
 // auth routes
 app.use('/register', registerRouter);
@@ -61,6 +58,7 @@ app.use('/genres', authenticateToken, genresRouter);
 //group route
 app.use('/groups', authenticateToken, groupsRouter);
 
+// eslint-disable-next-line no-use-before-define
 app.use((err, req, res, next) => {
   // format error
   res.status(err.status || 500).json({

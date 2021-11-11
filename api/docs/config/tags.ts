@@ -9,5 +9,9 @@ const tags: OpenAPIV3.Document['tags'] = [
     name: 'profil',
     description: 'Everything related to the current logged user profil',
   },
+  {
+    name: 'test',
+    description: 'Route for test',
+  },
 ];
 export default tags;
