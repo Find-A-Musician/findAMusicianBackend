@@ -103,4 +103,74 @@ describe('/groupinvitation', () => {
         expect(msg).toStrictEqual('E_UNAUTHORIZE_INVITOR');
       });
   });
+
+  it('User respond to the invitation', async () => {
+    pg.query.mockReturnValueOnce({
+      rows: [
+        {
+          membership: 'pending',
+        },
+      ],
+    });
+
+    pg.query.mockReturnValueOnce({});
+
+    const body = {
+      groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+      response: 'member',
+    };
+
+    await request(app)
+      .post('/groups/invitation/response')
+      .set('Authorization', token)
+      .send(body)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toStrictEqual('The user membership has been updated');
+      });
+  });
+
+  it("User can't respond to the invitation", async () => {
+    pg.query.mockReturnValueOnce({
+      rows: [],
+    });
+
+    const body = {
+      groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+      response: 'member',
+    };
+
+    await request(app)
+      .post('/groups/invitation/response')
+      .set('Authorization', token)
+      .send(body)
+      .expect(401)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual("User can't respond to this invitation");
+      });
+  });
+
+  it('User has already respond to the invitation', async () => {
+    pg.query.mockReturnValueOnce({
+      rows: [
+        {
+          membership: 'member',
+        },
+      ],
+    });
+
+    const body = {
+      groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+      response: 'member',
+    };
+
+    await request(app)
+      .post('/groups/invitation/response')
+      .set('Authorization', token)
+      .send(body)
+      .expect(401)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('The user has already responded');
+      });
+  });
 });
