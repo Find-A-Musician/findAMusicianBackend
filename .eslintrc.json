@@ -44,6 +44,7 @@
         }
       }
     ],
+
     "@typescript-eslint/ban-types": ["error",
       {
           "types": {
