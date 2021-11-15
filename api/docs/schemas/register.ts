@@ -74,6 +74,7 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'object',
+              required: ['token', 'musician', 'genres', 'instruments'],
               properties: {
                 token: { $ref: '#/components/schemas/token' },
                 musician: { $ref: '#/components/schemas/musician' },
