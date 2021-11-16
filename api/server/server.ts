@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import docs from '../docs/config/index';
 import authenticateToken from '../auth/authenticateToken';
 import * as OpenApiValidator from 'express-openapi-validator';
-import type { Request, Response, NextFunction } from 'express';
+
 // router import
 import registerRouter from '../routes/register';
 import loginRouter from '../routes/login';

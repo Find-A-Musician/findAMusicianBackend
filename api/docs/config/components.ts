@@ -4,7 +4,7 @@ const components: OpenAPIV3.Document['components'] = {
   schemas: {
     musician: {
       type: 'object',
-      required: ['email', 'id'],
+      required: ['email'],
       properties: {
         id: { type: 'string' },
         email: {

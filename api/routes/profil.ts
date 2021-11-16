@@ -26,6 +26,7 @@ router.get(
             FROM musicians
             WHERE musicians.id = ${req.userId}
         `);
+
       const { rows: instrumentsResponse } = await pg.query(sql`
         SELECT instruments.*
         FROM instruments
@@ -33,6 +34,7 @@ router.get(
         ON instruments.id = musicians_instruments.instrument
         WHERE musicians_instruments.musician= ${req.userId}
     `);
+
       const { rows: genresResponse } = await pg.query(sql`
         SELECT genres.*
         FROM genres
@@ -40,11 +42,13 @@ router.get(
         ON musicians_genres.genre=genres.id
         WHERE musicians_genres.musician = ${req.userId}
     `);
+
       const response = {
         musician: musicianResponse,
         instruments: instrumentsResponse,
         genres: genresResponse,
       };
+
       return res.status(200).json(response as getResponsesBody<getProfil>);
     } catch (err) {
       return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });

@@ -36,20 +36,23 @@ router.post(
           WHERE "group"=${groupId}
             AND musician=${musicianId}
         `);
+
       if (musicianGroupResult.length !== 0) {
         return res.status(400).json({ msg: 'E_ALREADY_INVITED' });
       }
+
       const { rows: invitorInfo } = await pg.query(sql`
           SELECT role FROM groups_musicians
           WHERE musician = ${invitorId}
+            AND "group" = ${groupId}
         `);
-      console.log(invitorInfo);
-      console.log(invitorInfo.length);
+
       if (invitorInfo.length === 0 || invitorInfo[0].role === 'member') {
         return res.status(401).json({
           msg: 'E_UNAUTHORIZE_INVITOR',
         });
       }
+
       await pg.query(sql`
         INSERT INTO groups_musicians (
           "group",

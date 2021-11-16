@@ -57,7 +57,7 @@ export interface paths {
 export interface components {
   schemas: {
     musician: {
-      id: string;
+      id?: string;
       email: string;
       givenName?: string;
       familyName?: string;
@@ -476,10 +476,10 @@ export interface operations {
       201: {
         content: {
           "application/json": {
-            token?: components["schemas"]["token"];
-            musician?: components["schemas"]["musician"];
-            genres?: components["schemas"]["genre"][];
-            instruments?: components["schemas"]["instrument"][];
+            token: components["schemas"]["token"];
+            musician: components["schemas"]["musician"];
+            genres: components["schemas"]["genre"][];
+            instruments: components["schemas"]["instrument"][];
           };
         };
       };

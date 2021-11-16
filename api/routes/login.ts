@@ -35,10 +35,8 @@ router.post(
 
     const password = rows[0].password;
 
-    bcrypt.compare(body.password, password, async function (err, result) {
-      if (err) {
-        return res.status(500).json({ msg: 'E_COMPARE_FAILED' });
-      }
+    try {
+      const result = await bcrypt.compare(body.password, password);
 
       if (!result) {
         return res.status(401).json({ msg: 'E_INVALID_PASSWORD' });
@@ -89,7 +87,9 @@ router.post(
         },
         musician: rows[0],
       });
-    });
+    } catch (err) {
+      return res.status(500).json({ msg: 'E_COMPARE_FAILED' });
+    }
   },
 );
 
