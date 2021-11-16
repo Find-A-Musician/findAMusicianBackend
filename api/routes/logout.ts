@@ -1,4 +1,4 @@
-import pg from '../postgres';
+import query from '../postgres';
 import sql from 'sql-template-strings';
 import cookie from 'cookie';
 import express from 'express';
@@ -18,7 +18,7 @@ router.delete(
     res: core.Response<getResponsesBody<Logout>, {}, getHTTPCode<Logout>>,
   ) => {
     try {
-      await pg.query(sql`
+      await query(sql`
             DELETE FROM tokens
             WHERE musician = ${req.userId}
         `);

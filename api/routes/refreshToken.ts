@@ -1,4 +1,4 @@
-import pg from '../postgres';
+import query from '../postgres';
 import sql from 'sql-template-strings';
 import express from 'express';
 import jwt from 'jsonwebtoken';
@@ -29,7 +29,7 @@ router.post(
     res: core.Response<getResponsesBody<PostToken>, {}, getHTTPCode<PostToken>>,
   ) => {
     try {
-      const { rows } = await pg.query(sql`
+      const { rows } = await query(sql`
         SELECT * FROM tokens
         WHERE token=${req.body.refreshToken}
     `);

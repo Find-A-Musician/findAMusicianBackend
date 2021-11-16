@@ -1,5 +1,5 @@
 import express from 'express';
-import pg from '../postgres';
+import query from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
 import type { getHTTPCode, getResponsesBody } from '@typing';
@@ -16,7 +16,7 @@ router.get(
     res: core.Response<getResponsesBody<GetGenres>, {}, getHTTPCode<GetGenres>>,
   ) => {
     try {
-      const { rows } = await pg.query(sql`
+      const { rows } = await query(sql`
         SELECT * FROM genres
     `);
       return res.status(200).json(rows);

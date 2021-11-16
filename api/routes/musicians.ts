@@ -1,5 +1,5 @@
 import express from 'express';
-import pg from '../postgres';
+import query from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
 import type { Request } from 'express';
@@ -21,10 +21,10 @@ router.get(
     >,
   ) => {
     try {
-      const { rows } = await pg.query(sql`SELECT * FROM musicians`);
+      const { rows } = await query(sql`SELECT * FROM musicians`);
 
       for (let i = 0; i < rows.length; i++) {
-        const { rows: instrumentsRows } = await pg.query(sql`
+        const { rows: instrumentsRows } = await query(sql`
         SELECT instruments.* 
         FROM instruments
         INNER JOIN musicians_instruments
@@ -35,7 +35,7 @@ router.get(
         rows[i]['instruments'] = instrumentsRows;
       }
       for (let i = 0; i < rows.length; i++) {
-        const { rows: genreRows } = await pg.query(sql`
+        const { rows: genreRows } = await query(sql`
         SELECT genres.* 
         FROM genres
         INNER JOIN musicians_genres

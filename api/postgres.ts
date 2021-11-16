@@ -8,4 +8,6 @@ const pg = new Pool({
   port: 5432,
 });
 
-export default pg;
+const query = pg.query;
+
+export default query;

@@ -4,7 +4,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import { v4 as uuidV4 } from 'uuid';
 import sql from 'sql-template-strings';
-import pg from '../postgres';
+import query from '../postgres';
 import cookie from 'cookie';
 import generateToken from '../auth/generateToken';
 import { GrantTypes } from '../auth/generateToken';
@@ -31,7 +31,7 @@ router.post(
       const hash = await bcrypt.hash(body.password, saltRound);
       const userId = uuidV4();
       try {
-        await pg.query(
+        await query(
           sql`INSERT INTO musicians (
           id,
           email,
@@ -60,7 +60,7 @@ router.post(
         `,
         );
         for (let i = 0; i < body.genres.length; i++) {
-          await pg.query(sql`
+          await query(sql`
               INSERT INTO musicians_genres (
                 musician,
                 genre
@@ -72,7 +72,7 @@ router.post(
             `);
         }
         for (let i = 0; i < body.instruments.length; i++) {
-          await pg.query(sql`
+          await query(sql`
               INSERT INTO musicians_instruments (
                 musician,
                 instrument
@@ -88,7 +88,7 @@ router.post(
 
         const refreshToken = generateToken(GrantTypes.RefreshToken, userId);
 
-        await pg.query(sql`
+        await query(sql`
             INSERT INTO tokens (
               id,
               token,
