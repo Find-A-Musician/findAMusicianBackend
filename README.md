@@ -1,5 +1,9 @@
 # findAMusician
 
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/RomainGuarinoni/findAMusician)
+
+[![Build status](https://travis-ci.com/nfroidure/whook.svg?branch=master)](https://travis-ci.com/github/RomainGuarinoni/findAMusician)
+
 A website for my school where the musicians can contact each others, create
 groups and register to play at events
 
@@ -145,4 +149,5 @@ https://www.figma.com/file/HOpu5h8KqPTw0abgOWBM0i/Find-a-musicien?node-id=0%3A1
 
 dokcer-pgsql : https://codewithhugo.com/node-postgres-express-docker-compose/
 
-- test : https://github.com/JoshuaToth/Node-Express-Jest-PSQL-Typescript-Template
+- test :
+  https://github.com/JoshuaToth/Node-Express-Jest-PSQL-Typescript-Template
