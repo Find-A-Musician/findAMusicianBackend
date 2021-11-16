@@ -26,13 +26,9 @@ router.post(
     const body = req.body;
 
     const saltRound = 10;
-    bcrypt.hash(body.password, saltRound, async function (err, hash) {
-      if (err) {
-        return res.status(500).json({
-          msg: 'E_HASH_ERROR',
-          stack: JSON.stringify(err),
-        });
-      }
+
+    try {
+      const hash = await bcrypt.hash(body.password, saltRound);
       const userId = uuidV4();
       try {
         await pg.query(
@@ -149,7 +145,12 @@ router.post(
           stack: JSON.stringify(err),
         });
       }
-    });
+    } catch (err) {
+      return res.status(500).json({
+        msg: 'E_HASH_ERROR',
+        stack: JSON.stringify(err),
+      });
+    }
   },
 );
 

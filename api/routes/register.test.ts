@@ -3,9 +3,13 @@ import request from 'supertest';
 import app from '../server/server';
 import { operations } from '@schema';
 import { getRequestBody } from '@typing';
+import bcrypt from 'bcrypt';
+
+jest.mock('bcrypt');
 
 describe('/register', () => {
   const pg: any = new Pool();
+  const hash = bcrypt.compare as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -32,6 +36,7 @@ describe('/register', () => {
       instruments: [{ id: 'id', name: 'name' }],
     };
 
+    hash.mockRejectedValueOnce('string');
     pg.query.mockReturnValueOnce();
     pg.query.mockReturnValueOnce();
     pg.query.mockReturnValueOnce();

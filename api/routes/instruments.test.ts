@@ -2,7 +2,6 @@ import app from '../server/server';
 import request from 'supertest';
 import { Pool } from 'pg';
 import generateToken, { GrantTypes } from '../auth/generateToken';
-import pg from '@postgres';
 
 describe('/instruments', () => {
   const pg: any = new Pool();
