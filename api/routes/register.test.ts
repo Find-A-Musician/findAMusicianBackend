@@ -9,7 +9,7 @@ jest.mock('bcrypt');
 
 describe('/register', () => {
   const pg: any = new Pool();
-  const hash = bcrypt.compare as jest.Mock;
+  const hash = bcrypt.hash as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -36,7 +36,7 @@ describe('/register', () => {
       instruments: [{ id: 'id', name: 'name' }],
     };
 
-    hash.mockRejectedValueOnce('string');
+    hash.mockImplementationOnce((): Promise<string> => Promise.resolve('hash'));
     pg.query.mockReturnValueOnce();
     pg.query.mockReturnValueOnce();
     pg.query.mockReturnValueOnce();
@@ -45,5 +45,39 @@ describe('/register', () => {
     await request(app).post('/register').send(bodyMusician).expect(201);
 
     expect(pg.query).toBeCalledTimes(4);
+  });
+
+  it('Failed to hash the password', async () => {
+    const bodyMusician: getRequestBody<operations['register']> = {
+      musician: {
+        email: 'test@gmail.com',
+        givenName: 'Test',
+        familyName: 'test',
+        phone: '0655443322',
+        facebook_url: 'url',
+        promotion: 'M1',
+        location: 'Douai',
+      },
+      genres: [
+        {
+          id: 'id',
+          name: 'genre',
+        },
+      ],
+      password: 'password',
+      instruments: [{ id: 'id', name: 'name' }],
+    };
+
+    hash.mockImplementation(() => {
+      throw new Error();
+    });
+
+    await request(app)
+      .post('/register')
+      .send(bodyMusician)
+      .expect(500)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('E_HASH_ERROR');
+      });
   });
 });
