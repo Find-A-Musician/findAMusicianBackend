@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import request from 'supertest';
 import app from '../server/server';
 import { operations } from '@schema';
@@ -7,8 +7,11 @@ import bcrypt from 'bcrypt';
 
 jest.mock('bcrypt');
 
+jest.mock('../postgres');
+
 describe('/register', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
+
   const hash = bcrypt.hash as jest.Mock;
 
   beforeEach(() => {
@@ -37,10 +40,10 @@ describe('/register', () => {
     };
 
     hash.mockImplementationOnce((): Promise<string> => Promise.resolve('hash'));
-    pg.query.mockReturnValueOnce();
-    pg.query.mockReturnValueOnce();
-    pg.query.mockReturnValueOnce();
-    pg.query.mockReturnValueOnce();
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
 
     await request(app)
       .post('/register')
@@ -53,7 +56,7 @@ describe('/register', () => {
         expect(header['set-cookie'].length).toStrictEqual(2);
       });
 
-    expect(pg.query).toBeCalledTimes(4);
+    expect(query).toBeCalledTimes(4);
   });
 
   it('Failed to hash the password', async () => {

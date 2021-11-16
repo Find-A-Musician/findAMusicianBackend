@@ -1,10 +1,12 @@
 import app from '../server/server';
 import request from 'supertest';
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/musicians', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
 
   const token = `Bearer ${generateToken(
     GrantTypes.AuthorizationCode,
@@ -16,7 +18,7 @@ describe('/musicians', () => {
   });
 
   it('Return all the musicians', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'musicianId',
@@ -25,7 +27,7 @@ describe('/musicians', () => {
       ],
     });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'instrumentId',
@@ -34,7 +36,7 @@ describe('/musicians', () => {
       ],
     });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'genreId',
@@ -42,7 +44,7 @@ describe('/musicians', () => {
         },
       ],
     });
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'genreId',

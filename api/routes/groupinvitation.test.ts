@@ -1,10 +1,12 @@
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import app from '../server/server';
 import request from 'supertest';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/groupinvitation', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
 
   const body = {
     groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
@@ -23,15 +25,15 @@ describe('/groupinvitation', () => {
   });
 
   it('send an invitation', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [],
     });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [{ role: 'admin' }],
     });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [],
     });
 
@@ -46,7 +48,7 @@ describe('/groupinvitation', () => {
   });
 
   it('The user is already invited', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           group: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
@@ -69,9 +71,9 @@ describe('/groupinvitation', () => {
   });
 
   it('The invitor is a member', async () => {
-    pg.query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           role: 'member',
@@ -90,9 +92,9 @@ describe('/groupinvitation', () => {
   });
 
   it('The inviror is not in the', async () => {
-    pg.query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
 
-    pg.query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
 
     await request(app)
       .post('/groups/invitation/send')
@@ -105,7 +107,7 @@ describe('/groupinvitation', () => {
   });
 
   it('User respond to the invitation', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           membership: 'pending',
@@ -113,7 +115,7 @@ describe('/groupinvitation', () => {
       ],
     });
 
-    pg.query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
 
     const body = {
       groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
@@ -131,7 +133,7 @@ describe('/groupinvitation', () => {
   });
 
   it("User can't respond to the invitation", async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [],
     });
 
@@ -151,7 +153,7 @@ describe('/groupinvitation', () => {
   });
 
   it('User has already respond to the invitation', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           membership: 'member',

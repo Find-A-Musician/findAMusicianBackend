@@ -1,10 +1,12 @@
 import app from '../server/server';
 import request from 'supertest';
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/logout', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
 
   const token = `Bearer ${generateToken(
     GrantTypes.AuthorizationCode,
@@ -16,7 +18,7 @@ describe('/logout', () => {
   });
 
   it('Logout the user', async () => {
-    pg.query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
     await request(app)
       .delete('/logout')
       .set('Authorization', token)

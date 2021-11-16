@@ -1,14 +1,16 @@
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import app from '../server/server';
 import request from 'supertest';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/refreshToken', () => {
+  const query = queryMock as jest.Mock;
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
-  const pg: any = new Pool();
 
   const refreshToken = generateToken(GrantTypes.RefreshToken, 'id');
   const accessToken = generateToken(GrantTypes.AuthorizationCode, 'id');
@@ -18,7 +20,7 @@ describe('/refreshToken', () => {
   const outdatedBody = { refreshToken: 'outdated' };
 
   it('Return a new access token', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'id',
@@ -38,7 +40,7 @@ describe('/refreshToken', () => {
   });
 
   it('Failed because the token is not in the DB', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [],
     });
 
@@ -52,7 +54,7 @@ describe('/refreshToken', () => {
   });
 
   it('Failed because the token is an accessToken', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'id',
@@ -72,7 +74,7 @@ describe('/refreshToken', () => {
   });
 
   it('Failed because the token is outdated', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'id',

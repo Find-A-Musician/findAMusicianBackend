@@ -1,13 +1,15 @@
 import app from '../server/server';
 import request from 'supertest';
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import bcrypt from 'bcrypt';
 
 jest.mock('bcrypt');
 
+jest.mock('../postgres');
+
 describe('/login', () => {
-  const pg: any = new Pool();
   const compare = bcrypt.compare as jest.Mock;
+  const query = queryMock as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,7 +22,7 @@ describe('/login', () => {
       password: 'romain123',
     };
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [{ id: 'id', password: 'hash', email: 'test@gmail.com' }],
     });
 
@@ -46,7 +48,7 @@ describe('/login', () => {
       password: 'romain123',
     };
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [{ id: 'id', password: 'hash', email: 'test@gmail.com' }],
     });
 
@@ -69,7 +71,7 @@ describe('/login', () => {
       password: 'romain123',
     };
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [{ id: 'id', password: 'hash', email: 'test@gmail.com' }],
     });
 
@@ -92,7 +94,7 @@ describe('/login', () => {
       password: 'romain123',
     };
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [],
     });
 
@@ -111,7 +113,7 @@ describe('/login', () => {
       password: 'romain123',
     };
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [{ id: 'id', password: 'hash', email: 'test@gmail.com' }],
     });
 

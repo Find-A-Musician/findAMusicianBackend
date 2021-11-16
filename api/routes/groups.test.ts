@@ -1,10 +1,12 @@
 import app from '../server/server';
 import request from 'supertest';
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/groups', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
 
   const token = `Bearer ${generateToken(GrantTypes.AuthorizationCode, 'id')}`;
 
@@ -30,15 +32,15 @@ describe('/groups', () => {
       email: 'test@email',
     };
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [groupInformation],
     });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [genre],
     });
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [groupMembers],
     });
 
@@ -81,9 +83,9 @@ describe('/groups', () => {
       },
     };
 
-    pg.query.mockReturnValueOnce({});
-    pg.query.mockReturnValueOnce({});
-    pg.query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
 
     await request(app)
       .post('/groups')
@@ -111,7 +113,7 @@ describe('/groups', () => {
       },
     };
 
-    pg.query.mockImplementation(() => {
+    query.mockImplementation(() => {
       throw new Error();
     });
 

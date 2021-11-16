@@ -1,10 +1,12 @@
 import app from '../server/server';
 import request from 'supertest';
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/instruments', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -16,7 +18,7 @@ describe('/instruments', () => {
       '8f6c1dd5-7444-46c9-b673-840731bfd041',
     )}`;
 
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'id',

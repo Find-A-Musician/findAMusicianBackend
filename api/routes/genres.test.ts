@@ -1,17 +1,19 @@
-import { Pool } from 'pg';
+import queryMock from '../postgres';
 import request from 'supertest';
 import app from '../server/server';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
+jest.mock('../postgres');
+
 describe('/genres', () => {
-  const pg: any = new Pool();
+  const query = queryMock as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('Return the genres list', async () => {
-    pg.query.mockReturnValueOnce({
+    query.mockReturnValueOnce({
       rows: [
         {
           id: 'id',
@@ -31,6 +33,6 @@ describe('/genres', () => {
       )
       .expect(200);
 
-    expect(pg.query).toBeCalledTimes(1);
+    expect(query).toBeCalledTimes(1);
   });
 });

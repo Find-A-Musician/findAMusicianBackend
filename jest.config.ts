@@ -5,6 +5,5 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   verbose: true,
   modulePathIgnorePatterns: ['build'],
-  setupFilesAfterEnv: ['./api/test/unitConfig.ts'],
 };
 export default config;
