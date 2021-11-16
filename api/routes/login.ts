@@ -1,10 +1,9 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import sql from 'sql-template-strings';
-import pg from '../postgres';
+import query from '../postgres';
 import { v4 as uuidV4 } from 'uuid';
 import generateToken, { GrantTypes } from '../auth/generateToken';
-import cookie from 'cookie';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
@@ -22,7 +21,7 @@ router.post(
   ) => {
     const body = req.body;
 
-    const { rows } = await pg.query(
+    const { rows } = await query(
       sql`SELECT * 
             FROM musicians 
             WHERE email=${body.email} 
@@ -49,7 +48,7 @@ router.post(
 
       const refreshToken = generateToken(GrantTypes.RefreshToken, rows[0].id);
 
-      await pg.query(sql`
+      await query(sql`
         INSERT INTO tokens (
           id,
           token,
@@ -61,24 +60,18 @@ router.post(
         )
       `);
 
-      res.setHeader(
-        'Set-Cookie',
-        cookie.serialize('accessToken', accessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development',
-          sameSite: 'strict',
-          maxAge: 60,
-        }),
-      );
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        sameSite: 'strict',
+      });
 
-      res.setHeader(
-        'Set-Cookie',
-        cookie.serialize('refreshToken', refreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development',
-          sameSite: 'strict',
-        }),
-      );
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        sameSite: 'strict',
+        maxAge: 60,
+      });
 
       return res.status(200).json({
         token: {

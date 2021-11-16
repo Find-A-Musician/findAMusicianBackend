@@ -19,7 +19,7 @@
       "paths" : {
         "@schema" : ["./api/types/schema"],
         "@typing" : ["./api/types/typing"],
-        "@postgres" : ["api/postgres"]
+        "@postgres" : ["./api/postgres"]
       },
       // Ensure that .d.ts files are created by tsc, but not .js files
       "emitDeclarationOnly": true,

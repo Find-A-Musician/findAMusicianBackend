@@ -1,5 +1,5 @@
 import express from 'express';
-import pg from '../postgres';
+import query from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
 import type { Request } from 'express';
@@ -21,13 +21,13 @@ router.get(
     try {
       const {
         rows: [musicianResponse],
-      } = await pg.query(sql`
+      } = await query(sql`
             SELECT *
             FROM musicians
             WHERE musicians.id = ${req.userId}
         `);
 
-      const { rows: instrumentsResponse } = await pg.query(sql`
+      const { rows: instrumentsResponse } = await query(sql`
         SELECT instruments.*
         FROM instruments
         INNER JOIN musicians_instruments
@@ -35,7 +35,7 @@ router.get(
         WHERE musicians_instruments.musician= ${req.userId}
     `);
 
-      const { rows: genresResponse } = await pg.query(sql`
+      const { rows: genresResponse } = await query(sql`
         SELECT genres.*
         FROM genres
         INNER JOIN musicians_genres
@@ -73,63 +73,63 @@ router.patch(
   ) => {
     try {
       if (req.body.email) {
-        await pg.query(sql`
+        await query(sql`
                   UPDATE musicians
                   SET email = ${req.body.email}
                   WHERE id = ${req.userId}
               `);
       }
       if (req.body.facebook_url) {
-        await pg.query(sql`
+        await query(sql`
                     UPDATE musicians
                     SET facebook_url = ${req.body.facebook_url}
                     WHERE id = ${req.userId}
                 `);
       }
       if (req.body.instagram_url) {
-        await pg.query(sql`
+        await query(sql`
                       UPDATE musicians
                       SET instagrams_url = ${req.body.instagram_url}
                       WHERE id = ${req.userId}
                   `);
       }
       if (req.body.twitter_url) {
-        await pg.query(sql`
+        await query(sql`
                         UPDATE musicians
                         SET twitter_url = ${req.body.twitter_url}
                         WHERE id = ${req.userId}
                     `);
       }
       if (req.body.familyName) {
-        await pg.query(sql`
+        await query(sql`
                           UPDATE musicians
                           SET family_name = ${req.body.familyName}
                           WHERE id = ${req.userId}
                       `);
       }
       if (req.body.givenName) {
-        await pg.query(sql`
+        await query(sql`
                             UPDATE musicians
                             SET given_name = ${req.body.givenName}
                             WHERE id = ${req.userId}
                         `);
       }
       if (req.body.phone) {
-        await pg.query(sql`
+        await query(sql`
                               UPDATE musicians
                               SET phone = ${req.body.phone}
                               WHERE id = ${req.userId}
                           `);
       }
       if (req.body.promotion) {
-        await pg.query(sql`
+        await query(sql`
                                 UPDATE musicians
                                 SET promotion = ${req.body.promotion}
                                 WHERE id = ${req.userId}
                             `);
       }
       if (req.body.location) {
-        await pg.query(sql`
+        await query(sql`
                                   UPDATE musicians
                                   SET location = ${req.body.location}
                                   WHERE id = ${req.userId}
@@ -140,12 +140,12 @@ router.patch(
 
       try {
         for (let index = 0; index < req.body.instruments.length; index++) {
-          await pg.query(sql`
+          await query(sql`
           DELETE FROM musicians_instruments
           WHERE musician=${req.userId}
             AND instrument = ${req.body.instruments[index].id}
         `);
-          await pg.query(sql`
+          await query(sql`
             INSERT INTO musicians_instruments (
               musician,
               instrument
@@ -165,12 +165,12 @@ router.patch(
 
       try {
         for (let index = 0; index < req.body.genres.length; index++) {
-          await pg.query(sql`
+          await query(sql`
             DELETE FROM musicians_genres
             WHERE musician=${req.userId}
               AND genre = ${req.body.genres[index].id}
           `);
-          await pg.query(sql`
+          await query(sql`
           INSERT INTO musicians_genres (
             musician,
             genre
@@ -209,7 +209,7 @@ router.delete(
     >,
   ) => {
     try {
-      await pg.query(sql`
+      await query(sql`
         DELETE FROM musicians
         WHERE id = ${req.userId}
       `);

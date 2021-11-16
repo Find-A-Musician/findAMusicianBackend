@@ -1,4 +1,4 @@
-import pg from '../postgres';
+import query from '../postgres';
 import sql from 'sql-template-strings';
 import express from 'express';
 import { v4 as uuidV4 } from 'uuid';
@@ -24,7 +24,7 @@ router.get(
     const response: getResponsesBody<getGroups> = [];
     try {
       // Get all the groups and their information
-      const { rows: groups } = await pg.query(sql`
+      const { rows: groups } = await query(sql`
             SELECT * FROM groups
         `);
 
@@ -38,7 +38,7 @@ router.get(
 
       //get each genre for each group
       for (let index = 0; index < groups.length; index++) {
-        const { rows: genres } = await pg.query(sql`
+        const { rows: genres } = await query(sql`
             SELECT genres.* FROM genres
             INNER JOIN groups_genres
             ON groups_genres.genre=genres.id
@@ -49,7 +49,7 @@ router.get(
 
       //get every musicians of each group
       for (let index = 0; index < groups.length; index++) {
-        const { rows: groupMembers } = await pg.query(sql`
+        const { rows: groupMembers } = await query(sql`
             SELECT given_name, family_name, instruments.name as instrument, role, membership
             FROM groups_musicians
             INNER JOIN musicians 
@@ -90,7 +90,7 @@ router.post(
       const groupId = uuidV4();
 
       try {
-        await pg.query(sql`
+        await query(sql`
       INSERT INTO groups (
         id,
         name,
@@ -108,7 +108,7 @@ router.post(
       }
 
       for (let index = 0; index < req.body.group.genre.length; index++) {
-        await pg.query(sql`
+        await query(sql`
           INSERT INTO groups_genres (
             "group",
             genre
@@ -119,7 +119,7 @@ router.post(
         `);
       }
 
-      await pg.query(sql`
+      await query(sql`
         INSERT INTO groups_musicians (
           "group",
           musician,
