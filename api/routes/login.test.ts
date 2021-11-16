@@ -36,7 +36,7 @@ describe('/login', () => {
         expect(Boolean(body['token']['accessToken'])).toBe(true);
         expect(Boolean(body['token']['refreshToken'])).toBe(true);
         expect(Boolean(body['musician'])).toBe(true);
-        // console.log(header);
+        expect(header['set-cookie'].length).toStrictEqual(2);
       });
   });
 

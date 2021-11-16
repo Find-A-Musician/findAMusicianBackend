@@ -42,7 +42,16 @@ describe('/register', () => {
     pg.query.mockReturnValueOnce();
     pg.query.mockReturnValueOnce();
 
-    await request(app).post('/register').send(bodyMusician).expect(201);
+    await request(app)
+      .post('/register')
+      .send(bodyMusician)
+      .expect(201)
+      .then(({ body, header }) => {
+        expect(Boolean(body['token']['accessToken'])).toBe(true);
+        expect(Boolean(body['token']['refreshToken'])).toBe(true);
+        expect(Boolean(body['musician'])).toBe(true);
+        expect(header['set-cookie'].length).toStrictEqual(2);
+      });
 
     expect(pg.query).toBeCalledTimes(4);
   });
