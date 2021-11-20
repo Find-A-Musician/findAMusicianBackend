@@ -1,12 +1,12 @@
 import app from '../server/server';
 import request from 'supertest';
-import queryMock from '../postgres';
+import pg from '../postgres';
 import generateToken, { GrantTypes } from '../auth/generateToken';
 
 jest.mock('../postgres');
 
 describe('/instruments', () => {
-  const query = queryMock as jest.Mock;
+  const query = pg.query as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();

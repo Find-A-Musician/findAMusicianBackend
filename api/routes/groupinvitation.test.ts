@@ -1,4 +1,4 @@
-import queryMock from '../postgres';
+import pg from '../postgres';
 import app from '../server/server';
 import request from 'supertest';
 import generateToken, { GrantTypes } from '../auth/generateToken';
@@ -6,7 +6,7 @@ import generateToken, { GrantTypes } from '../auth/generateToken';
 jest.mock('../postgres');
 
 describe('/groupinvitation', () => {
-  const query = queryMock as jest.Mock;
+  const query = pg.query as jest.Mock;
 
   const body = {
     groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',

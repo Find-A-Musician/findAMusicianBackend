@@ -1,4 +1,4 @@
-import queryMock from '../postgres';
+import pg from '../postgres';
 import request from 'supertest';
 import app from '../server/server';
 import { operations } from '@schema';
@@ -10,7 +10,7 @@ jest.mock('bcrypt');
 jest.mock('../postgres');
 
 describe('/register', () => {
-  const query = queryMock as jest.Mock;
+  const query = pg.query as jest.Mock;
 
   const hash = bcrypt.hash as jest.Mock;
 

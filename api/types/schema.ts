@@ -8,6 +8,16 @@ export interface paths {
     /** A simple get route for testing */
     get: operations["test"];
   };
+  "/events": {
+    /** Get a list of all the events */
+    get: operations["getEvents"];
+    /** Post a new event */
+    post: operations["postEvents"];
+    /** Delete an event */
+    delete: operations["deleteEvents"];
+    /** Modify an event info */
+    patch: operations["patchEvent"];
+  };
   "/genres": {
     /** Get a list of all genres */
     get: operations["getGenres"];
@@ -92,6 +102,15 @@ export interface components {
       id: string;
       name: string;
     };
+    event: {
+      id?: string;
+      name: string;
+      description: string;
+      start_date: string;
+      end_date: string;
+      adress: string;
+      admin?: components["schemas"]["musician"];
+    };
     token: {
       accessToken: string;
       refreshToken: string;
@@ -131,6 +150,128 @@ export interface operations {
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get a list of all the events */
+  getEvents: {
+    responses: {
+      /** A list of all the events */
+      200: {
+        content: {
+          "application/json": components["schemas"]["event"][];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Post a new event */
+  postEvents: {
+    responses: {
+      /** The event has been created */
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** Event already created */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["event"];
+      };
+    };
+  };
+  /** Delete an event */
+  deleteEvents: {
+    responses: {
+      /** The event has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          event: string;
+        };
+      };
+    };
+  };
+  /** Modify an event info */
+  patchEvent: {
+    responses: {
+      /** The event has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          id: string;
+          name: string;
+          description: string;
+          start_date: string;
+          end_date: string;
+          adress: string;
         };
       };
     };

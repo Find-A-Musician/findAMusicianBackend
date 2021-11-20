@@ -5,7 +5,7 @@
       "node_modules/**/node_modules",
       "schema.ts",
       "doc.json",
-      "api/docs/config"
+      "api/docs/config/*"
     ],
     "verbose": true,
     "env": {

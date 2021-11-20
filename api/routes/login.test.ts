@@ -1,6 +1,6 @@
 import app from '../server/server';
 import request from 'supertest';
-import queryMock from '../postgres';
+import pg from '../postgres';
 import bcrypt from 'bcrypt';
 
 jest.mock('bcrypt');
@@ -9,7 +9,7 @@ jest.mock('../postgres');
 
 describe('/login', () => {
   const compare = bcrypt.compare as jest.Mock;
-  const query = queryMock as jest.Mock;
+  const query = pg.query as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();

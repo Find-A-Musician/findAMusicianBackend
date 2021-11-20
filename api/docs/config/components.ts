@@ -69,6 +69,19 @@ const components: OpenAPIV3.Document['components'] = {
         name: { type: 'string' },
       },
     },
+    event: {
+      type: 'object',
+      required: ['name', 'description', 'start_date', 'end_date', 'adress'],
+      properties: {
+        id: { type: 'string' },
+        name: { type: 'string' },
+        description: { type: 'string' },
+        start_date: { type: 'string', format: 'date-time' },
+        end_date: { type: 'string', format: 'date-time' },
+        adress: { type: 'string' },
+        admin: { $ref: '#/components/schemas/musician' },
+      },
+    },
     token: {
       type: 'object',
       required: ['accessToken', 'refreshToken'],

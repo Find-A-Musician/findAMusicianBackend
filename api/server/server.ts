@@ -5,7 +5,6 @@ import swaggerUi from 'swagger-ui-express';
 import docs from '../docs/config/index';
 import authenticateToken from '../auth/authenticateToken';
 import * as OpenApiValidator from 'express-openapi-validator';
-
 // router import
 import registerRouter from '../routes/register';
 import loginRouter from '../routes/login';
@@ -16,6 +15,7 @@ import genresRouter from '../routes/genres';
 import refreshTokenRouter from '../routes/refreshToken';
 import profilRouter from '../routes/profil';
 import groupsRouter from '../routes/groups';
+import eventsRoute from '../routes/events';
 import testRouter from '../routes/apiTest';
 import RateLimit from 'express-rate-limit';
 
@@ -62,17 +62,21 @@ app.use('/logout', authenticateToken, logoutRouter);
 app.use('/profil', authenticateToken, profilRouter);
 app.use('/musicians', musiciansRouter);
 
-//instruments route
+// instruments route
 app.use('/instruments', authenticateToken, instrumentRouter);
 
-//genre route
+// genre route
 app.use('/genres', authenticateToken, genresRouter);
 
 //group route
 app.use('/groups', authenticateToken, groupsRouter);
 
-// eslint-disable-next-line no-use-before-define
-app.use((err, req, res, next) => {
+// event route
+
+app.use('/events', authenticateToken, eventsRoute);
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _) => {
   // format error
   res.status(err.status || 500).json({
     message: err.message,
