@@ -87,6 +87,20 @@ const schema: HandlerDefinition = {
       },
     },
   },
+  patch: {
+    operationId: 'patchEvent',
+    tags: ['events'],
+    description: 'Modify an event info',
+    security: [{ BearerAuth: [] }],
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {},
+        },
+      },
+    },
+  },
   delete: {
     operationId: 'deleteEvents',
     tags: ['events'],
