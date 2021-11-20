@@ -1,5 +1,5 @@
 import express from 'express';
-import query from '../postgres';
+import pg from '../postgres';
 import sql from 'sql-template-strings';
 import type core from 'express-serve-static-core';
 import { Request } from 'express';
@@ -31,7 +31,7 @@ router.post(
     const instrument = req.body.instrumentId;
     const role = req.body.role;
     try {
-      const { rows: musicianGroupResult } = await query(sql`
+      const { rows: musicianGroupResult } = await pg.query(sql`
           SELECT * FROM groups_musicians
           WHERE "group"=${groupId}
             AND musician=${musicianId}
@@ -41,7 +41,7 @@ router.post(
         return res.status(400).json({ msg: 'E_ALREADY_INVITED' });
       }
 
-      const { rows: invitorInfo } = await query(sql`
+      const { rows: invitorInfo } = await pg.query(sql`
           SELECT role FROM groups_musicians
           WHERE musician = ${invitorId}
             AND "group" = ${groupId}
@@ -53,7 +53,7 @@ router.post(
         });
       }
 
-      await query(sql`
+      await pg.query(sql`
         INSERT INTO groups_musicians (
           "group",
           musician,
@@ -92,7 +92,7 @@ router.post(
     >,
   ) => {
     try {
-      const { rows: userInvitationStatus } = await query(sql`
+      const { rows: userInvitationStatus } = await pg.query(sql`
       SELECT membership FROM groups_musicians
       WHERE "group"=${req.body.groupId}
         AND musician = ${req.userId}
@@ -108,7 +108,7 @@ router.post(
         return res.status(401).json({ msg: 'The user has already responded' });
       }
 
-      await query(sql`
+      await pg.query(sql`
         UPDATE groups_musicians 
         SET membership = ${req.body.response}
         WHERE "group"=${req.body.groupId}

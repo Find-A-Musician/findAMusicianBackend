@@ -63,7 +63,7 @@ app.use('/groups', authenticateToken, groupsRouter);
 app.use('/events', authenticateToken, eventsRoute);
 
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
+app.use((err, req, res, _) => {
   // format error
   res.status(err.status || 500).json({
     message: err.message,

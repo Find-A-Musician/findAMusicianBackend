@@ -1,5 +1,5 @@
 import express from 'express';
-import query from '../postgres';
+import pg from '../postgres';
 import { v4 as uuidV4 } from 'uuid';
 import sql from 'sql-template-strings';
 import type { operations, components } from '@schema';
@@ -15,6 +15,7 @@ const router = express.Router();
 
 type GetEvents = operations['getEvents'];
 type PostEvents = operations['postEvents'];
+type PatchEvents = operations['patchEvent'];
 type DeleteEvents = operations['deleteEvents'];
 
 router.get(
@@ -29,11 +30,12 @@ router.get(
     res: core.Response<getResponsesBody<GetEvents>, {}, getHTTPCode<GetEvents>>,
   ) => {
     try {
-      const { rows }: { rows: getResponsesBody<GetEvents> } = await query(sql`
+      const { rows }: { rows: getResponsesBody<GetEvents> } =
+        await pg.query(sql`
             SELECT * FROM events
         `);
       for (let index = 0; index < rows.length; index++) {
-        const { rows: admin } = await query<
+        const { rows: admin } = await pg.query<
           components['schemas']['musician']
         >(sql`
             SELECT * FROM musicians
@@ -68,7 +70,7 @@ router.post(
   ) => {
     try {
       const id = uuidV4();
-      await query(sql`
+      await pg.query(sql`
               INSERT INTO events (
                   id,
                   name,
@@ -85,7 +87,7 @@ router.post(
                   ${req.body.adress}
               );
           `);
-      await query(sql`
+      await pg.query(sql`
         INSERT INTO events_admin (
             event,
             admin
@@ -107,6 +109,43 @@ router.post(
   },
 );
 
+router.patch(
+  '/',
+  async (
+    req: core.Request<
+      {},
+      getResponsesBody<PatchEvents>,
+      getRequestBody<PatchEvents>,
+      getPathParams<PatchEvents>
+    >,
+    res: core.Response<
+      getResponsesBody<PatchEvents>,
+      {},
+      getHTTPCode<PatchEvents>
+    >,
+  ) => {
+    try {
+      await pg.query(sql`
+    UPDATE events 
+    SET 
+      name = ${req.body.name},
+      description = ${req.body.description},
+      start_date = ${req.body.start_date},
+      end_date = ${req.body.end_date},
+      adress = ${req.body.adress}
+    `);
+
+      return res.status(200).json('Event modified');
+    } catch (err) {
+      console.log(err);
+
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    }
+  },
+);
+
 router.delete(
   '/',
   async (
@@ -123,7 +162,7 @@ router.delete(
     >,
   ) => {
     try {
-      const { rows: admin } = await query(sql`
+      const { rows: admin } = await pg.query(sql`
               SELECT id FROM musicians
               INNER JOIN events_admin
                   ON events_admin.admin = musicians.id
@@ -133,7 +172,7 @@ router.delete(
         return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
       } else {
         if (admin.some(({ id }) => id === req.userId)) {
-          await query(sql`
+          await pg.query(sql`
                 DELETE FROM events WHERE events.id = ${req.body.event}
               `);
 

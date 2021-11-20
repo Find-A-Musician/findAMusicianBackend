@@ -15,6 +15,8 @@ export interface paths {
     post: operations["postEvents"];
     /** Delete an event */
     delete: operations["deleteEvents"];
+    /** Modify an event info */
+    patch: operations["patchEvent"];
   };
   "/genres": {
     /** Get a list of all genres */
@@ -230,6 +232,40 @@ export interface operations {
         "application/json": {
           event: string;
         };
+      };
+    };
+  };
+  /** Modify an event info */
+  patchEvent: {
+    responses: {
+      /** The event has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["event"];
       };
     };
   };

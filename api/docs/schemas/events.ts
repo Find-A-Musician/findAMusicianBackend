@@ -96,7 +96,51 @@ const schema: HandlerDefinition = {
       required: true,
       content: {
         'application/json': {
-          schema: {},
+          schema: {
+            $ref: '#/components/schemas/event',
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: 'The event has been deleted',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      403: {
+        description: 'The user does not have the right',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      404: {
+        description: 'The event does not exist',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
+        },
+      },
+      500: {
+        description: 'Error intern server',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/httpError',
+            },
+          },
         },
       },
     },
