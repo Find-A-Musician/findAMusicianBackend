@@ -17,6 +17,7 @@ import refreshTokenRouter from '../routes/refreshToken';
 import profilRouter from '../routes/profil';
 import groupsRouter from '../routes/groups';
 import testRouter from '../routes/apiTest';
+import RateLimit from 'express-rate-limit';
 
 dotenv.config();
 
@@ -24,6 +25,18 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// set up rate limiter: maximum of 30 requests per minute, 1 per 2s
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 30,
+  handler: (_, res) => {
+    res.status(429).json({ msg: 'E_TOO_MANY_REQUEST' });
+  },
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
