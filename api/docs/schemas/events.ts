@@ -97,7 +97,23 @@ const schema: HandlerDefinition = {
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/event',
+            type: 'object',
+            required: [
+              'id',
+              'name',
+              'description',
+              'start_date',
+              'end_date',
+              'adress',
+            ],
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              description: { type: 'string' },
+              start_date: { type: 'string', format: 'date-time' },
+              end_date: { type: 'string', format: 'date-time' },
+              adress: { type: 'string' },
+            },
           },
         },
       },

@@ -125,20 +125,35 @@ router.patch(
     >,
   ) => {
     try {
-      await pg.query(sql`
-    UPDATE events 
-    SET 
-      name = ${req.body.name},
-      description = ${req.body.description},
-      start_date = ${req.body.start_date},
-      end_date = ${req.body.end_date},
-      adress = ${req.body.adress}
-    `);
+      const { rows } = await pg.query(sql`
+        SELECT admin
+        FROM events_admin
+        WHERE event = ${req.body.id}
+      `);
 
-      return res.status(200).json('Event modified');
+      console.log(rows);
+
+      if (rows.length == 0) {
+        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
+      }
+
+      if (rows.some(({ admin }) => admin === req.userId)) {
+        pg.query(sql`
+          UPDATE events
+          SET 
+            name = ${req.body.name} ,
+            description= ${req.body.description}  ,
+            start_date= ${req.body.start_date}  ,
+            end_date = ${req.body.end_date} ,
+            adress = ${req.body.adress} 
+          WHERE id = ${req.body.id}
+        `);
+
+        return res.sendStatus(200);
+      } else {
+        return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+      }
     } catch (err) {
-      console.log(err);
-
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
