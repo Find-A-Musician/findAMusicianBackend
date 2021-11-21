@@ -4,9 +4,19 @@
  */
 
 export interface paths {
-  "/test": {
-    /** A simple get route for testing */
-    get: operations["test"];
+  "/login": {
+    post: operations["login"];
+  };
+  "/logout": {
+    /** Logout the current user */
+    delete: operations["logout"];
+  };
+  "/refresh_token": {
+    /** Send a new access token */
+    post: operations["postRefreshToken"];
+  };
+  "/register": {
+    post: operations["register"];
   };
   "/events": {
     /** Get a list of all the events */
@@ -39,13 +49,6 @@ export interface paths {
   "/instruments": {
     get: operations["getInstruments"];
   };
-  "/login": {
-    post: operations["login"];
-  };
-  "/logout": {
-    /** Logout the current user */
-    delete: operations["logout"];
-  };
   "/musicians": {
     get: operations["getMusicians"];
   };
@@ -55,12 +58,9 @@ export interface paths {
     delete: operations["deleteProfil"];
     patch: operations["patchProfil"];
   };
-  "/refresh_token": {
-    /** Send a new access token */
-    post: operations["postRefreshToken"];
-  };
-  "/register": {
-    post: operations["register"];
+  "/test": {
+    /** A simple get route for testing */
+    get: operations["test"];
   };
 }
 
@@ -123,25 +123,25 @@ export interface components {
 }
 
 export interface operations {
-  /** A simple get route for testing */
-  test: {
+  login: {
     responses: {
-      /** The test has been a success */
+      /** Login successful */
       200: {
         content: {
           "application/json": {
-            userId: string;
+            token: components["schemas"]["token"];
+            musician: components["schemas"]["musician"];
           };
         };
       };
-      /** Token not found */
-      401: {
+      /** The user is not find */
+      400: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Invalid token */
-      403: {
+      /** invalid password */
+      401: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -150,6 +150,94 @@ export interface operations {
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          email?: string;
+          password?: string;
+        };
+      };
+    };
+  };
+  /** Logout the current user */
+  logout: {
+    responses: {
+      /** All the token has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Send a new access token */
+  postRefreshToken: {
+    responses: {
+      /** a new access token */
+      200: {
+        content: {
+          "application/json": {
+            accessToken: string;
+          };
+        };
+      };
+      /** Invalid refresh token */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          refreshToken: string;
+        };
+      };
+    };
+  };
+  register: {
+    responses: {
+      /** The user has been registered in the db */
+      201: {
+        content: {
+          "application/json": {
+            token: components["schemas"]["token"];
+            musician: components["schemas"]["musician"];
+            genres: components["schemas"]["genre"][];
+            instruments: components["schemas"]["instrument"][];
+          };
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          musician: components["schemas"]["musician"];
+          password: string;
+          genres: components["schemas"]["genre"][];
+          instruments: components["schemas"]["instrument"][];
         };
       };
     };
@@ -437,62 +525,6 @@ export interface operations {
       };
     };
   };
-  login: {
-    responses: {
-      /** Login successful */
-      200: {
-        content: {
-          "application/json": {
-            token: components["schemas"]["token"];
-            musician: components["schemas"]["musician"];
-          };
-        };
-      };
-      /** The user is not find */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** invalid password */
-      401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          email?: string;
-          password?: string;
-        };
-      };
-    };
-  };
-  /** Logout the current user */
-  logout: {
-    responses: {
-      /** All the token has been deleted */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-  };
   getMusicians: {
     responses: {
       /** A list of all the musicians informations */
@@ -579,65 +611,33 @@ export interface operations {
       };
     };
   };
-  /** Send a new access token */
-  postRefreshToken: {
+  /** A simple get route for testing */
+  test: {
     responses: {
-      /** a new access token */
+      /** The test has been a success */
       200: {
         content: {
           "application/json": {
-            accessToken: string;
+            userId: string;
           };
         };
       };
-      /** Invalid refresh token */
+      /** Token not found */
       401: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
+      /** Invalid token */
+      403: {
         content: {
           "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          refreshToken: string;
-        };
-      };
-    };
-  };
-  register: {
-    responses: {
-      /** The user has been registered in the db */
-      201: {
-        content: {
-          "application/json": {
-            token: components["schemas"]["token"];
-            musician: components["schemas"]["musician"];
-            genres: components["schemas"]["genre"][];
-            instruments: components["schemas"]["instrument"][];
-          };
         };
       };
       /** Error intern server */
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          musician: components["schemas"]["musician"];
-          password: string;
-          genres: components["schemas"]["genre"][];
-          instruments: components["schemas"]["instrument"][];
         };
       };
     };

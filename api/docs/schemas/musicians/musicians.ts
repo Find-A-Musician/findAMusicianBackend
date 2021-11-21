@@ -1,22 +1,21 @@
-import { HandlerDefinition } from 'api/types/typing';
+import { HandlerDefinition } from '@typing';
 
 const schema: HandlerDefinition = {
-  path: '/genres',
+  path: '/musicians',
 
   get: {
-    operationId: 'getGenres',
-    description: 'Get a list of all genres',
-    tags: ['genres'],
+    operationId: 'getMusicians',
+    tags: ['musician'],
     security: [{ BearerAuth: [] }],
     responses: {
       200: {
-        description: 'A list of all genres',
+        description: 'A list of all the musicians informations',
         content: {
           'application/json': {
             schema: {
               type: 'array',
               items: {
-                $ref: '#/components/schemas/genre',
+                $ref: '#/components/schemas/musician',
               },
             },
           },

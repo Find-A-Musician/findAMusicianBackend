@@ -1,10 +1,11 @@
-import { HandlerDefinition } from 'api/types/typing';
+import { HandlerDefinition } from '@typing';
 
 const schema: HandlerDefinition = {
-  path: '/login',
+  path: '/refresh_token',
 
   post: {
-    operationId: 'login',
+    operationId: 'postRefreshToken',
+    description: 'Send a new access token',
     tags: ['auth'],
     requestBody: {
       required: true,
@@ -12,46 +13,31 @@ const schema: HandlerDefinition = {
         'application/json': {
           schema: {
             type: 'object',
+            required: ['refreshToken'],
             properties: {
-              email: { type: 'string', format: 'email' },
-              password: { type: 'string' },
+              refreshToken: { type: 'string' },
             },
-          },
-          example: {
-            email: 'romain.guar01@gmail.com',
-            password: 'romain123',
           },
         },
       },
     },
     responses: {
       200: {
-        description: 'Login successful',
+        description: 'a new access token',
         content: {
           'application/json': {
             schema: {
               type: 'object',
-              required: ['token', 'musician'],
+              required: ['accessToken'],
               properties: {
-                token: { $ref: '#/components/schemas/token' },
-                musician: { $ref: '#/components/schemas/musician' },
+                accessToken: { type: 'string' },
               },
             },
           },
         },
       },
-      400: {
-        description: 'The user is not find',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
       401: {
-        description: 'invalid password',
+        description: 'Invalid refresh token',
         content: {
           'application/json': {
             schema: {

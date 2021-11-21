@@ -1,33 +1,37 @@
-import { HandlerDefinition } from 'api/types/typing';
+import { HandlerDefinition } from '@typing';
 
 const schema: HandlerDefinition = {
-  path: '/groups/invitation/response',
+  path: '/groups/invitation/send',
   post: {
-    operationId: 'responseGroupInvitation',
+    operationId: 'sendGroupInvitation',
     tags: ['groups'],
-    description: 'Respond to a group invitation',
+    description: 'Invite a musician in a group',
     security: [{ BearerAuth: [] }],
     requestBody: {
       content: {
         'application/json': {
           schema: {
             type: 'object',
-            required: ['groupId', 'response'],
+            required: ['groupId', 'musicianId', 'instrumentId', 'role'],
             properties: {
               groupId: { type: 'string' },
-              response: { type: 'string', enum: ['declined', 'member'] },
+              musicianId: { type: 'string' },
+              instrumentId: { type: 'string' },
+              role: { type: 'string', enum: ['lite_admin', 'member'] },
             },
-            example: {
-              groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-              response: 'member',
-            },
+          },
+          example: {
+            groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+            musicianId: '8c9a685a-2be9-4cf0-a03c-0b316fc4b515',
+            instrumentId: 'cd836a31-1663-4a11-8a88-0a249aa70793',
+            role: 'member',
           },
         },
       },
     },
     responses: {
       201: {
-        description: 'The user membershhip has been updated',
+        description: 'The user has been invited',
         content: {
           'application/json': {
             schema: {
@@ -37,7 +41,7 @@ const schema: HandlerDefinition = {
         },
       },
       401: {
-        description: "User can't respond to this invitation",
+        description: "User that invite doesn't have the access",
         content: {
           'application/json': {
             schema: { $ref: '#/components/schemas/httpError' },
@@ -45,7 +49,7 @@ const schema: HandlerDefinition = {
         },
       },
       400: {
-        description: 'The user has already responded',
+        description: 'The user is already invited',
         content: {
           'application/json': {
             schema: { $ref: '#/components/schemas/httpError' },

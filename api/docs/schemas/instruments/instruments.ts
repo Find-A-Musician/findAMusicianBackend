@@ -1,4 +1,4 @@
-import { HandlerDefinition } from 'api/types/typing';
+import { HandlerDefinition } from '@typing';
 
 const schema: HandlerDefinition = {
   path: '/instruments',
