@@ -149,7 +149,7 @@ router.get(
     } catch (err) {
       return res
         .status(500)
-        .json({ msg: 'E_SQK_ERROR', stack: JSON.stringify(err) });
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -197,6 +197,8 @@ router.patch(
         return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
       }
     } catch (err) {
+      console.log(err);
+
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
@@ -221,15 +223,14 @@ router.delete(
   ) => {
     try {
       const { rows: admin } = await pg.query(sql`
-                SELECT id FROM musicians
-                INNER JOIN events_admin
-                    ON events_admin.admin = musicians.id
-                WHERE events_admin.event = ${req.params.eventId}
+                SELECT admin
+                FROM events_admin
+                WHERE event = ${req.params.eventId}
             `);
       if (admin.length === 0) {
         return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
       } else {
-        if (admin.some(({ id }) => id === req.userId)) {
+        if (admin.some(({ admin }) => admin === req.userId)) {
           await pg.query(sql`
                   DELETE FROM events WHERE events.id = ${req.params.eventId}
                 `);
