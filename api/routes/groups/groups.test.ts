@@ -223,4 +223,130 @@ describe('/groups', () => {
         expect(msg).toStrictEqual('E_UNAUTHORIZED_USER');
       });
   });
+
+  it("Patch a group by it's id", async () => {
+    const token = `Bearer ${generateToken(
+      GrantTypes.AuthorizationCode,
+      'adminId',
+    )}`;
+
+    const body = {
+      id: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+      name: 'hot consuption',
+      description: 'a test group ',
+      location: 'Douai',
+      genre: [
+        {
+          id: 'string',
+          name: 'string',
+        },
+        {
+          id: 'string',
+          name: 'string',
+        },
+      ],
+    };
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          musician: 'adminId',
+          role: 'lite_admin',
+        },
+      ],
+    });
+
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+    query.mockReturnValueOnce({});
+
+    await request(app)
+      .patch('/groups/id')
+      .set('Authorization', token)
+      .send(body)
+      .expect(200)
+      .then(() => {
+        expect(query).toBeCalledTimes(5);
+      });
+  });
+
+  it("Can't update because group does not exist", async () => {
+    const token = `Bearer ${generateToken(
+      GrantTypes.AuthorizationCode,
+      'adminId',
+    )}`;
+
+    const body = {
+      id: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+      name: 'hot consuption',
+      description: 'a test group ',
+      location: 'Douai',
+      genre: [
+        {
+          id: 'string',
+          name: 'string',
+        },
+        {
+          id: 'string',
+          name: 'string',
+        },
+      ],
+    };
+
+    query.mockReturnValueOnce({
+      rows: [],
+    });
+
+    await request(app)
+      .patch('/groups/id')
+      .set('Authorization', token)
+      .send(body)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('E_GROUP_DOES_NOT_EXIST');
+      });
+  });
+
+  it("Can't update because user is member", async () => {
+    const token = `Bearer ${generateToken(
+      GrantTypes.AuthorizationCode,
+      'adminId',
+    )}`;
+
+    const body = {
+      id: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+      name: 'hot consuption',
+      description: 'a test group ',
+      location: 'Douai',
+      genre: [
+        {
+          id: 'string',
+          name: 'string',
+        },
+        {
+          id: 'string',
+          name: 'string',
+        },
+      ],
+    };
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          musician: 'adminId',
+          role: 'member',
+        },
+      ],
+    });
+
+    await request(app)
+      .patch('/groups/id')
+      .set('Authorization', token)
+      .send(body)
+      .expect(403)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('E_UNAUTHORIZED_USER');
+      });
+  });
 });

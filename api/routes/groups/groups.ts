@@ -208,6 +208,76 @@ router.get(
   },
 );
 
+router.patch(
+  '/:groupId',
+  async (
+    req: Request<
+      getPathParams<PatchGroupsById>,
+      getResponsesBody<PatchGroupsById>,
+      getRequestBody<PatchGroupsById>,
+      {}
+    >,
+    res: core.Response<
+      getResponsesBody<PatchGroupsById>,
+      {},
+      getHTTPCode<PatchGroupsById>
+    >,
+  ) => {
+    try {
+      const { rows: admin } = await pg.query(sql`
+      SELECT musician, role 
+      FROM groups_musicians
+      WHERE "group" = ${req.params.groupId}
+    `);
+
+      if (admin.length === 0) {
+        return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
+      }
+
+      if (
+        admin.some(({ musician, role }) => {
+          return role !== 'member' && musician === req.userId;
+        })
+      ) {
+        // update the group information
+        await pg.query(sql`
+        UPDATE groups 
+        SET 
+          name = ${req.body.name},
+          description = ${req.body.description},
+          location = ${req.body.location}
+        WHERE id = ${req.params.groupId}
+      `);
+
+        // delete all the genres of the group
+        await pg.query(sql`
+        DELETE FROM groups_genres WHERE "group"=${req.params.groupId}
+      `);
+        // adding the new ones
+        req.body.genre.forEach(async (genre) => {
+          await pg.query(sql`
+            INSERT INTO groups_genres (
+              "group",
+              genre
+            ) VALUES (
+              ${req.params.groupId},
+              ${genre}
+            )
+          `);
+        });
+
+        return res.sendStatus(200);
+      } else {
+        return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    }
+  },
+);
+
 router.delete(
   '/:groupId',
   async (
