@@ -1,6 +1,6 @@
 # findAMusician
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/RomainGuarinoni/findAMusician)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/RomainGuarinoni/findAMusician/blob/main/LICENSE)
 
 [![Build status](https://travis-ci.com/nfroidure/whook.svg?branch=master)](https://travis-ci.com/github/RomainGuarinoni/findAMusician)
 
