@@ -208,4 +208,51 @@ router.get(
   },
 );
 
+router.delete(
+  '/:groupId',
+  async (
+    req: Request<
+      getPathParams<DeleteGroupsById>,
+      getResponsesBody<DeleteGroupsById>,
+      getRequestBody<DeleteGroupsById>,
+      {}
+    >,
+    res: core.Response<
+      getResponsesBody<DeleteGroupsById>,
+      {},
+      getHTTPCode<DeleteGroupsById>
+    >,
+  ) => {
+    try {
+      const { rows: admin } = await pg.query(sql`
+        SELECT musician, role 
+        FROM groups_musicians
+        WHERE "group" = ${req.params.groupId}
+      `);
+
+      if (admin.length === 0) {
+        return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
+      }
+
+      if (
+        admin.some(
+          ({ musician, role }) => role === 'admin' && musician === req.userId,
+        )
+      ) {
+        await pg.query(sql`
+          DELETE FROM groups WHERE id = ${req.params.groupId}
+
+        `);
+        return res.sendStatus(200);
+      } else {
+        return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    }
+  },
+);
+
 export default router;

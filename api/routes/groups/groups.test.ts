@@ -13,25 +13,23 @@ describe('/groups', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+  const groupInformation = {
+    id: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
+    name: 'hot consuption',
+    description: 'a test group ',
+    location: 'Douai',
+  };
 
+  const genre = {
+    id: 'id',
+    name: 'metal',
+  };
+
+  const groupMembers = {
+    id: 'id',
+    email: 'test@email',
+  };
   it('Return all the groups', async () => {
-    const groupInformation = {
-      id: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-      name: 'hot consuption',
-      description: 'a test group ',
-      location: 'Douai',
-    };
-
-    const genre = {
-      id: 'id',
-      name: 'metal',
-    };
-
-    const groupMembers = {
-      id: 'id',
-      email: 'test@email',
-    };
-
     query.mockReturnValueOnce({
       rows: [groupInformation],
     });
@@ -124,6 +122,105 @@ describe('/groups', () => {
       .expect(422)
       .then(({ body: { msg } }) => {
         expect(msg).toStrictEqual('E_GROUP_NAME_ALREADY_TAKEN');
+      });
+  });
+
+  it("Return a group information by it's id", async () => {
+    query.mockReturnValueOnce({
+      rows: [groupInformation],
+    });
+
+    query.mockReturnValueOnce({
+      rows: [genre],
+    });
+
+    query.mockReturnValueOnce({
+      rows: [groupMembers],
+    });
+
+    await request(app)
+      .get('/groups/id')
+      .set('Authorization', token)
+      .expect(200);
+  });
+
+  it("The group doesn't exist", async () => {
+    query.mockReturnValueOnce({
+      rows: [],
+    });
+
+    await request(app)
+      .get('/groups/id')
+      .set('Authorization', token)
+      .expect(404)
+      .then(({ body: { msg } }) =>
+        expect(msg).toStrictEqual('E_GROUP_DOES_NOT_EXIST'),
+      );
+  });
+
+  it("Delete a group by it's id", async () => {
+    const token = `Bearer ${generateToken(
+      GrantTypes.AuthorizationCode,
+      'adminId',
+    )}`;
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          musician: 'adminId',
+          role: 'admin',
+        },
+      ],
+    });
+
+    query.mockReturnValueOnce({});
+
+    await request(app)
+      .delete('/groups/id')
+      .set('Authorization', token)
+      .expect(200);
+  });
+
+  it("Can't delete because the group does not exist", async () => {
+    const token = `Bearer ${generateToken(
+      GrantTypes.AuthorizationCode,
+      'adminId',
+    )}`;
+
+    query.mockReturnValueOnce({
+      rows: [],
+    });
+
+    await request(app)
+      .delete('/groups/id')
+      .set('Authorization', token)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('E_GROUP_DOES_NOT_EXIST');
+      });
+  });
+
+  it("Can't delete because the user is not admin", async () => {
+    const token = `Bearer ${generateToken(
+      GrantTypes.AuthorizationCode,
+      'adminId',
+    )}`;
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          musician: 'adminId',
+          role: 'lite_admin',
+        },
+      ],
+    });
+
+    await request(app)
+      .delete('/groups/id')
+      .set('Authorization', token)
+      .expect(403)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('E_UNAUTHORIZED_USER');
       });
   });
 });
