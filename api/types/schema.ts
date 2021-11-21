@@ -61,6 +61,10 @@ export interface paths {
   "/instruments": {
     get: operations["getInstruments"];
   };
+  "/musicians/{musicianId}": {
+    /** Get a musician information by it's ID */
+    get: operations["getMusicianById"];
+  };
   "/musicians": {
     get: operations["getMusicians"];
   };
@@ -667,6 +671,35 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["instrument"][];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get a musician information by it's ID */
+  getMusicianById: {
+    parameters: {
+      path: {
+        /** The ID of the muscician */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The group information */
+      200: {
+        content: {
+          "application/json": components["schemas"]["musician"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
       /** Error intern server */

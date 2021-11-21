@@ -2,6 +2,7 @@ import app from '../../server/server';
 import request from 'supertest';
 import pg from '../../postgres';
 import generateToken, { GrantTypes } from '../../auth/generateToken';
+import { copyFileSync } from 'fs';
 
 jest.mock('../../postgres');
 
@@ -44,13 +45,6 @@ describe('/musicians', () => {
         },
       ],
     });
-    query.mockReturnValueOnce({
-      rows: [
-        {
-          id: 'genreId',
-        },
-      ],
-    });
 
     await request(app)
       .get('/musicians')
@@ -59,6 +53,58 @@ describe('/musicians', () => {
       .then(({ body }) => {
         expect(body[0]['genres'][0]['id']).toStrictEqual('genreId');
         expect(body[0]['instruments'][0]['id']).toStrictEqual('instrumentId');
+      });
+  });
+
+  it("Return the inormation of a musician by it's id", async () => {
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          id: 'musicianId',
+          email: 'test@gmail.com',
+        },
+      ],
+    });
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          id: 'instrumentId',
+          name: 'batterie',
+        },
+      ],
+    });
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          id: 'genreId',
+          name: 'metal',
+        },
+      ],
+    });
+
+    await request(app)
+      .get('/musicians/id')
+      .set('Authorization', token)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body['genres'][0]['id']).toStrictEqual('genreId');
+        expect(body['instruments'][0]['id']).toStrictEqual('instrumentId');
+      });
+  });
+
+  it('The musician does not exist', async () => {
+    query.mockReturnValueOnce({
+      rows: [],
+    });
+
+    await request(app)
+      .get('/musicians/id')
+      .set('Authorization', token)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toStrictEqual('E_MUSICIAN_DOES_NOT_EXIST');
       });
   });
 });
