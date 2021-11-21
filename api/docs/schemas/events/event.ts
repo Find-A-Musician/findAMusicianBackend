@@ -20,7 +20,7 @@ const schema: HandlerDefinition = {
     ],
     responses: {
       200: {
-        description: 'A list of all the events',
+        description: 'The event information',
         content: {
           'application/json': {
             schema: {

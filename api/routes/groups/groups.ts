@@ -4,11 +4,20 @@ import express from 'express';
 import { v4 as uuidV4 } from 'uuid';
 import invitationRouter from './groupInvitation';
 import type { operations } from '@schema';
-import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
+import type {
+  getHTTPCode,
+  getPathParams,
+  getRequestBody,
+  getResponsesBody,
+} from '@typing';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 
-type getGroups = operations['getGroups'];
+type GetGroups = operations['getGroups'];
+type PostGroups = operations['createGroup'];
+type GetGroupsById = operations['getGroupsById'];
+type PatchGroupsById = operations['patchGroupsById'];
+type DeleteGroupsById = operations['deleteGroupsById'];
 
 const router = express.Router();
 
@@ -18,10 +27,10 @@ router.use('/invitation', invitationRouter);
 router.get(
   '/',
   async (
-    req: Request<{}, getResponsesBody<getGroups>, {}, {}>,
-    res: core.Response<getResponsesBody<getGroups>, {}, getHTTPCode<getGroups>>,
+    req: Request<{}, getResponsesBody<GetGroups>, {}, {}>,
+    res: core.Response<getResponsesBody<GetGroups>, {}, getHTTPCode<GetGroups>>,
   ) => {
-    const response: getResponsesBody<getGroups> = [];
+    const response: getResponsesBody<GetGroups> = [];
     try {
       // Get all the groups and their information
       const { rows: groups } = await pg.query(sql`
@@ -67,8 +76,6 @@ router.get(
   },
 );
 
-type postGroups = operations['createGroup'];
-
 // create a new group
 
 router.post(
@@ -76,14 +83,14 @@ router.post(
   async (
     req: Request<
       {},
-      getResponsesBody<postGroups>,
-      getRequestBody<postGroups>,
+      getResponsesBody<PostGroups>,
+      getRequestBody<PostGroups>,
       {}
     >,
     res: core.Response<
-      getResponsesBody<postGroups>,
+      getResponsesBody<PostGroups>,
       {},
-      getHTTPCode<postGroups>
+      getHTTPCode<PostGroups>
     >,
   ) => {
     try {
@@ -138,6 +145,65 @@ router.post(
       return res.sendStatus(201);
     } catch (err) {
       return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+    }
+  },
+);
+
+router.get(
+  '/:groupId',
+  async (
+    req: Request<
+      getPathParams<GetGroupsById>,
+      getResponsesBody<GetGroupsById>,
+      getRequestBody<GetGroupsById>,
+      {}
+    >,
+    res: core.Response<
+      getResponsesBody<GetGroupsById>,
+      {},
+      getHTTPCode<GetGroupsById>
+    >,
+  ) => {
+    const response = {
+      groupInformation: {},
+      groupMembers: [],
+    };
+    try {
+      const { rows: groups } = await pg.query(sql`
+          SELECT * FROM groups
+          WHERE id = ${req.params.groupId}
+      `);
+
+      if (groups.length === 0) {
+        return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
+      }
+
+      response.groupInformation = groups[0];
+
+      const { rows: genres } = await pg.query(sql`
+          SELECT genres.* FROM genres
+          INNER JOIN groups_genres
+          ON groups_genres.genre=genres.id
+          WHERE groups_genres."group"=${req.params.groupId}
+      `);
+      response.groupInformation['genre'] = genres;
+
+      const { rows: groupMembers } = await pg.query(sql`
+          SELECT given_name, family_name, instruments.name as instrument, role, membership
+          FROM groups_musicians
+          INNER JOIN musicians
+            ON musicians.id = groups_musicians.musician
+          INNER JOIN instruments
+            ON groups_musicians.instrument = instruments.id
+          WHERE groups_musicians."group"=${req.params.groupId}
+        `);
+      response['groupMembers'] = groupMembers;
+
+      return res.status(200).json(response as getResponsesBody<GetGroupsById>);
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );

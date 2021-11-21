@@ -36,6 +36,14 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/groups/{groupId}": {
+    /** Get a group information by it's Id */
+    get: operations["getGroupsById"];
+    /** Delete a group by it's Id */
+    delete: operations["deleteGroupsById"];
+    /** Patch a group by it's Id */
+    patch: operations["patchGroupsById"];
+  };
   "/groups/invitation/response": {
     /** Respond to a group invitation */
     post: operations["responseGroupInvitation"];
@@ -255,7 +263,7 @@ export interface operations {
       };
     };
     responses: {
-      /** A list of all the events */
+      /** The event information */
       200: {
         content: {
           "application/json": components["schemas"]["event"][];
@@ -415,6 +423,113 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
+      };
+    };
+  };
+  /** Get a group information by it's Id */
+  getGroupsById: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The group information */
+      200: {
+        content: {
+          "application/json": {
+            groupInformation: components["schemas"]["group"];
+            groupMembers: components["schemas"]["groupMember"][];
+          };
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Delete a group by it's Id */
+  deleteGroupsById: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The group has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Patch a group by it's Id */
+  patchGroupsById: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The group has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["group"];
       };
     };
   };
