@@ -1,5 +1,5 @@
 import express from 'express';
-import pg from '../postgres';
+import pg from '../../postgres';
 import { v4 as uuidV4 } from 'uuid';
 import sql from 'sql-template-strings';
 import type { operations, components } from '@schema';

@@ -1,13 +1,13 @@
-import pg from '../postgres';
+import pg from '../../postgres';
 import request from 'supertest';
-import app from '../server/server';
+import app from '../../server/server';
 import { operations } from '@schema';
 import { getRequestBody } from '@typing';
 import bcrypt from 'bcrypt';
 
 jest.mock('bcrypt');
 
-jest.mock('../postgres');
+jest.mock('../../postgres');
 
 describe('/register', () => {
   const query = pg.query as jest.Mock;

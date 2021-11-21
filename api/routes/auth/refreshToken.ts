@@ -1,10 +1,10 @@
-import pg from '../postgres';
+import pg from '../../postgres';
 import sql from 'sql-template-strings';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import type { operations } from '@schema';
 import { Request } from 'express';
-import generateToken, { GrantTypes } from '../auth/generateToken';
+import generateToken, { GrantTypes } from '../../auth/generateToken';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 

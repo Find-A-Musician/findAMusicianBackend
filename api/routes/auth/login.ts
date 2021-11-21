@@ -1,9 +1,9 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import sql from 'sql-template-strings';
-import pg from '../postgres';
+import pg from '../../postgres';
 import { v4 as uuidV4 } from 'uuid';
-import generateToken, { GrantTypes } from '../auth/generateToken';
+import generateToken, { GrantTypes } from '../../auth/generateToken';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';

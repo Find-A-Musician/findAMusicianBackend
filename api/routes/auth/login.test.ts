@@ -1,11 +1,11 @@
-import app from '../server/server';
+import app from '../../server/server';
 import request from 'supertest';
-import pg from '../postgres';
+import pg from '../../postgres';
 import bcrypt from 'bcrypt';
 
 jest.mock('bcrypt');
 
-jest.mock('../postgres');
+jest.mock('../../postgres');
 
 describe('/login', () => {
   const compare = bcrypt.compare as jest.Mock;

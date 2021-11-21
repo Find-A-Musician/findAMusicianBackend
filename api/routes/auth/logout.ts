@@ -1,4 +1,4 @@
-import pg from '../postgres';
+import pg from '../../postgres';
 import sql from 'sql-template-strings';
 import express from 'express';
 import type core from 'express-serve-static-core';

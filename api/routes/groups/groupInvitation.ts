@@ -1,5 +1,5 @@
 import express from 'express';
-import pg from '../postgres';
+import pg from '../../postgres';
 import sql from 'sql-template-strings';
 import type core from 'express-serve-static-core';
 import { Request } from 'express';

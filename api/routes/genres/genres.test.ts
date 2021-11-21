@@ -1,9 +1,9 @@
-import pg from '../postgres';
+import pg from '../../postgres';
 import request from 'supertest';
-import app from '../server/server';
-import generateToken, { GrantTypes } from '../auth/generateToken';
+import app from '../../server/server';
+import generateToken, { GrantTypes } from '../../auth/generateToken';
 
-jest.mock('../postgres');
+jest.mock('../../postgres');
 
 describe('/genres', () => {
   const query = pg.query as jest.Mock;
