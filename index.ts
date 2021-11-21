@@ -24,7 +24,8 @@ httpApp.listen(PORT, async () => {
         '📕 Swager documention : http://localhost:' + PORT + '/api-docs',
       );
     } catch (err) {
-      throw new Error('E_TYPEs_FAILED');
+      console.log(err);
+      throw new Error('E_TYPES_FAILED');
     }
   }
   {

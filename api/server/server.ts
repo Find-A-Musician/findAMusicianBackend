@@ -6,17 +6,17 @@ import docs from '../docs/config/index';
 import authenticateToken from '../auth/authenticateToken';
 import * as OpenApiValidator from 'express-openapi-validator';
 // router import
-import registerRouter from '../routes/register';
-import loginRouter from '../routes/login';
-import logoutRouter from '../routes/logout';
-import musiciansRouter from '../routes/musicians';
-import instrumentRouter from '../routes/instruments';
-import genresRouter from '../routes/genres';
-import refreshTokenRouter from '../routes/refreshToken';
-import profilRouter from '../routes/profil';
-import groupsRouter from '../routes/groups';
-import eventsRoute from '../routes/events';
-import testRouter from '../routes/apiTest';
+import registerRouter from '../routes/auth/register';
+import loginRouter from '../routes/auth/login';
+import logoutRouter from '../routes/auth/logout';
+import musiciansRouter from '../routes/musicians/musicians';
+import instrumentRouter from '../routes/instruments/instruments';
+import genresRouter from '../routes/genres/genres';
+import refreshTokenRouter from '../routes/auth/refreshToken';
+import profilRouter from '../routes//profil/profil';
+import groupsRouter from '../routes/groups/groups';
+import eventsRoute from '../routes/events/events';
+import testRouter from '../routes/test/apiTest';
 import RateLimit from 'express-rate-limit';
 
 dotenv.config();
@@ -76,7 +76,7 @@ app.use('/groups', authenticateToken, groupsRouter);
 app.use('/events', authenticateToken, eventsRoute);
 
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, _) => {
+app.use((err, req, res, next) => {
   // format error
   res.status(err.status || 500).json({
     message: err.message,

@@ -14,7 +14,10 @@ export default async function createAPITypes(): Promise<void> {
   try {
     console.log('🔧 building the paths object...');
     // get every files of the schemas directory
-    const schemaFiles = readdirSync('./api/docs/schemas');
+
+    const schemaFiles = readDir('./api/docs/schemas').map(
+      (file) => file.split('schemas/')[1].split('.')[0],
+    );
     for (let index = 0; index < schemaFiles.length; index++) {
       await import(
         `../${path.join('./docs/schemas', schemaFiles[index]).split('.')[0]}`
@@ -56,4 +59,27 @@ export default async function createAPITypes(): Promise<void> {
   } catch (err) {
     throw new Error(err);
   }
+}
+
+/**
+ *
+ * @description Return all the files of a folder including files of sub-folder
+ * @param {string} dir The root folder
+ * @return {string[]} A list of all the files
+ * @author Romain Guarinoni
+ */
+
+function readDir(dir: string) {
+  let results: string[] = [];
+  const files = fs.readdirSync(dir);
+  files.forEach((file) => {
+    const filePath = dir + '/' + file;
+    const stats = fs.statSync(filePath);
+    if (stats && stats.isDirectory()) {
+      results = results.concat(readDir(filePath));
+    } else {
+      results.push(filePath);
+    }
+  });
+  return results;
 }
