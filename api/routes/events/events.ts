@@ -15,8 +15,9 @@ const router = express.Router();
 
 type GetEvents = operations['getEvents'];
 type PostEvents = operations['postEvents'];
-type PatchEvents = operations['patchEvent'];
-type DeleteEvents = operations['deleteEvents'];
+type GetEventsById = operations['getEventById'];
+type PatchEventsById = operations['patchEventById'];
+type DeleteEventsById = operations['deleteEventById'];
 
 router.get(
   '/',
@@ -41,6 +42,7 @@ router.get(
             SELECT * FROM musicians
             INNER JOIN events_admin
             ON events_admin.admin = musicians.id
+            WHERE events_admin.event = ${rows[index].id}
           `);
         rows[index]['admin'] = admin[0];
       }
@@ -109,29 +111,70 @@ router.post(
   },
 );
 
-router.patch(
-  '/',
+router.get(
+  '/:eventId',
   async (
     req: core.Request<
-      {},
-      getResponsesBody<PatchEvents>,
-      getRequestBody<PatchEvents>,
-      getPathParams<PatchEvents>
+      getPathParams<GetEventsById>,
+      getResponsesBody<GetEventsById>,
+      getRequestBody<GetEventsById>,
+      getPathParams<GetEventsById>
     >,
     res: core.Response<
-      getResponsesBody<PatchEvents>,
+      getResponsesBody<GetEventsById>,
       {},
-      getHTTPCode<PatchEvents>
+      getHTTPCode<GetEventsById>
     >,
   ) => {
     try {
       const { rows } = await pg.query(sql`
-        SELECT admin
-        FROM events_admin
-        WHERE event = ${req.body.id}
+        SELECT * FROM events
+        WHERE id = ${req.params.eventId}
       `);
 
-      console.log(rows);
+      if (rows.length === 0) {
+        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
+      }
+
+      const { rows: admin } = await pg.query(sql`
+            SELECT * FROM musicians
+            INNER JOIN events_admin
+            ON events_admin.admin = musicians.id
+            WHERE events_admin.event = ${req.params.eventId}
+          `);
+
+      rows[0]['admin'] = admin[0];
+
+      return res.status(200).json(rows);
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ msg: 'E_SQK_ERROR', stack: JSON.stringify(err) });
+    }
+  },
+);
+
+router.patch(
+  '/:eventId',
+  async (
+    req: core.Request<
+      getPathParams<PatchEventsById>,
+      getResponsesBody<PatchEventsById>,
+      getRequestBody<PatchEventsById>,
+      getPathParams<PatchEventsById>
+    >,
+    res: core.Response<
+      getResponsesBody<PatchEventsById>,
+      {},
+      getHTTPCode<PatchEventsById>
+    >,
+  ) => {
+    try {
+      const { rows } = await pg.query(sql`
+          SELECT admin
+          FROM events_admin
+          WHERE event = ${req.params.eventId}
+        `);
 
       if (rows.length == 0) {
         return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
@@ -139,15 +182,15 @@ router.patch(
 
       if (rows.some(({ admin }) => admin === req.userId)) {
         pg.query(sql`
-          UPDATE events
-          SET 
-            name = ${req.body.name} ,
-            description= ${req.body.description}  ,
-            start_date= ${req.body.start_date}  ,
-            end_date = ${req.body.end_date} ,
-            adress = ${req.body.adress} 
-          WHERE id = ${req.body.id}
-        `);
+            UPDATE events
+            SET
+              name = ${req.body.name} ,
+              description= ${req.body.description}  ,
+              start_date= ${req.body.start_date}  ,
+              end_date = ${req.body.end_date} ,
+              adress = ${req.body.adress}
+            WHERE id = ${req.params.eventId}
+          `);
 
         return res.sendStatus(200);
       } else {
@@ -162,34 +205,34 @@ router.patch(
 );
 
 router.delete(
-  '/',
+  '/:eventId',
   async (
     req: core.Request<
-      {},
-      getResponsesBody<DeleteEvents>,
-      getRequestBody<DeleteEvents>,
-      getPathParams<DeleteEvents>
+      getPathParams<DeleteEventsById>,
+      getResponsesBody<DeleteEventsById>,
+      getRequestBody<DeleteEventsById>,
+      getPathParams<DeleteEventsById>
     >,
     res: core.Response<
-      getResponsesBody<DeleteEvents>,
+      getResponsesBody<DeleteEventsById>,
       {},
-      getHTTPCode<DeleteEvents>
+      getHTTPCode<DeleteEventsById>
     >,
   ) => {
     try {
       const { rows: admin } = await pg.query(sql`
-              SELECT id FROM musicians
-              INNER JOIN events_admin
-                  ON events_admin.admin = musicians.id
-              WHERE events_admin.event = ${req.body.event}
-          `);
+                SELECT id FROM musicians
+                INNER JOIN events_admin
+                    ON events_admin.admin = musicians.id
+                WHERE events_admin.event = ${req.params.eventId}
+            `);
       if (admin.length === 0) {
         return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
       } else {
         if (admin.some(({ id }) => id === req.userId)) {
           await pg.query(sql`
-                DELETE FROM events WHERE events.id = ${req.body.event}
-              `);
+                  DELETE FROM events WHERE events.id = ${req.params.eventId}
+                `);
 
           return res.sendStatus(200);
         } else {

@@ -18,15 +18,19 @@ export interface paths {
   "/register": {
     post: operations["register"];
   };
+  "/events/{eventId}": {
+    /** Get an event by his Id */
+    get: operations["getEventById"];
+    /** Delete an event by his Id */
+    delete: operations["deleteEventById"];
+    /** Modify an event info */
+    patch: operations["patchEventById"];
+  };
   "/events": {
     /** Get a list of all the events */
     get: operations["getEvents"];
     /** Post a new event */
     post: operations["postEvents"];
-    /** Delete an event */
-    delete: operations["deleteEvents"];
-    /** Modify an event info */
-    patch: operations["patchEvent"];
   };
   "/genres": {
     /** Get a list of all genres */
@@ -242,6 +246,116 @@ export interface operations {
       };
     };
   };
+  /** Get an event by his Id */
+  getEventById: {
+    parameters: {
+      path: {
+        /** The ID of the event */
+        eventId: string;
+      };
+    };
+    responses: {
+      /** A list of all the events */
+      200: {
+        content: {
+          "application/json": components["schemas"]["event"][];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Delete an event by his Id */
+  deleteEventById: {
+    parameters: {
+      path: {
+        /** The ID of the event */
+        eventId: string;
+      };
+    };
+    responses: {
+      /** The event has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Modify an event info */
+  patchEventById: {
+    parameters: {
+      path: {
+        /** The ID of the event */
+        eventId: string;
+      };
+    };
+    responses: {
+      /** The event has been deleted */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          name: string;
+          description: string;
+          start_date: string;
+          end_date: string;
+          adress: string;
+        };
+      };
+    };
+  };
   /** Get a list of all the events */
   getEvents: {
     responses: {
@@ -284,83 +398,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["event"];
-      };
-    };
-  };
-  /** Delete an event */
-  deleteEvents: {
-    responses: {
-      /** The event has been deleted */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The user does not have the right */
-      403: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** The event does not exist */
-      404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          event: string;
-        };
-      };
-    };
-  };
-  /** Modify an event info */
-  patchEvent: {
-    responses: {
-      /** The event has been deleted */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The user does not have the right */
-      403: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** The event does not exist */
-      404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          id: string;
-          name: string;
-          description: string;
-          start_date: string;
-          end_date: string;
-          adress: string;
-        };
       };
     };
   };
