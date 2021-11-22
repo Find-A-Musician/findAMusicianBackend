@@ -5,5 +5,7 @@ import type { Config } from '@jest/types';
 const config: Config.InitialOptions = {
   verbose: true,
   modulePathIgnorePatterns: ['build'],
+  coverageDirectory: './coverage/',
+  collectCoverage: true,
 };
 export default config;

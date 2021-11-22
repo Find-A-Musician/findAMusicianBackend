@@ -1,26 +1,194 @@
-# findAMusician
+[![Build Status](https://img.shields.io/github/workflow/status/RomainGuarinoni/findAMusician/tests/main)](https://img.shields.io/github/workflow/status/RomainGuarinoni/findAMusician/tests/main)
+[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/RomainGuarinoni/findAMusician)](https://img.shields.io/snyk/vulnerabilities/github/RomainGuarinoni/findAMusician)
+[![commit](https://img.shields.io/github/commit-activity/m/RomainGuarinoni/findAMusician)](https://img.shields.io/github/commit-activity/m/RomainGuarinoni/findAMusician)
+[![license](https://img.shields.io/github/license/RomainGuarinoni/findAMusician)](https://img.shields.io/github/license/RomainGuarinoni/findAMusician)
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/RomainGuarinoni/findAMusician)
+<br />
 
-[![Build status](https://travis-ci.com/nfroidure/whook.svg?branch=master)](https://travis-ci.com/github/RomainGuarinoni/findAMusician)
+<div align="center">
+  <a href="https://github.com/RomainGuarinoni/findAMusician#findamusician">
+    <img src="assets/logo.png" alt="Logo" >
+  </a>
 
-A website for my school where the musicians can contact each others, create
-groups and register to play at events
+<br/>
+  <p align="center">
+    A website for my school where the musicians can contact each others, create groups and register to play at events
+    <br />
+    <a href="https://github.com/RomainGuarinoni/findAMusician/wiki"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    ·
+    <a href="https://github.com/RomainGuarinoni/findAMusician/issues/new">Report Bug</a>
+    ·
+    <a href="https://github.com/RomainGuarinoni/findAMusician/issues/new">Request Feature</a>
+  </p>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Development">Development</a>
+      <ul>
+        <li><a href="create-an-openapi-definition">Create an OpenAPI definition</a></li>
+        <li><a href="create-an-express-route">Create an express route</a></li>
+        <li><a href="add-your-route-to-the-server">Add your route to the server</a></li>
+      </ul>
+    </li>
+    <li><a href="#useful-commands">Useful commands</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#usefull-links">Usefull links</a></li>
+  </ol>
+</details>
+
+<!-- ABOUT THE PROJECT -->
+
+## About The Project
+
+> The project is still under development, only the backend exists for the moment
+
+<div align="center">
+    <img src="assets/screenshot.png" alt="Logo" >
+
+</div>
+
+Find A Musician is a web platform that will allow musicians from IMT schools to
+meet, create bands and participate in events all in a few clicks.
+
+The idea came when I realized that apart from whatsApp conversations or facebook
+groups, it was super hard to meet musicians or to keep up with different events.
+Find A Musician is a solution that allows to centralize all these problems on a
+single web platform making the musical association life much easier.
+
+The platform allows all musicians to :
+
+- view the profiles of other registered musicians
+- create a band or join an existing one
+- create or join a musical event
+
+### Built With
+
+#### Backend
+
+- [Express](https://expressjs.com/)
+- [OpenAPI](https://www.openapis.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Jest](https://jestjs.io/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Docker](https://www.docker.com/)
+
+#### Frontend
+
+- [Nextjs](https://nextjs.org/)
+- [Storybook](https://storybook.js.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+
+<!-- GETTING STARTED -->
+
+## Getting Started
+
+To run the application in development mode, you must run the frontend and the
+backend separately.
+
+### Prerequisites
+
+First of all, make sure you have the following dependencies install on your
+computer :
+
+- [docker](https://docs.docker.com/get-docker/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+- [npm](https://docs.npmjs.com/getting-started/)
+
+### Installation
+
+Follow these instructions to run the project in development mode
+
+#### Backend
+
+1. Clone the repo
+
+   SSH
+
+   ```sh
+   git clone git@github.com:RomainGuarinoni/findAMusician.git
+   ```
+
+   HTTPS
+
+   ```sh
+   git clone https://github.com/RomainGuarinoni/findAMusician.git
+   ```
+
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Run the docker container
+
+   ```sh
+   docker-compose up
+   ```
+
+   You need to build the container the first time you run the backend :
+
+   ```sh
+   docker-compose up --build
+   ```
+
+4. Set up the `.env` files
+
+   > The procedure to receive the .env is not yet implemented, please contact me
+   > for the moment
+
+5. Run the test
+
+   ```sh
+   npm run test
+   ```
+
+#### Frontend
+
+1. Place yourself in the frontend folder
+
+   ```sh
+   cd frontend
+   ```
+
+2. Install the dependencies
+
+   ```sh
+   npm install
+   ```
+
+3. Run the local developement mode
+
+   ```sh
+   npm run dev
+   ```
 
 ## Development
 
-To run the API in development mode , run this command :
-
-```bash
-docker-compose up
-```
-
-You need to have installed Docker and docker-compose on your local machine.
-
-Every changes you make to the database restart the server and recreate the
-OpenAPI types.
-
-## Create a new API endpoint
+You can check the
+[doc](https://github.com/RomainGuarinoni/findAMusician/blob/main/api/routes/doc/template.md)
+to have templates for routes and schemas
 
 ### Create an OpenAPI definition
 
@@ -102,52 +270,67 @@ app.use('/example', testRouter);
 ### Reset the postgres database
 
 ```bash
-command/pg_reset.sh
+api/command/pg_reset.sh
 ```
 
-### lint the project
+### Lint the project
 
 ```bash
 npm run lint
 ```
 
-### get a random uuid
+### Get a random uuid
 
 ```bash
 npm run uuid
 ```
 
-## DB architecture
+### Generate a new password hash
 
-see the DB architecture there :
-https://app.diagrams.net/#G1qQYCvZrO-_BE1svWz_xGW_J_nBfvSYip
+```bash
+npm run password
+```
 
-## Maquette
+<!-- CONTRIBUTING -->
 
-https://www.figma.com/file/HOpu5h8KqPTw0abgOWBM0i/Find-a-musicien?node-id=0%3A1
+## Contributing
 
-## documentation
+If you have a suggestion that would make this better, please fork the repo and
+create a pull request. You can also simply open an issue with the tag
+"enhancement". Don't forget to give the project a star! Thanks again!
 
-- postgresql :
-  https://glaucia86.medium.com/developing-a-crud-node-js-application-with-postgresql-d25febb1cc4
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feat/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'feat(type): subject'`)
+4. Push to the Branch (`git push origin feat/AmazingFeature`)
+5. Open a Pull Request
 
-- pgsql :
-  https://blog.logrocket.com/nodejs-expressjs-postgresql-crud-rest-api-example/
+<!-- LICENSE -->
 
-- openAPI :
-  https://www.google.com/amp/s/www.freecodecamp.org/news/how-to-build-explicit-apis-with-openapi/amp/
+## License
 
-- openAPI : https://github.com/mwangiKibui/node.js-rest-api-documentation
+Distributed under the MIT License. See `LICENSE` for more information.
 
-- auth express : https://youtu.be/mbsmsi7l3r4
+<!-- CONTACT -->
 
-- Eslint :
-  https://dev.to/devdammak/setting-up-eslint-in-your-javascript-project-with-vs-code-2amf
+## Contact
 
-- pgsql :
-  https://jessitron.com/2020/05/25/develop-in-docker-node-js-express-postgresql-on-heroku/
+Romain Guarinoni -
+[linkedin](https://www.linkedin.com/in/romain-guarinoni-535445189/) -
+romain.guar01@gmail.com
 
-dokcer-pgsql : https://codewithhugo.com/node-postgres-express-docker-compose/
+Project Link:
+[https://github.com/RomainGuarinoni/findAMusician](https://github.com/RomainGuarinoni/findAMusician)
 
-- test :
-  https://github.com/JoshuaToth/Node-Express-Jest-PSQL-Typescript-Template
+<!-- ACKNOWLEDGMENTS -->
+
+## Usefull links
+
+Use this space to list resources you find helpful and would like to give credit
+to. I've included a few of my favorites to kick things off!
+
+- [Db architecture](https://app.diagrams.net/#G1qQYCvZrO-_BE1svWz_xGW_J_nBfvSYip)
+- [Maquette](https://www.figma.com/file/HOpu5h8KqPTw0abgOWBM0i/Find-a-musicien?node-id=0%3A1)
+- [CRUD Pgsql](https://glaucia86.medium.com/developing-a-crud-node-js-application-with-postgresql-d25febb1cc4)
+- [OpenAPI with express](https://github.com/mwangiKibui/node.js-rest-api-docuentation)
+- [Img Shields](https://shields.io)
