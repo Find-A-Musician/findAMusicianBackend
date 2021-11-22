@@ -2,7 +2,9 @@
 [![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/RomainGuarinoni/findAMusician)](https://img.shields.io/snyk/vulnerabilities/github/RomainGuarinoni/findAMusician)
 [![commit](https://img.shields.io/github/commit-activity/m/RomainGuarinoni/findAMusician)](https://img.shields.io/github/commit-activity/m/RomainGuarinoni/findAMusician)
 [![license](https://img.shields.io/github/license/RomainGuarinoni/findAMusician)](https://img.shields.io/github/license/RomainGuarinoni/findAMusician)
-
+[![Codecov Coverage](https://img.shields.io/codecov/c/github/RomainGuarinoni/findAMusician/coverage.svg)](https://codecov.io/gh/RomainGuarinoni/findAMusician/)
+[![Issues](https://img.shields.io/github/issues/RomainGuarinoni/findAMusician)](https://img.shields.io/github/issues/RomainGuarinoni/findAMusician)
+[![Pull request](https://img.shields.io/github/issues-pr/RomainGuarinoni/findAMusician)](https://img.shields.io/github/issues-pr/RomainGuarinoni/findAMusician)
 <br />
 
 <div align="center">
@@ -17,7 +19,7 @@
     <a href="https://github.com/RomainGuarinoni/findAMusician/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://github.com/RomainGuarinoni/findAMusician">View Demo</a>
     ·
     <a href="https://github.com/RomainGuarinoni/findAMusician/issues/new">Report Bug</a>
     ·

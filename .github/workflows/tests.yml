@@ -35,5 +35,11 @@ jobs:
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
 
+      - name: Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+
       - name: Close the docker containers
         run: docker-compose stop
