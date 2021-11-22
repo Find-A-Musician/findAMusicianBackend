@@ -37,6 +37,12 @@ describe('Test the Bearer token authentification middleware', () => {
   });
 
   it('notify the empty token', async () => {
-    await supertest(app).get('/test').expect(401);
+    await supertest(app)
+      .get('/test')
+      .set('Authorization', '')
+      .expect(401)
+      .then(({ body: { message } }) => {
+        expect(message).toStrictEqual('Authorization header required');
+      });
   });
 });
