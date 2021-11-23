@@ -51,7 +51,9 @@ router.get(
 
       return res.status(200).json(response as getResponsesBody<getProfil>);
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -158,7 +160,7 @@ router.patch(
       } catch (err) {
         return res
           .status(500)
-          .json({ msg: 'E_SQL_ERROR_INSTRUMENTS', stack: err });
+          .json({ msg: 'E_SQL_ERROR_INSTRUMENTS', stack: JSON.stringify(err) });
       }
 
       // //update the genres of the user
@@ -181,7 +183,9 @@ router.patch(
         `);
         }
       } catch (err) {
-        return res.status(500).json({ msg: 'E_SQL_ERROR_GENRES', stack: err });
+        return res
+          .status(500)
+          .json({ msg: 'E_SQL_ERROR_GENRES', stack: JSON.stringify(err) });
       }
 
       return res.sendStatus(200);
@@ -216,7 +220,9 @@ router.delete(
 
       return res.status(200).json('The user has been deleted');
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );

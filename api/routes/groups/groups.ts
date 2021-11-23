@@ -71,7 +71,9 @@ router.get(
       }
       return res.status(200).json(response);
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -144,7 +146,9 @@ router.post(
 
       return res.sendStatus(201);
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );

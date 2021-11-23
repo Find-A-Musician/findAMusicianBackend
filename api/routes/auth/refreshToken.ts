@@ -53,7 +53,9 @@ router.post(
         },
       );
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );

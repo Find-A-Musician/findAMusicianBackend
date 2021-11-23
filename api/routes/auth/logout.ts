@@ -28,7 +28,9 @@ router.delete(
 
       return res.status(200).json('the user has been logout');
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );

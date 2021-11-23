@@ -72,7 +72,9 @@ router.post(
       return res.status(201).json('The user has been invited');
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -117,7 +119,9 @@ router.post(
 
       res.status(201).json('The user membership has been updated');
     } catch (err) {
-      return res.status(500).json({ msg: 'E_SQL_ERROR', stack: err });
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
