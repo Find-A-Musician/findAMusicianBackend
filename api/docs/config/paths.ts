@@ -425,8 +425,8 @@ const paths: OpenAPIV3.Document['paths'] = {
             example: {
               name: 'Insane event',
               description: 'An insane event',
-              start_date: '2021-11-22T08:46:49.485Z',
-              end_date: '2021-11-22T08:46:49.485Z',
+              start_date: '2021-11-23T10:35:27.763Z',
+              end_date: '2021-11-23T10:35:27.763Z',
               adress: 'somewhere',
             },
           },
@@ -1001,7 +1001,6 @@ const paths: OpenAPIV3.Document['paths'] = {
             schema: {
               type: 'object',
               properties: {
-                email: { type: 'string', format: 'email' },
                 givenName: { type: 'string' },
                 familyName: { type: 'string' },
                 phone: { type: 'string' },

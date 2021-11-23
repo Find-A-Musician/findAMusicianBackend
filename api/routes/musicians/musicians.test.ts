@@ -2,7 +2,6 @@ import app from '../../server/server';
 import request from 'supertest';
 import pg from '../../postgres';
 import generateToken, { GrantTypes } from '../../auth/generateToken';
-import { copyFileSync } from 'fs';
 
 jest.mock('../../postgres');
 

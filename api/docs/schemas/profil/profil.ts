@@ -60,10 +60,6 @@ const schema: HandlerDefinition = {
           schema: {
             type: 'object',
             properties: {
-              email: {
-                type: 'string',
-                format: 'email',
-              },
               givenName: { type: 'string' },
               familyName: { type: 'string' },
               phone: { type: 'string' },

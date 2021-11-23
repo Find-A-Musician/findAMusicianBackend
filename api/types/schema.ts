@@ -781,7 +781,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          email?: string;
           givenName?: string;
           familyName?: string;
           phone?: string;

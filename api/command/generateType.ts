@@ -1,5 +1,5 @@
 import docs from '../docs/config/index';
-import fs, { readdirSync } from 'fs';
+import fs from 'fs';
 import { series } from 'async';
 import { exec } from 'child_process';
 import path from 'path';

@@ -74,13 +74,6 @@ router.patch(
     >,
   ) => {
     try {
-      if (req.body.email) {
-        await pg.query(sql`
-                  UPDATE musicians
-                  SET email = ${req.body.email}
-                  WHERE id = ${req.userId}
-              `);
-      }
       if (req.body.facebook_url) {
         await pg.query(sql`
                     UPDATE musicians
@@ -140,57 +133,63 @@ router.patch(
 
       //update the instruments of the user
 
-      try {
-        for (let index = 0; index < req.body.instruments.length; index++) {
+      if (req.body.instruments) {
+        try {
+          // Delete all the instruments
           await pg.query(sql`
           DELETE FROM musicians_instruments
           WHERE musician=${req.userId}
-            AND instrument = ${req.body.instruments[index].id}
         `);
-          await pg.query(sql`
-            INSERT INTO musicians_instruments (
-              musician,
-              instrument
-            ) VALUES (
-              ${req.userId},
-              ${req.body.instruments[index].id}
-            )
-          `);
+          for (let index = 0; index < req.body.instruments.length; index++) {
+            // insert the new instruments
+            await pg.query(sql`
+              INSERT INTO musicians_instruments (
+                musician,
+                instrument
+              ) VALUES (
+                ${req.userId},
+                ${req.body.instruments[index].id}
+              )
+            `);
+          }
+        } catch (err) {
+          return res.status(500).json({
+            msg: 'E_SQL_ERROR_INSTRUMENTS',
+            stack: JSON.stringify(err),
+          });
         }
-      } catch (err) {
-        return res
-          .status(500)
-          .json({ msg: 'E_SQL_ERROR_INSTRUMENTS', stack: JSON.stringify(err) });
       }
 
       // //update the genres of the user
 
-      try {
-        for (let index = 0; index < req.body.genres.length; index++) {
+      if (req.body.genres) {
+        try {
+          // Delete all the genres
           await pg.query(sql`
-            DELETE FROM musicians_genres
-            WHERE musician=${req.userId}
-              AND genre = ${req.body.genres[index].id}
-          `);
-          await pg.query(sql`
-          INSERT INTO musicians_genres (
-            musician,
-            genre
-          ) VALUES (
-            ${req.userId},
-            ${req.body.genres[index].id}
-          )
+          DELETE FROM musicians_genres
+          WHERE musician=${req.userId}
         `);
+          for (let index = 0; index < req.body.genres.length; index++) {
+            // insert the nesw genres
+            await pg.query(sql`
+        INSERT INTO musicians_genres (
+          musician,
+          genre
+        ) VALUES (
+          ${req.userId},
+          ${req.body.genres[index].id}
+        )
+      `);
+          }
+        } catch (err) {
+          return res
+            .status(500)
+            .json({ msg: 'E_SQL_ERROR_GENRES', stack: JSON.stringify(err) });
         }
-      } catch (err) {
-        return res
-          .status(500)
-          .json({ msg: 'E_SQL_ERROR_GENRES', stack: JSON.stringify(err) });
       }
 
       return res.sendStatus(200);
     } catch (err) {
-      console.log(err);
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
