@@ -24,8 +24,7 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'array',
-              items: { $ref: '#/components/schemas/event' },
+              $ref: '#/components/schemas/event',
             },
           },
         },

@@ -145,7 +145,7 @@ router.get(
 
       rows[0]['admin'] = admin[0];
 
-      return res.status(200).json(rows);
+      return res.status(200).json(rows[0]);
     } catch (err) {
       return res
         .status(500)

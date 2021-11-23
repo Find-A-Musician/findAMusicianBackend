@@ -270,7 +270,7 @@ export interface operations {
       /** The event information */
       200: {
         content: {
-          "application/json": components["schemas"]["event"][];
+          "application/json": components["schemas"]["event"];
         };
       };
       /** The event does not exist */

@@ -152,20 +152,18 @@ describe('/events', () => {
       )
       .expect(200)
       .then(({ body }) => {
-        expect(body).toStrictEqual([
-          {
-            id: 'id',
-            name: 'name',
-            description: 'description',
-            start_date: new Date(2000, 11, 13).toISOString(),
-            end_date: new Date(2000, 11, 13).toISOString(),
-            adress: 'adress',
-            admin: {
-              id: 'musiciansId',
-              email: 'test@test.fr',
-            },
+        expect(body).toStrictEqual({
+          id: 'id',
+          name: 'name',
+          description: 'description',
+          start_date: new Date(2000, 11, 13).toISOString(),
+          end_date: new Date(2000, 11, 13).toISOString(),
+          adress: 'adress',
+          admin: {
+            id: 'musiciansId',
+            email: 'test@test.fr',
           },
-        ]);
+        });
       });
   });
 
