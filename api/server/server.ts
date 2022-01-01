@@ -27,16 +27,19 @@ app.use(cors());
 app.use(express.json());
 
 // set up rate limiter: maximum of 30 requests per minute, 1 per 2s
-const limiter = RateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 30,
-  handler: (_, res) => {
-    res.status(429).json({ msg: 'E_TOO_MANY_REQUEST' });
-  },
-});
+if (process.env.NODE_ENV === 'production') {
+  const limiter = RateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 30,
+    handler: (_, res) => {
+      res.status(429).json({ msg: 'E_TOO_MANY_REQUEST' });
+    },
+  });
 
-// apply rate limiter to all requests
-app.use(limiter);
+  // apply rate limiter to all requests
+
+  app.use(limiter);
+}
 
 // serve the API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));

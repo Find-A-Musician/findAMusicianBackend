@@ -94,6 +94,7 @@ export interface components {
       promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
       location?: "Douai" | "Lille";
       instruments?: components["schemas"]["instrument"][];
+      genres?: components["schemas"]["genre"][];
     };
     group: {
       id?: string;
@@ -732,11 +733,7 @@ export interface operations {
       /** The user profil information */
       200: {
         content: {
-          "application/json": {
-            musician: components["schemas"]["musician"];
-            genres: components["schemas"]["genre"][];
-            instruments: components["schemas"]["instrument"][];
-          };
+          "application/json": components["schemas"]["musician"];
         };
       };
       /** Error intern server */

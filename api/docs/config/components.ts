@@ -28,6 +28,12 @@ const components: OpenAPIV3.Document['components'] = {
             $ref: '#/components/schemas/instrument',
           },
         },
+        genres: {
+          type: 'array',
+          items: {
+            $ref: '#/components/schemas/genre',
+          },
+        },
       },
     },
     group: {

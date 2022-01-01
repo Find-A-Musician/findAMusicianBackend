@@ -51,7 +51,7 @@ describe('/profil', () => {
       .set('Authorization', token)
       .expect(200)
       .then(({ body }) => {
-        expect(body.musician.email).toStrictEqual('test@gmail.com');
+        expect(body.email).toStrictEqual('test@gmail.com');
         expect(body.instruments[0].name).toStrictEqual('Batterie');
         expect(body.genres[0].name).toStrictEqual('metal');
       });

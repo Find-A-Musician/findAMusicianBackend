@@ -44,7 +44,7 @@ router.get(
     `);
 
       const response = {
-        musician: musicianResponse,
+        ...musicianResponse,
         instruments: instrumentsResponse,
         genres: genresResponse,
       };

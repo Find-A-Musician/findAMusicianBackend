@@ -13,25 +13,7 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'object',
-              required: ['musician', 'genres', 'instruments'],
-              properties: {
-                musician: {
-                  $ref: '#/components/schemas/musician',
-                },
-                genres: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/components/schemas/genre',
-                  },
-                },
-                instruments: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/components/schemas/instrument',
-                  },
-                },
-              },
+              $ref: '#/components/schemas/musician',
             },
           },
         },
