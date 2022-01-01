@@ -22,7 +22,17 @@ router.get(
       const {
         rows: [musicianResponse],
       } = await pg.query(sql`
-            SELECT *
+            SELECT 
+            id,
+            email,
+            given_name as "givenName",
+            family_name as "familyName",
+            phone,
+            facebook_url,
+            twitter_url,
+            instagram_url,
+            promotion,
+            location
             FROM musicians
             WHERE musicians.id = ${req.userId}
         `);
