@@ -83,18 +83,18 @@ export interface paths {
 export interface components {
   schemas: {
     musician: {
-      id?: string;
+      id: string;
       email: string;
-      givenName?: string;
-      familyName?: string;
+      givenName: string;
+      familyName: string;
       phone?: string | null;
       facebook_url?: string | null;
       twitter_url?: string | null;
       instagram_url?: string | null;
-      promotion?: "L1" | "L2" | "L3" | "M1" | "M2";
-      location?: "Douai" | "Lille";
-      instruments?: components["schemas"]["instrument"][];
-      genres?: components["schemas"]["genre"][];
+      promotion: "L1" | "L2" | "L3" | "M1" | "M2";
+      location: "Douai" | "Lille";
+      instruments: components["schemas"]["instrument"][];
+      genres: components["schemas"]["genre"][];
     };
     group: {
       id?: string;
@@ -236,8 +236,6 @@ export interface operations {
           "application/json": {
             token: components["schemas"]["token"];
             musician: components["schemas"]["musician"];
-            genres: components["schemas"]["genre"][];
-            instruments: components["schemas"]["instrument"][];
           };
         };
       };
@@ -253,8 +251,6 @@ export interface operations {
         "application/json": {
           musician: components["schemas"]["musician"];
           password: string;
-          genres: components["schemas"]["genre"][];
-          instruments: components["schemas"]["instrument"][];
         };
       };
     };

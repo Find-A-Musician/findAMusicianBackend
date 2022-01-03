@@ -18,27 +18,46 @@ describe('/login', () => {
   // vérifier qu'il y a bienn les cookies
   it('Login the user', async () => {
     const body = {
-      email: 'romain.guar01@gmail.com',
-      password: 'romain123',
+      email: 'test@gmail.com',
+      password: 'password',
     };
 
-    query.mockReturnValueOnce({
-      rows: [{ id: 'id', password: 'hash', email: 'test@gmail.com' }],
-    });
+    query.mockReturnValueOnce({ rows: [{ id: 'id', password: 'hash' }] });
 
     compare.mockImplementationOnce(
       (): Promise<boolean> => Promise.resolve(true),
     );
 
+    query.mockReturnValueOnce({});
+
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          id: 'id',
+          email: 'test@gmail.com',
+          givenName: '',
+          familyName: '',
+          phone: '',
+          facebook_url: null,
+          twitter_url: null,
+          instagram_url: null,
+          promotion: 'L1',
+          location: 'Douai',
+        },
+      ],
+    });
+
+    query.mockReturnValueOnce({ rows: [{ id: 'id', name: 'genres' }] });
+    query.mockReturnValueOnce({ rows: [{ id: 'id', name: 'instrument' }] });
+
     await request(app)
       .post('/login')
       .send(body)
       .expect(200)
-      .then(({ body, header }) => {
-        expect(Boolean(body['token']['accessToken'])).toBe(true);
-        expect(Boolean(body['token']['refreshToken'])).toBe(true);
-        expect(Boolean(body['musician'])).toBe(true);
-        expect(header['set-cookie'].length).toStrictEqual(2);
+      .then(({ body }) => {
+        expect(Boolean(body.token.accessToken)).toStrictEqual(true);
+        expect(Boolean(body.token.refreshToken)).toStrictEqual(true);
+        expect(Boolean(body.musician.id)).toStrictEqual(true);
       });
   });
 

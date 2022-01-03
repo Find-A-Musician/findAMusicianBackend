@@ -24,6 +24,12 @@ describe('/profil', () => {
         {
           id: 'id',
           email: 'test@gmail.com',
+          givenName: 'Test',
+          familyName: 'test',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
         },
       ],
     });

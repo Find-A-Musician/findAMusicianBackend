@@ -12,24 +12,12 @@ const schema: HandlerDefinition = {
         'application/json': {
           schema: {
             type: 'object',
-            required: ['musician', 'password', 'genres', 'instruments'],
+            required: ['musician', 'password'],
             properties: {
               musician: {
                 $ref: '#/components/schemas/musician',
               },
               password: { type: 'string' },
-              genres: {
-                type: 'array',
-                items: {
-                  $ref: '#/components/schemas/genre',
-                },
-              },
-              instruments: {
-                type: 'array',
-                items: {
-                  $ref: '#/components/schemas/instrument',
-                },
-              },
             },
           },
           example: {
@@ -44,25 +32,25 @@ const schema: HandlerDefinition = {
               instagram_url: 'https://instagram.com',
               promotion: 'L1',
               location: 'Douai',
+              genres: [
+                {
+                  id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
+                  name: 'rock',
+                },
+                { id: '7d68d33c-3eff-4f5e-985b-c7d9e058e23a', name: 'metal' },
+              ],
+              instruments: [
+                {
+                  id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
+                  name: 'batterie',
+                },
+                {
+                  id: 'e345114e-7723-42eb-8ed1-f26cd2f9d084',
+                  name: 'guitare',
+                },
+              ],
             },
             password: 'password',
-            genres: [
-              {
-                id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
-                name: 'rock',
-              },
-              { id: '7d68d33c-3eff-4f5e-985b-c7d9e058e23a', name: 'metal' },
-            ],
-            instruments: [
-              {
-                id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-                name: 'batterie',
-              },
-              {
-                id: 'e345114e-7723-42eb-8ed1-f26cd2f9d084',
-                name: 'guitare',
-              },
-            ],
           },
         },
       },
@@ -74,18 +62,10 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'object',
-              required: ['token', 'musician', 'genres', 'instruments'],
+              required: ['token', 'musician'],
               properties: {
                 token: { $ref: '#/components/schemas/token' },
                 musician: { $ref: '#/components/schemas/musician' },
-                genres: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/genre' },
-                },
-                instruments: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/instrument' },
-                },
               },
             },
           },

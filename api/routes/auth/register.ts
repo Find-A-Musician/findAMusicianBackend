@@ -58,26 +58,26 @@ router.post(
         )
         `,
         );
-        for (let i = 0; i < body.genres.length; i++) {
+        for (let i = 0; i < body.musician.genres.length; i++) {
           await pg.query(sql`
               INSERT INTO musicians_genres (
                 musician,
                 genre
               ) VALUES  (
                 ${userId},
-                ${body.genres[i].id}
+                ${body.musician.genres[i].id}
               )
 
             `);
         }
-        for (let i = 0; i < body.instruments.length; i++) {
+        for (let i = 0; i < body.musician.instruments.length; i++) {
           await pg.query(sql`
               INSERT INTO musicians_instruments (
                 musician,
                 instrument
               ) VALUES  (
                 ${userId},
-                ${body.instruments[i].id}
+                ${body.musician.instruments[i].id}
               )
 
             `);
@@ -128,9 +128,9 @@ router.post(
             twitter_url: body.musician.twitter_url,
             promotion: body.musician.promotion,
             location: body.musician.location,
+            genres: body.musician.genres,
+            instruments: body.musician.instruments,
           },
-          genres: body.genres,
-          instruments: body.instruments,
         });
       } catch (err) {
         return res.status(500).json({

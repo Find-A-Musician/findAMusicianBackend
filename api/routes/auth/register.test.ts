@@ -21,6 +21,7 @@ describe('/register', () => {
   it('register a new user', async () => {
     const bodyMusician: getRequestBody<operations['register']> = {
       musician: {
+        id: 'id',
         email: 'test@gmail.com',
         givenName: 'Test',
         familyName: 'test',
@@ -28,15 +29,16 @@ describe('/register', () => {
         facebook_url: 'url',
         promotion: 'M1',
         location: 'Douai',
+        instruments: [{ id: 'id', name: 'name' }],
+        genres: [
+          {
+            id: 'id',
+            name: 'genre',
+          },
+        ],
       },
-      genres: [
-        {
-          id: 'id',
-          name: 'genre',
-        },
-      ],
+
       password: 'password',
-      instruments: [{ id: 'id', name: 'name' }],
     };
 
     hash.mockImplementationOnce((): Promise<string> => Promise.resolve('hash'));
@@ -62,6 +64,7 @@ describe('/register', () => {
   it('Failed to hash the password', async () => {
     const bodyMusician: getRequestBody<operations['register']> = {
       musician: {
+        id: 'id',
         email: 'test@gmail.com',
         givenName: 'Test',
         familyName: 'test',
@@ -69,15 +72,16 @@ describe('/register', () => {
         facebook_url: 'url',
         promotion: 'M1',
         location: 'Douai',
+        instruments: [{ id: 'id', name: 'name' }],
+        genres: [
+          {
+            id: 'id',
+            name: 'genre',
+          },
+        ],
       },
-      genres: [
-        {
-          id: 'id',
-          name: 'genre',
-        },
-      ],
+
       password: 'password',
-      instruments: [{ id: 'id', name: 'name' }],
     };
 
     hash.mockImplementation(() => {

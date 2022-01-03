@@ -22,7 +22,7 @@ router.post(
     const body = req.body;
 
     const { rows } = await pg.query(
-      sql`SELECT * 
+      sql`SELECT id, password 
             FROM musicians 
             WHERE email=${body.email} 
         `,
@@ -33,6 +33,7 @@ router.post(
     }
 
     const password = rows[0].password;
+    const userId = rows[0].id;
 
     try {
       const result = await bcrypt.compare(body.password, password);
@@ -41,12 +42,9 @@ router.post(
         return res.status(401).json({ msg: 'E_INVALID_PASSWORD' });
       }
 
-      const accessToken = generateToken(
-        GrantTypes.AuthorizationCode,
-        rows[0].id,
-      );
+      const accessToken = generateToken(GrantTypes.AuthorizationCode, userId);
 
-      const refreshToken = generateToken(GrantTypes.RefreshToken, rows[0].id);
+      const refreshToken = generateToken(GrantTypes.RefreshToken, userId);
 
       await pg.query(sql`
         INSERT INTO tokens (
@@ -56,7 +54,7 @@ router.post(
         ) VALUES (
           ${uuidV4()},
           ${refreshToken},
-          ${rows[0].id}
+          ${userId}
         )
       `);
 
@@ -73,12 +71,50 @@ router.post(
         maxAge: 60,
       });
 
+      const {
+        rows: [musicianResponse],
+      } = await pg.query(sql`
+            SELECT 
+            id,
+            email,
+            given_name as "givenName",
+            family_name as "familyName",
+            phone,
+            facebook_url,
+            twitter_url,
+            instagram_url,
+            promotion,
+            location
+            FROM musicians
+            WHERE musicians.id = ${userId}
+        `);
+
+      const { rows: instrumentsResponse } = await pg.query(sql`
+        SELECT instruments.*
+        FROM instruments
+        INNER JOIN musicians_instruments
+        ON instruments.id = musicians_instruments.instrument
+        WHERE musicians_instruments.musician= ${userId}
+    `);
+
+      const { rows: genresResponse } = await pg.query(sql`
+        SELECT genres.*
+        FROM genres
+        INNER JOIN musicians_genres
+        ON musicians_genres.genre=genres.id
+        WHERE musicians_genres.musician = ${userId}
+    `);
+
       return res.status(200).json({
         token: {
           accessToken,
           refreshToken,
         },
-        musician: rows[0],
+        musician: {
+          ...musicianResponse,
+          genres: genresResponse,
+          instruments: instrumentsResponse,
+        },
       });
     } catch (err) {
       return res.status(500).json({ msg: 'E_COMPARE_FAILED' });

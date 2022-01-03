@@ -26,7 +26,19 @@ router.get(
     >,
   ) => {
     try {
-      const { rows } = await pg.query(sql`SELECT * FROM musicians`);
+      const { rows } = await pg.query(
+        sql`SELECT id,
+                  email,
+                  given_name as "givenName",
+                  family_name as "familyName",
+                  phone,
+                  facebook_url,
+                  twitter_url,
+                  instagram_url,
+                  promotion,
+                  location 
+              FROM musicians`,
+      );
 
       for (let i = 0; i < rows.length; i++) {
         const { rows: instrumentsRows } = await pg.query(sql`
@@ -76,7 +88,17 @@ router.get(
   ) => {
     try {
       const { rows } = await pg.query(sql`
-        SELECT * FROM musicians
+        SELECT id,
+              email,
+              given_name as "givenName",
+              family_name as "familyName",
+              phone,
+              facebook_url,
+              twitter_url,
+              instagram_url,
+              promotion,
+              location 
+        FROM musicians
         WHERE id = ${req.params.musicianId}
       `);
 
@@ -84,16 +106,12 @@ router.get(
         return res.status(404).json({ msg: 'E_MUSICIAN_DOES_NOT_EXIST' });
       }
 
-      console.log(rows);
-
       const { rows: instrumentsRows } = await pg.query(sql`
         SELECT instruments.* 
         FROM instruments
         INNER JOIN musicians_instruments
         ON instruments.id = musicians_instruments.instrument
         WHERE musicians_instruments.musician= ${req.params.musicianId}`);
-
-      console.log(instrumentsRows);
 
       rows[0]['instruments'] = instrumentsRows;
 
@@ -103,7 +121,6 @@ router.get(
         INNER JOIN musicians_genres
         ON musicians_genres.genre=genres.id
         WHERE musicians_genres.musician = ${req.params.musicianId}`);
-      console.log(genreRows);
 
       rows[0]['genres'] = genreRows;
 

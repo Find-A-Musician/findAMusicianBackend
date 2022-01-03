@@ -28,8 +28,21 @@ describe('/events', () => {
     query.mockReturnValueOnce({
       rows: [
         {
-          id: 'musiciansId',
-          email: 'test@test.fr',
+          id: 'id',
+          email: 'test@gmail.com',
+          givenName: 'Test',
+          familyName: 'test',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
+          instruments: [{ id: 'id', name: 'name' }],
+          genres: [
+            {
+              id: 'id',
+              name: 'genre',
+            },
+          ],
         },
       ],
     });
@@ -54,8 +67,21 @@ describe('/events', () => {
             end_date: new Date(2000, 11, 13).toISOString(),
             adress: 'adress',
             admin: {
-              id: 'musiciansId',
-              email: 'test@test.fr',
+              id: 'id',
+              email: 'test@gmail.com',
+              givenName: 'Test',
+              familyName: 'test',
+              phone: '0655443322',
+              facebook_url: 'url',
+              promotion: 'M1',
+              location: 'Douai',
+              instruments: [{ id: 'id', name: 'name' }],
+              genres: [
+                {
+                  id: 'id',
+                  name: 'genre',
+                },
+              ],
             },
           },
         ]);
@@ -135,8 +161,21 @@ describe('/events', () => {
     query.mockReturnValueOnce({
       rows: [
         {
-          id: 'musiciansId',
-          email: 'test@test.fr',
+          id: 'id',
+          email: 'test@gmail.com',
+          givenName: 'Test',
+          familyName: 'test',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
+          instruments: [{ id: 'id', name: 'name' }],
+          genres: [
+            {
+              id: 'id',
+              name: 'genre',
+            },
+          ],
         },
       ],
     });
@@ -160,8 +199,21 @@ describe('/events', () => {
           end_date: new Date(2000, 11, 13).toISOString(),
           adress: 'adress',
           admin: {
-            id: 'musiciansId',
-            email: 'test@test.fr',
+            id: 'id',
+            email: 'test@gmail.com',
+            givenName: 'Test',
+            familyName: 'test',
+            phone: '0655443322',
+            facebook_url: 'url',
+            promotion: 'M1',
+            location: 'Douai',
+            instruments: [{ id: 'id', name: 'name' }],
+            genres: [
+              {
+                id: 'id',
+                name: 'genre',
+              },
+            ],
           },
         });
       });
