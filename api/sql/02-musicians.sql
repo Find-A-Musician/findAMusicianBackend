@@ -29,7 +29,7 @@ CREATE TABLE musicians (
 
 INSERT INTO musicians VALUES (
     '8f6c1dd5-7444-46c9-b673-840731bfd041',
-    'romain.guar01@gmail.com',
+    'romain.guar91@gmail.com',
     'Romain',
     'Guarinoni',
     '0766072513',
