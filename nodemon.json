@@ -3,9 +3,8 @@
     "ignore": [
       ".git",
       "node_modules/**/node_modules",
-      "schema.ts",
-      "doc.json",
-      "api/docs/config/*"
+      "api/types/*",
+      "api/docs/config/paths.ts"
     ],
     "verbose": true,
     "env": {

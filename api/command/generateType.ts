@@ -2,8 +2,8 @@ import docs from '../docs/config/index';
 import fs from 'fs';
 import { series } from 'async';
 import { exec } from 'child_process';
+import rimraf from 'rimraf';
 import path from 'path';
-
 // import schemas from '../api/docs/schemas';
 
 export default async function createAPITypes(): Promise<void> {
@@ -12,9 +12,13 @@ export default async function createAPITypes(): Promise<void> {
   } = {};
 
   try {
+    // console.log('🗑️ Delete existing type');
+    // rimraf.sync(path.join(__dirname, '..', 'docs', 'config', 'paths.ts'), {});
+    // rimraf.sync(path.join(__dirname, '..', 'types', 'doc.json'), {});
+    // rimraf.sync(path.join(__dirname, '..', 'types', 'schema.ts'), {});
+
     console.log('🔧 building the paths object...');
     // get every files of the schemas directory
-
     const schemaFiles = readDir('./api/docs/schemas').map(
       (file) => file.split('schemas/')[1].split('.')[0],
     );
@@ -37,14 +41,17 @@ export default async function createAPITypes(): Promise<void> {
     }
 
     fs.writeFileSync(
-      './api/docs/config/paths.ts',
+      path.join(__dirname, '..', 'docs', 'config', 'paths.ts'),
       "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const paths:OpenAPIV3.Document['paths'] = " +
         JSON.stringify(schemaObject) +
         '; export default paths',
     );
 
     console.log('🚧 Writing the JSON API file...');
-    fs.writeFileSync('./api/types/doc.json', JSON.stringify(docs));
+    fs.writeFileSync(
+      path.join(__dirname, '..', 'types', 'doc.json'),
+      JSON.stringify(docs),
+    );
     console.log('⏳ writing the types from the JSON file...');
 
     series([
