@@ -3,3 +3,4 @@ api/types/doc.json
 build/*
 command/*
 api/docs/config/schemas.ts
+api/docs/config/paths.ts

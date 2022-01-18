@@ -58,6 +58,10 @@ export interface paths {
     /** Invite a musician in a group */
     post: operations["sendGroupInvitation"];
   };
+  "/info": {
+    /** Return the basic information of the app */
+    get: operations["getApplicationInfo"];
+  };
   "/instruments": {
     get: operations["getInstruments"];
   };
@@ -658,6 +662,27 @@ export interface operations {
           musicianId: string;
           instrumentId: string;
           role: "lite_admin" | "member";
+        };
+      };
+    };
+  };
+  /** Return the basic information of the app */
+  getApplicationInfo: {
+    responses: {
+      /** The basic information about the app */
+      200: {
+        content: {
+          "application/json": {
+            nbMusician?: number;
+            nbGroups?: number;
+            nbEvents?: number;
+          };
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };

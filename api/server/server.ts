@@ -17,6 +17,7 @@ import profilRouter from '../routes//profil/profil';
 import groupsRouter from '../routes/groups/groups';
 import eventsRoute from '../routes/events/events';
 import testRouter from '../routes/test/apiTest';
+import infoRouter from '../routes/info/info';
 import RateLimit from 'express-rate-limit';
 
 dotenv.config();
@@ -75,8 +76,10 @@ app.use('/genres', authenticateToken, genresRouter);
 app.use('/groups', authenticateToken, groupsRouter);
 
 // event route
-
 app.use('/events', authenticateToken, eventsRoute);
+
+// info route
+app.use('/info', infoRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

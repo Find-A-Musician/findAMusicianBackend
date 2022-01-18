@@ -6,7 +6,7 @@
 
 ```ts
 import express from 'express';
-import query from '../postgres';
+import pg from '../postgres';
 import sql from 'sql-template-strings';
 import type { operations } from '@schema';
 import type {
