@@ -33,9 +33,9 @@ INSERT INTO musicians VALUES (
     'Romain',
     'Guarinoni',
     '0766072513',
-    NULL,
-    NULL,
-    NULL,
+    'randomurl',
+    'randomurl',
+    'randomurl',
     'M1',
     --mdp : romain123
     '$2b$10$oSkbT5bDabLIuJ5ikcdKT.11kquR8q4MU7sbgo1tFWU67AgnOcppu',

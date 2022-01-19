@@ -13,13 +13,13 @@ ALTER TABLE musicians_genres ADD FOREIGN KEY (genre) REFERENCES genres (id) ON D
 
 INSERT INTO genres VALUES (
         'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
-        'rock'
+        'Rock'
     ), (
         '7d68d33c-3eff-4f5e-985b-c7d9e058e23a',
-        'metal'
+        'Metal'
     ), (
         '54d47edb-97e5-4f45-b2a1-f3048b038650',
-        'jazz'
+        'Jazz'
 );
 
 INSERT INTO musicians_genres VALUES (

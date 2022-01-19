@@ -42,11 +42,11 @@ const schema: HandlerDefinition = {
               instruments: [
                 {
                   id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-                  name: 'batterie',
+                  name: 'drums',
                 },
                 {
                   id: 'e345114e-7723-42eb-8ed1-f26cd2f9d084',
-                  name: 'guitare',
+                  name: 'guitar',
                 },
               ],
             },

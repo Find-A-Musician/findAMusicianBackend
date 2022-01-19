@@ -38,7 +38,7 @@ describe('/profil', () => {
       rows: [
         {
           id: 'id',
-          name: 'Batterie',
+          name: 'drums',
         },
       ],
     });
@@ -58,7 +58,7 @@ describe('/profil', () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.email).toStrictEqual('test@gmail.com');
-        expect(body.instruments[0].name).toStrictEqual('Batterie');
+        expect(body.instruments[0].name).toStrictEqual('drums');
         expect(body.genres[0].name).toStrictEqual('metal');
       });
   });

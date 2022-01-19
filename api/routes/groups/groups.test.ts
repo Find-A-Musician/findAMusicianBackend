@@ -77,7 +77,7 @@ describe('/groups', () => {
       },
       instrument: {
         id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-        name: 'batterie',
+        name: 'drums',
       },
     };
 
@@ -107,7 +107,7 @@ describe('/groups', () => {
       },
       instrument: {
         id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-        name: 'batterie',
+        name: 'drums',
       },
     };
 

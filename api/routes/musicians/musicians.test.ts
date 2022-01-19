@@ -37,7 +37,7 @@ describe('/musicians', () => {
       rows: [
         {
           id: 'instrumentId',
-          name: 'batterie',
+          name: 'drums',
         },
       ],
     });
@@ -81,7 +81,7 @@ describe('/musicians', () => {
       rows: [
         {
           id: 'instrumentId',
-          name: 'batterie',
+          name: 'drums',
         },
       ],
     });

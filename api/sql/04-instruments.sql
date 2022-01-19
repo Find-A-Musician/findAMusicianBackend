@@ -15,10 +15,10 @@ ALTER TABLE musicians_instruments ADD FOREIGN KEY (instrument) REFERENCES instru
 
 INSERT INTO instruments VALUES (
     'cd836a31-1663-4a11-8a88-0a249aa70793',
-    'batterie'
+    'drums'
 ) , (
     'e345114e-7723-42eb-8ed1-f26cd2f9d084',
-    'guitare'
+    'guitar'
 );
 
 INSERT INTO musicians_instruments VALUES (

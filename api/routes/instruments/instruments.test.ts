@@ -22,7 +22,7 @@ describe('/instruments', () => {
       rows: [
         {
           id: 'id',
-          name: 'batterie',
+          name: 'drums',
         },
       ],
     });
@@ -35,7 +35,7 @@ describe('/instruments', () => {
         expect(body).toStrictEqual([
           {
             id: 'id',
-            name: 'batterie',
+            name: 'drums',
           },
         ]);
       });
