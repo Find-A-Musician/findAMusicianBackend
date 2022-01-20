@@ -67,10 +67,10 @@ app.use('/profil', authenticateToken, profilRouter);
 app.use('/musicians', musiciansRouter);
 
 // instruments route
-app.use('/instruments', authenticateToken, instrumentRouter);
+app.use('/instruments', instrumentRouter);
 
 // genre route
-app.use('/genres', authenticateToken, genresRouter);
+app.use('/genres', genresRouter);
 
 //group route
 app.use('/groups', authenticateToken, groupsRouter);

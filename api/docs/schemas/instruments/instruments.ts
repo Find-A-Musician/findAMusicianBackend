@@ -6,7 +6,6 @@ const schema: HandlerDefinition = {
   get: {
     operationId: 'getInstruments',
     tags: ['instruments'],
-    security: [{ BearerAuth: [] }],
     responses: {
       200: {
         description: 'A list of all the instruments',

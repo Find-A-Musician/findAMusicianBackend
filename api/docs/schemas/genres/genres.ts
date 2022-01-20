@@ -7,7 +7,6 @@ const schema: HandlerDefinition = {
     operationId: 'getGenres',
     description: 'Get a list of all genres',
     tags: ['genres'],
-    security: [{ BearerAuth: [] }],
     responses: {
       200: {
         description: 'A list of all genres',
