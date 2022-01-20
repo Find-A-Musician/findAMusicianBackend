@@ -59,3 +59,15 @@ export type getPathParams<T> = T extends {
 }
   ? T['parameters']['path']
   : never;
+
+/**
+ * @description Return an union of all the query value available in the request
+ *              of the OpenAPI definition
+ * @param T An OpenAPI type definition
+ *
+ */
+export type getRequestQuery<T> = T extends {
+  parameters: { query: Record<string, unknown> };
+}
+  ? T['parameters']['query']
+  : never;
