@@ -36,6 +36,7 @@ router.get(
       const genresFilter = req.query.genres || null;
       const instrumentsFilter = req.query.instruments || null;
       const locationFilter = req.query.location || null;
+      const promotionFilter = req.query.promotion || null;
 
       const { rows } = await pg.query(
         sql`SELECT id,
@@ -55,6 +56,8 @@ router.get(
                     (cast(${nameFilter} as char) IS null OR family_name ILIKE ${nameFilter})
                   ) AND (
                     (cast(${locationFilter} as char[]) IS null OR location = ANY(${locationFilter}))
+                  ) AND (
+                    (cast(${promotionFilter} as char[]) IS null OR promotion = ANY(${promotionFilter})) 
                   )
               `,
       );

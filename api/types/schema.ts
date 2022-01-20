@@ -755,6 +755,8 @@ export interface operations {
         instruments?: string[];
         /** The query filter for location */
         location?: string[];
+        /** The query filter for promotion */
+        promotion?: string[];
       };
     };
     responses: {

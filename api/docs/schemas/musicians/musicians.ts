@@ -53,6 +53,18 @@ const schema: HandlerDefinition = {
         },
         description: 'The query filter for location',
       },
+      {
+        in: 'query',
+        name: 'promotion',
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['M1'],
+        },
+        description: 'The query filter for promotion',
+      },
     ],
     responses: {
       200: {
