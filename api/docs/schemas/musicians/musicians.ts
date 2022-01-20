@@ -7,6 +7,53 @@ const schema: HandlerDefinition = {
     operationId: 'getMusicians',
     tags: ['musician'],
     security: [{ BearerAuth: [] }],
+    parameters: [
+      {
+        in: 'query',
+        name: 'name',
+        schema: {
+          type: 'string',
+          example: 'Romain',
+        },
+        description: 'The query filter for name',
+      },
+      {
+        in: 'query',
+        name: 'genres',
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['Rock', 'Jazz'],
+        },
+        description: 'The query filter for genre',
+      },
+      {
+        in: 'query',
+        name: 'instruments',
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['piano', 'guitar'],
+        },
+        description: 'The query filter for instruments',
+      },
+      {
+        in: 'query',
+        name: 'location',
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['Douai'],
+        },
+        description: 'The query filter for location',
+      },
+    ],
     responses: {
       200: {
         description: 'A list of all the musicians informations',

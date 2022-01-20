@@ -18,7 +18,7 @@ const schema: HandlerDefinition = {
             },
           },
           example: {
-            email: 'romain.guar01@gmail.com',
+            email: 'romain.guar91@gmail.com',
             password: 'romain123',
           },
         },

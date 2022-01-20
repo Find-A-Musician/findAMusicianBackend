@@ -733,6 +733,18 @@ export interface operations {
     };
   };
   getMusicians: {
+    parameters: {
+      query: {
+        /** The query filter for name */
+        name?: string;
+        /** The query filter for genre */
+        genres?: string[];
+        /** The query filter for instruments */
+        instruments?: string[];
+        /** The query filter for location */
+        location?: string[];
+      };
+    };
     responses: {
       /** A list of all the musicians informations */
       200: {

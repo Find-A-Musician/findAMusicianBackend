@@ -2,7 +2,7 @@ import docs from '../docs/config/index';
 import fs from 'fs';
 import { series } from 'async';
 import { exec } from 'child_process';
-import rimraf from 'rimraf';
+// import rimraf from 'rimraf';
 import path from 'path';
 // import schemas from '../api/docs/schemas';
 

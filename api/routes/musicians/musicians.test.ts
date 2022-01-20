@@ -61,7 +61,108 @@ describe('/musicians', () => {
       });
   });
 
-  it("Return the inormation of a musician by it's id", async () => {
+  it('Return the musicians information filtered by location and name query', async () => {
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          id: 'id1',
+          email: 'test1@gmail.com',
+          givenName: 'Romain',
+          familyName: 'Guarinoni',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
+        },
+        {
+          id: 'id2',
+          email: 'test2@gmail.com',
+          givenName: 'Dorian',
+          familyName: 'Viala',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
+        },
+      ],
+    });
+
+    // Mock the instruments
+    query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
+
+    // Mock the genres
+    query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
+
+    await request(app)
+      .get('/musicians?name=o&location=Douai&location=Lille')
+      .set('Authorization', token)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.length).toStrictEqual(2);
+        expect(body[0].id).toStrictEqual('id1');
+        expect(body[1].id).toStrictEqual('id2');
+      });
+  });
+
+  it('Return the musicians information filtered by genres and instruments query', async () => {
+    query.mockReturnValueOnce({
+      rows: [
+        {
+          id: 'id1',
+          email: 'test1@gmail.com',
+          givenName: 'Romain',
+          familyName: 'Guarinoni',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
+        },
+        {
+          id: 'id2',
+          email: 'test2@gmail.com',
+          givenName: 'Dorian',
+          familyName: 'Viala',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Lille',
+        },
+        {
+          id: 'id3',
+          email: 'test3@gmail.com',
+          givenName: 'Guillaume',
+          familyName: 'Faure',
+          phone: '0655443322',
+          facebook_url: 'url',
+          promotion: 'M1',
+          location: 'Douai',
+        },
+      ],
+    });
+
+    // Mock the instruments
+    query.mockReturnValueOnce({ rows: [{ id: 'id', name: 'drums' }] });
+    query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
+
+    // Mock the genres
+    query.mockReturnValueOnce({ rows: [{ id: 'id', name: 'Metal' }] });
+    query.mockReturnValueOnce({ rows: [] });
+    query.mockReturnValueOnce({ rows: [] });
+
+    await request(app)
+      .get('/musicians?instruments=drums&genres=Metal')
+      .set('Authorization', token)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.length).toStrictEqual(1);
+        expect(body[0].id).toStrictEqual('id1');
+      });
+  });
+
+  it("Return the information of a musician by it's id", async () => {
     query.mockReturnValueOnce({
       rows: [
         {
