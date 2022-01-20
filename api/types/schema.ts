@@ -253,7 +253,19 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          musician: components["schemas"]["musician"];
+          musician: {
+            email: string;
+            givenName: string;
+            familyName: string;
+            phone?: string | null;
+            facebook_url: string | null;
+            twitter_url: string | null;
+            instagram_url: string | null;
+            promotion: "L1" | "L2" | "L3" | "M1" | "M2";
+            location: "Douai" | "Lille";
+            instruments: components["schemas"]["instrument"][];
+            genres: components["schemas"]["genre"][];
+          };
           password: string;
         };
       };

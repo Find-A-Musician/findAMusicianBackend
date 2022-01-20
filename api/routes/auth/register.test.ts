@@ -21,12 +21,13 @@ describe('/register', () => {
   it('register a new user', async () => {
     const bodyMusician: getRequestBody<operations['register']> = {
       musician: {
-        id: 'id',
         email: 'test@gmail.com',
         givenName: 'Test',
         familyName: 'test',
         phone: '0655443322',
         facebook_url: 'url',
+        instagram_url: 'url',
+        twitter_url: 'url',
         promotion: 'M1',
         location: 'Douai',
         instruments: [{ id: 'id', name: 'name' }],
@@ -64,12 +65,13 @@ describe('/register', () => {
   it('Failed to hash the password', async () => {
     const bodyMusician: getRequestBody<operations['register']> = {
       musician: {
-        id: 'id',
         email: 'test@gmail.com',
         givenName: 'Test',
         familyName: 'test',
         phone: '0655443322',
         facebook_url: 'url',
+        instagram_url: 'url',
+        twitter_url: 'url',
         promotion: 'M1',
         location: 'Douai',
         instruments: [{ id: 'id', name: 'name' }],
