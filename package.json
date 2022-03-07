@@ -15,8 +15,10 @@
     "jsonwebtoken": "^8.5.1",
     "openapi-typescript": "^4.0.2",
     "pg": "^8.7.1",
+    "reflect-metadata": "^0.1.13",
     "sql-template-strings": "^2.2.2",
     "swagger-ui-express": "^4.1.6",
+    "typeorm": "^0.2.45",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
