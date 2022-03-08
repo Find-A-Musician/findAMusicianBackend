@@ -1,10 +1,11 @@
 import express from 'express';
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
+
 import type { operations } from '@schema';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getResponsesBody } from '@typing';
 import type { Request } from 'express';
+import { getRepository } from 'typeorm';
+import { Instrument } from '../../entity';
 
 type GetInstruments = operations['getInstruments'];
 
@@ -21,15 +22,9 @@ router.get(
     >,
   ) => {
     try {
-      const {
-        rows,
-      }: {
-        rows: {
-          id: string;
-          name: string;
-        }[];
-      } = await pg.query(sql`SELECT * FROM instruments`);
-      return res.status(200).json(rows);
+      const instruments = await getRepository(Instrument).find();
+
+      return res.status(200).json(instruments);
     } catch (err) {
       return res
         .status(500)
