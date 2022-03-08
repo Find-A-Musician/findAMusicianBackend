@@ -11,18 +11,8 @@ import { Instrument } from './Instrument';
 import { Event } from './Event';
 import { MusicianBand } from './MusicianGroup';
 
-export enum Promotion {
-  L1 = 'L1',
-  L2 = 'L2',
-  L3 = 'L3',
-  M1 = 'M1',
-  M2 = 'M2',
-}
-
-export enum Location {
-  Douai = 'Douai',
-  Lille = 'Lille',
-}
+export type Promotion = 'L1' | 'L2' | 'L3' | 'M1' | 'M2';
+export type Location = 'Douai' | 'Lille';
 
 @Entity()
 export class Musician {
@@ -39,7 +29,7 @@ export class Musician {
   familyName: string;
 
   @Column('varchar', { nullable: true, length: 50 })
-  phone: number;
+  phone: string;
 
   @Column('text', { nullable: true })
   facebookUrl: string;
@@ -52,13 +42,13 @@ export class Musician {
 
   @Column({
     type: 'enum',
-    enum: Promotion,
+    enum: ['L1', 'L2', 'L3', 'M1', 'M2'],
   })
   promotion: Promotion;
 
   @Column({
     type: 'enum',
-    enum: Location,
+    enum: ['Douai', 'Lille'],
   })
   location: Location;
 

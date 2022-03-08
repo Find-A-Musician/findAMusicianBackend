@@ -3,12 +3,7 @@ import { Band } from './Band';
 import { Instrument } from './Instrument';
 import { Musician } from './Musician';
 
-export enum Membership {
-  Pending = 'pending', // Waiting that the musician respond to the invitation
-  Member = 'member', // Is a member of the group
-  Admin = 'admin', // Is an admin of the group
-  Declined = 'declined', // Declined the invitation to join the group
-}
+export type Membership = 'pending' | 'member' | 'admin' | 'declined';
 
 @Entity()
 export class MusicianBand {
@@ -28,8 +23,8 @@ export class MusicianBand {
 
   @Column({
     type: 'enum',
-    enum: Membership,
-    default: Membership.Pending,
+    enum: ['pending', 'member', 'admin', 'declined'],
+    default: 'pending',
   })
   membership: Membership;
 

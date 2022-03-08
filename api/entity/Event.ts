@@ -20,11 +20,11 @@ export class Event {
   @Column('text')
   description: string;
 
-  @Column('time without time zone')
-  startDate: Date;
+  // @Column('timestamp without time zone')
+  // startDate: string;
 
-  @Column('time without time zone')
-  endDate: Date;
+  // @Column('time without time zone')
+  // endDate: string;
 
   @Column('varchar')
   adress: string;
@@ -40,5 +40,6 @@ export class Event {
   @ManyToMany(() => Musician, (musician) => musician.adminEvents, {
     onDelete: 'CASCADE',
   })
+  @JoinTable()
   admins: Musician[];
 }

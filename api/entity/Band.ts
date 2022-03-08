@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Location, Genre } from '.';
+import { Genre } from '.';
 import { MusicianBand } from './MusicianGroup';
 import { Event } from './Event';
 

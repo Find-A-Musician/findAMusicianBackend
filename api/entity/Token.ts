@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { GrantTypes } from '../auth/generateToken';
 import { Musician } from '.';
+
+export type GrantTypes = 'AuthorizationCode' | 'RefreshToken';
 
 @Entity()
 export class Token {
@@ -10,7 +11,7 @@ export class Token {
   @Column('text')
   token: string;
 
-  @Column({ type: 'enum', enum: GrantTypes })
+  @Column({ type: 'enum', enum: ['AuthorizationCode', 'RefreshToken'] })
   grandType: GrantTypes;
 
   @ManyToOne(() => Musician, { onDelete: 'CASCADE' })
