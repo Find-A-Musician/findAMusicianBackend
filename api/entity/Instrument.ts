@@ -10,9 +10,13 @@ export class Instrument {
   @Column('varchar', { unique: true })
   name: string;
 
-  @ManyToMany(() => Musician, (musician) => musician.instruments)
+  @ManyToMany(() => Musician, (musician) => musician.instruments, {
+    onDelete: 'CASCADE',
+  })
   musicians: Musician[];
 
-  @ManyToMany(() => MusicianBand, (musicianBand) => musicianBand.instruments)
+  @ManyToMany(() => MusicianBand, (musicianBand) => musicianBand.instruments, {
+    onDelete: 'CASCADE',
+  })
   groups: MusicianBand;
 }

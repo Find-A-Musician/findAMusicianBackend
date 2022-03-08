@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Location, Genre } from '.';
 import { MusicianBand } from './MusicianGroup';
+import { Event } from './Event';
 
 @Entity()
 export class Band {
@@ -20,6 +21,7 @@ export class Band {
   @Column('text', { nullable: true })
   description: string;
 
+  // Error of map when setting two same enum in two differents entitys...
   // @Column('enum', { nullable: false, enum: Location, enumName: 'location' })
   // location!: Location;
 
@@ -27,6 +29,11 @@ export class Band {
   @JoinTable()
   genres: Genre[];
 
-  @OneToMany(() => MusicianBand, (musicianBand) => musicianBand.group)
+  @OneToMany(() => MusicianBand, (musicianBand) => musicianBand.group, {
+    onDelete: 'CASCADE',
+  })
   musicianBands: MusicianBand[];
+
+  @ManyToMany(() => Event, (event) => event.bands, { onDelete: 'CASCADE' })
+  events: Event[];
 }

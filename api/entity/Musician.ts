@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Genre } from './Genre';
 import { Instrument } from './Instrument';
+import { Event } from './Event';
 import { MusicianBand } from './MusicianGroup';
 
 export enum Promotion {
@@ -78,4 +79,7 @@ export class Musician {
     onDelete: 'CASCADE',
   })
   musicianGroups: MusicianBand[];
+
+  @ManyToMany(() => Event, (event) => event.admins, { onDelete: 'CASCADE' })
+  adminEvents: Event[];
 }
