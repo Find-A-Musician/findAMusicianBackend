@@ -44,7 +44,7 @@ router.post(
 
       const token = new Token();
       token.token = refreshToken;
-      token.grandType = GrantTypes.RefreshToken;
+      token.grandType = 'RefreshToken';
       token.musician = musician;
 
       await getRepository(Token).save(token);

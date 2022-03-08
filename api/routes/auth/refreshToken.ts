@@ -1,5 +1,3 @@
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import type { operations } from '@schema';
@@ -7,6 +5,8 @@ import { Request } from 'express';
 import generateToken, { GrantTypes } from '../../auth/generateToken';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
+import { getRepository } from 'typeorm';
+import { Token } from '../../entity';
 
 type AuthTokenResult = {
   userId: string;
@@ -29,11 +29,12 @@ router.post(
     res: core.Response<getResponsesBody<PostToken>, {}, getHTTPCode<PostToken>>,
   ) => {
     try {
-      const { rows } = await pg.query(sql`
-        SELECT * FROM tokens
-        WHERE token=${req.body.refreshToken}
-    `);
-      if (rows.length === 0) {
+      const token = await getRepository(Token).findOne({
+        token: req.body.refreshToken,
+        grandType: 'RefreshToken',
+      });
+
+      if (!token) {
         return res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
       }
 
@@ -41,7 +42,7 @@ router.post(
         req.body.refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         (err, result: AuthTokenResult) => {
-          if (err || result.grantType !== GrantTypes.RefreshToken) {
+          if (err) {
             return res.status(401).json({ msg: 'E_INVALID_REFRESH_TOKEN' });
           }
           const accessToken = generateToken(
