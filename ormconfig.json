@@ -7,7 +7,12 @@
   "database": "db",
   "synchronize": true,
   "logging": false,
-  "entities": ["src/entity/**/*.ts"],
-  "migrations": ["src/migration/**/*.ts"],
-  "subscribers": ["src/subscriber/**/*.ts"]
+  "entities": ["api/entity/**/*.ts"],
+  "migrations": ["api/migration/**/*.ts"],
+  "subscribers": ["api/subscriber/**/*.ts"],
+  "cli": {
+    "entitiesDir": "api/entity",
+    "migrationsDir": "api/migration",
+    "subscribersDir": "api/subscriber"
+  }
 }
