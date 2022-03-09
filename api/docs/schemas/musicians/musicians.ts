@@ -11,6 +11,7 @@ const schema: HandlerDefinition = {
       {
         in: 'query',
         name: 'name',
+        required: false,
         schema: {
           type: 'string',
           example: 'Romain',
@@ -20,30 +21,33 @@ const schema: HandlerDefinition = {
       {
         in: 'query',
         name: 'genres',
+        required: false,
         schema: {
           type: 'array',
           items: {
             type: 'string',
           },
-          example: ['Rock', 'Jazz'],
+          example: ['rock', 'jazz'],
         },
         description: 'The query filter for genre',
       },
       {
         in: 'query',
         name: 'instruments',
+        required: false,
         schema: {
           type: 'array',
           items: {
             type: 'string',
           },
-          example: ['piano', 'guitar'],
+          example: ['piano', 'guitare'],
         },
         description: 'The query filter for instruments',
       },
       {
         in: 'query',
         name: 'location',
+        required: false,
         schema: {
           type: 'array',
           items: {
@@ -56,6 +60,7 @@ const schema: HandlerDefinition = {
       {
         in: 'query',
         name: 'promotion',
+        required: false,
         schema: {
           type: 'array',
           items: {
