@@ -4,7 +4,7 @@ const schema: HandlerDefinition = {
   path: '/groups/invitation/send',
   post: {
     operationId: 'sendGroupInvitation',
-    tags: ['groups'],
+    tags: ['groups', 'groupInvitation'],
     description: 'Invite a musician in a group',
     security: [{ BearerAuth: [] }],
     requestBody: {

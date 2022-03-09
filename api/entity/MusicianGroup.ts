@@ -9,14 +9,12 @@ export type Membership = 'pending' | 'member' | 'admin' | 'declined';
 export class MusicianBand {
   @ManyToOne(() => Musician, (musician) => musician.musicianGroups, {
     primary: true,
-    eager: true,
     onDelete: 'CASCADE',
   })
   musician: Musician;
 
-  @ManyToOne(() => Band, (band) => band.musicianBands, {
+  @ManyToOne(() => Band, (band) => band.members, {
     primary: true,
-    eager: true,
     onDelete: 'CASCADE',
   })
   group: Band;
@@ -30,6 +28,7 @@ export class MusicianBand {
 
   @ManyToMany(() => Instrument, (instrument) => instrument.groups, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   @JoinTable()
   instruments: Instrument[];

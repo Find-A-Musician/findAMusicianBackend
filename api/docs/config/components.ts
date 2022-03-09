@@ -47,13 +47,13 @@ const components: OpenAPIV3.Document['components'] = {
     },
     group: {
       type: 'object',
-      required: ['name', 'description', 'location', 'genre'],
+      required: ['name', 'description', 'location', 'genres'],
       properties: {
         id: { type: 'string' },
         name: { type: 'string' },
-        desription: { type: 'string' },
+        description: { type: 'string' },
         location: { type: 'string', enum: ['Douai', 'Lille'] },
-        genre: {
+        genres: {
           type: 'array',
           items: { $ref: '#/components/schemas/genre' },
         },
@@ -62,10 +62,15 @@ const components: OpenAPIV3.Document['components'] = {
     groupMember: {
       type: 'object',
       properties: {
-        givenName: { type: 'string' },
-        familyName: { type: 'string' },
-        instrument: { type: 'string' },
-        role: { type: 'string', enum: ['admin', 'member', 'declined'] },
+        musician: { $ref: '#/components/schemas/musician' },
+        instruments: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/instrument' },
+        },
+        membership: {
+          type: 'string',
+          enum: ['admin', 'member', 'declined', 'pending'],
+        },
       },
     },
     instrument: {
