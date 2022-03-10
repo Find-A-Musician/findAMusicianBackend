@@ -1,7 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Band } from './Band';
-import { Musician } from './Musician';
-import { Event } from './Event';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Genre {
@@ -10,15 +7,4 @@ export class Genre {
 
   @Column('varchar', { unique: true })
   name: string;
-
-  @ManyToMany(() => Musician, (musician) => musician.genres, {
-    onDelete: 'CASCADE',
-  })
-  musicians: Musician[];
-
-  @ManyToMany(() => Band, (band) => band.genres, { onDelete: 'CASCADE' })
-  groups: Band[];
-
-  @ManyToMany(() => Event, (event) => event.genres, { onDelete: 'CASCADE' })
-  events: Event[];
 }

@@ -26,7 +26,7 @@ export class MusicianBand {
   })
   membership: Membership;
 
-  @ManyToMany(() => Instrument, (instrument) => instrument.groups, {
+  @ManyToMany(() => Instrument, {
     onDelete: 'CASCADE',
     eager: true,
   })

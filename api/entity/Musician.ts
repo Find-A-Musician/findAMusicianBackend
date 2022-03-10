@@ -55,13 +55,11 @@ export class Musician {
   @Column('text')
   password: string;
 
-  @ManyToMany(() => Instrument, (instrument) => instrument.musicians, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToMany(() => Instrument, { onDelete: 'CASCADE' })
   @JoinTable()
   instruments: Instrument[];
 
-  @ManyToMany(() => Genre, (genre) => genre.musicians, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Genre, { onDelete: 'CASCADE' })
   @JoinTable()
   genres: Genre[];
 

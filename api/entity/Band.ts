@@ -28,7 +28,7 @@ export class Band {
   })
   location: Location;
 
-  @ManyToMany(() => Genre, (genre) => genre.groups, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Genre, { onDelete: 'CASCADE' })
   @JoinTable()
   genres: Genre[];
 

@@ -29,7 +29,7 @@ export class Event {
   @Column('varchar')
   adress: string;
 
-  @ManyToMany(() => Genre, (genre) => genre.events, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Genre, { onDelete: 'CASCADE' })
   @JoinTable()
   genres: Genre[];
 
