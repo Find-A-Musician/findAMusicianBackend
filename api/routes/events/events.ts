@@ -1,8 +1,5 @@
 import express from 'express';
-import pg from '../../postgres';
-import { v4 as uuidV4 } from 'uuid';
-import sql from 'sql-template-strings';
-import type { operations, components } from '@schema';
+import type { operations } from '@schema';
 import type {
   getHTTPCode,
   getResponsesBody,
@@ -10,6 +7,8 @@ import type {
   getPathParams,
 } from '@typing';
 import type core from 'express-serve-static-core';
+import { DeepPartial, getRepository } from 'typeorm';
+import { Event, Genre, Musician } from '../../entity';
 
 const router = express.Router();
 
@@ -31,22 +30,45 @@ router.get(
     res: core.Response<getResponsesBody<GetEvents>, {}, getHTTPCode<GetEvents>>,
   ) => {
     try {
-      const { rows }: { rows: getResponsesBody<GetEvents> } =
-        await pg.query(sql`
-            SELECT * FROM events
-        `);
-      for (let index = 0; index < rows.length; index++) {
-        const { rows: admin } = await pg.query<
-          components['schemas']['musician']
-        >(sql`
-            SELECT * FROM musicians
-            INNER JOIN events_admin
-            ON events_admin.admin = musicians.id
-            WHERE events_admin.event = ${rows[index].id}
-          `);
-        rows[index]['admin'] = admin[0];
+      const events = await getRepository(Event).find({
+        relations: ['genres', 'groups', 'admins'],
+      });
+
+      return res.status(200).json(events);
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    }
+  },
+);
+
+router.get(
+  '/:eventId',
+  async (
+    req: core.Request<
+      getPathParams<GetEventsById>,
+      getResponsesBody<GetEventsById>,
+      getRequestBody<GetEventsById>,
+      getPathParams<GetEventsById>
+    >,
+    res: core.Response<
+      getResponsesBody<GetEventsById>,
+      {},
+      getHTTPCode<GetEventsById>
+    >,
+  ) => {
+    try {
+      const event = await getRepository(Event).findOne({
+        where: { id: req.params.eventId },
+        relations: ['genres', 'groups', 'admins'],
+      });
+
+      if (!event) {
+        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
       }
-      return res.status(200).json(rows);
+
+      return res.status(200).json(event);
     } catch (err) {
       return res
         .status(500)
@@ -71,34 +93,31 @@ router.post(
     >,
   ) => {
     try {
-      const id = uuidV4();
-      await pg.query(sql`
-              INSERT INTO events (
-                  id,
-                  name,
-                  description,
-                  start_date,
-                  end_date,
-                  adress
-              ) VALUES (
-                  ${id},
-                  ${req.body.name},
-                  ${req.body.description},
-                  ${req.body.start_date},
-                  ${req.body.end_date},
-                  ${req.body.adress}
-              );
-          `);
-      await pg.query(sql`
-        INSERT INTO events_admin (
-            event,
-            admin
-        ) VALUES (
-            ${id},
-            ${req.userId}
+      const { name, description, startDate, endDate, adress, genres } =
+        req.body;
+
+      const admin = new Musician();
+      admin.id = req.userId;
+
+      const newEvent = new Event();
+      newEvent.name = name;
+      newEvent.description = description;
+      newEvent.startDate = startDate;
+      newEvent.endDate = endDate;
+      newEvent.adress = adress;
+      newEvent.admins = [admin];
+
+      const evtGenres: Genre[] = [];
+      for (let i = 0; i < genres.length; i++) {
+        evtGenres.push(
+          await getRepository(Genre).findOne({ name: genres[i].name }),
         );
-    `);
-      res.sendStatus(201);
+      }
+      newEvent.genres = evtGenres;
+
+      await getRepository(Event).save(newEvent);
+
+      return res.status(201).json(newEvent);
     } catch (err) {
       if (err.constraint === 'events_name_key') {
         return res.status(401).json({ msg: 'E_EVENT_NAME_ALREADY_TAKEN' });
@@ -107,49 +126,6 @@ router.post(
           .status(500)
           .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
       }
-    }
-  },
-);
-
-router.get(
-  '/:eventId',
-  async (
-    req: core.Request<
-      getPathParams<GetEventsById>,
-      getResponsesBody<GetEventsById>,
-      getRequestBody<GetEventsById>,
-      getPathParams<GetEventsById>
-    >,
-    res: core.Response<
-      getResponsesBody<GetEventsById>,
-      {},
-      getHTTPCode<GetEventsById>
-    >,
-  ) => {
-    try {
-      const { rows } = await pg.query(sql`
-        SELECT * FROM events
-        WHERE id = ${req.params.eventId}
-      `);
-
-      if (rows.length === 0) {
-        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
-      }
-
-      const { rows: admin } = await pg.query(sql`
-            SELECT * FROM musicians
-            INNER JOIN events_admin
-            ON events_admin.admin = musicians.id
-            WHERE events_admin.event = ${req.params.eventId}
-          `);
-
-      rows[0]['admin'] = admin[0];
-
-      return res.status(200).json(rows[0]);
-    } catch (err) {
-      return res
-        .status(500)
-        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -170,32 +146,36 @@ router.patch(
     >,
   ) => {
     try {
-      const { rows } = await pg.query(sql`
-          SELECT admin
-          FROM events_admin
-          WHERE event = ${req.params.eventId}
-        `);
+      const { admins } = await getRepository(Event).findOne({
+        where: { id: req.params.eventId },
+        relations: ['admins'],
+      });
 
-      if (rows.length == 0) {
+      if (admins.length === 0) {
         return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
       }
 
-      if (rows.some(({ admin }) => admin === req.userId)) {
-        pg.query(sql`
-            UPDATE events
-            SET
-              name = ${req.body.name} ,
-              description= ${req.body.description}  ,
-              start_date= ${req.body.start_date}  ,
-              end_date = ${req.body.end_date} ,
-              adress = ${req.body.adress}
-            WHERE id = ${req.params.eventId}
-          `);
-
-        return res.sendStatus(200);
-      } else {
+      if (!admins.some((musician) => musician.id === req.userId)) {
         return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
       }
+
+      const { genres, ...basicInfo } = req.body;
+      const update: DeepPartial<Event> = { ...basicInfo };
+      const newGenres: Genre[] = [];
+      if (genres) {
+        for (let i = 0; i < genres.length; i++) {
+          newGenres.push(
+            await getRepository(Genre).findOne({
+              name: genres[i].name,
+            }),
+          );
+        }
+
+        update['genres'] = newGenres;
+      }
+
+      await getRepository(Event).save({ id: req.params.eventId, ...update });
+      return res.sendStatus(200);
     } catch (err) {
       console.log(err);
 
@@ -222,24 +202,21 @@ router.delete(
     >,
   ) => {
     try {
-      const { rows: admin } = await pg.query(sql`
-                SELECT admin
-                FROM events_admin
-                WHERE event = ${req.params.eventId}
-            `);
-      if (admin.length === 0) {
-        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
-      } else {
-        if (admin.some(({ admin }) => admin === req.userId)) {
-          await pg.query(sql`
-                  DELETE FROM events WHERE events.id = ${req.params.eventId}
-                `);
+      const { admins } = await getRepository(Event).findOne({
+        where: { id: req.params.eventId },
+        relations: ['admins'],
+      });
 
-          return res.sendStatus(200);
-        } else {
-          return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
-        }
+      if (admins.length === 0) {
+        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
       }
+
+      if (!admins.some((musician) => musician.id === req.userId)) {
+        return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+      }
+
+      await getRepository(Event).delete({ id: req.params.eventId });
+      return res.sendStatus(200);
     } catch (err) {
       return res
         .status(500)

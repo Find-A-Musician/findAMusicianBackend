@@ -91,15 +91,35 @@ const components: OpenAPIV3.Document['components'] = {
     },
     event: {
       type: 'object',
-      required: ['name', 'description', 'start_date', 'end_date', 'adress'],
+      required: [
+        'name',
+        'description',
+        'startDate',
+        'endDate',
+        'adress',
+        'genres',
+        'groups',
+        'admins',
+      ],
       properties: {
         id: { type: 'string' },
         name: { type: 'string' },
         description: { type: 'string' },
-        start_date: { type: 'string', format: 'date-time' },
-        end_date: { type: 'string', format: 'date-time' },
+        startDate: { type: 'string', format: 'date-time' },
+        endDate: { type: 'string', format: 'date-time' },
         adress: { type: 'string' },
-        admin: { $ref: '#/components/schemas/musician' },
+        genres: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/genre' },
+        },
+        groups: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/group' },
+        },
+        admins: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/musician' },
+        },
       },
     },
     token: {

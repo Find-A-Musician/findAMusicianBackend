@@ -42,14 +42,40 @@ const schema: HandlerDefinition = {
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/event',
+            type: 'object',
+            required: [
+              'name',
+              'description',
+              'startDate',
+              'endDate',
+              'adress',
+              'genres',
+            ],
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              description: { type: 'string' },
+              startDate: { type: 'string', format: 'date-time' },
+              endDate: { type: 'string', format: 'date-time' },
+              adress: { type: 'string' },
+              genres: {
+                type: 'array',
+                items: { $ref: '#/components/schemas/genre' },
+              },
+            },
           },
           example: {
             name: 'Insane event',
             description: 'An insane event',
-            start_date: new Date(Date.now()),
-            end_date: new Date(Date.now()),
+            startDate: new Date(Date.now()),
+            endDate: new Date(Date.now()),
             adress: 'somewhere',
+            genres: [
+              {
+                id: 'id',
+                name: 'rock',
+              },
+            ],
           },
         },
       },
@@ -60,7 +86,7 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'string',
+              $ref: '#/components/schemas/event',
             },
           },
         },

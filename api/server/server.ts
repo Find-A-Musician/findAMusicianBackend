@@ -49,7 +49,7 @@ app.use(
   OpenApiValidator.middleware({
     apiSpec: docs,
     validateRequests: true,
-    validateResponses: true,
+    validateResponses: false,
   }),
 );
 

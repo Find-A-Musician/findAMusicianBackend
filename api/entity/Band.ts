@@ -37,6 +37,6 @@ export class Band {
   })
   members: MusicianBand[];
 
-  @ManyToMany(() => Event, (event) => event.bands, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Event, (event) => event.groups, { onDelete: 'CASCADE' })
   events: Event[];
 }
