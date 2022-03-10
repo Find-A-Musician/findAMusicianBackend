@@ -13,7 +13,6 @@
     "express-openapi-validator": "^4.13.2",
     "express-rate-limit": "^5.5.1",
     "jsonwebtoken": "^8.5.1",
-    "openapi-typescript": "^4.0.2",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "sql-template-strings": "^2.2.2",
@@ -23,6 +22,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
+    "@babel/plugin-proposal-decorators": "^7.17.2",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^13.1.0",
@@ -54,6 +54,7 @@
     "jest": "^27.1.0",
     "nodemon": "^2.0.12",
     "openapi-types": "^9.3.0",
+    "openapi-typescript": "^5.2.0",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "supertest": "^6.1.6",
@@ -73,6 +74,7 @@
     "prettier": "prettier --config .prettierrc './**/*.ts' --write",
     "types": "tsc --project ./",
     "generateTypes": "ts-node api/command/generateType",
+    "resetdb": "ts-node api/db/reset",
     "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
   },
   "repository": {
