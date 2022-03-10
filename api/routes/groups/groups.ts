@@ -9,7 +9,13 @@ import type {
 } from '@typing';
 
 import { DeepPartial, getRepository } from 'typeorm';
-import { Band, Musician, MusicianBand, Genre, Instrument } from '../../entity';
+import {
+  Groups,
+  Musician,
+  MusicianGroup,
+  Genre,
+  Instrument,
+} from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 
@@ -30,7 +36,7 @@ router.get(
     res: core.Response<getResponsesBody<GetGroups>, {}, getHTTPCode<GetGroups>>,
   ) => {
     try {
-      const groups = await getRepository(Band).find({
+      const groups = await getRepository(Groups).find({
         relations: [
           'members',
           'genres',
@@ -65,7 +71,7 @@ router.get(
     >,
   ) => {
     try {
-      const group = await getRepository(Band).findOne({
+      const group = await getRepository(Groups).findOne({
         where: { id: req.params.groupId },
         relations: [
           'members',
@@ -109,25 +115,32 @@ router.post(
     >,
   ) => {
     try {
+      const groupRepository = getRepository(Groups);
+      const musicianGroupRepository = getRepository(MusicianGroup);
       const {
-        body: { group, instruments },
+        body: {
+          group: { name, description, location, genres: groupGenre },
+          instruments,
+        },
       } = req;
 
-      // Create the new group entity and save it
-      const newGroup = new Band();
-      newGroup.name = group.name;
-      newGroup.description = group.description;
-      newGroup.location = group.location;
-
-      const groupGenres: Genre[] = [];
-      for (let i = 0; i < group.genres.length; i++) {
-        groupGenres.push(
-          await getRepository(Genre).findOne({ name: group.genres[i].name }),
+      const genres: Genre[] = [];
+      for (let i = 0; i < groupGenre.length; i++) {
+        genres.push(
+          await getRepository(Genre).findOne({
+            name: groupGenre[i].name,
+          }),
         );
       }
-      newGroup.genres = groupGenres;
+      // Create the new group entity and save it
+      const newGroup = groupRepository.create({
+        name,
+        description,
+        location,
+        genres,
+      });
 
-      await getRepository(Band).save(newGroup);
+      await groupRepository.save(newGroup);
 
       // Save the req userId as the admin of this new Group
       const musician = await getRepository(Musician).findOne({
@@ -143,12 +156,14 @@ router.post(
         );
       }
 
-      const musicianBand = new MusicianBand();
-      musicianBand.musician = musician;
-      musicianBand.group = newGroup;
-      musicianBand.instruments = musicianGroupInstruments;
-      musicianBand.membership = 'admin';
-      await getRepository(MusicianBand).save(musicianBand);
+      const musicianGroup = musicianGroupRepository.create({
+        musician,
+        group: newGroup,
+        instruments: musicianGroupInstruments,
+        membership: 'admin',
+      });
+
+      await musicianGroupRepository.save(musicianGroup);
 
       return res.sendStatus(201);
     } catch (err) {
@@ -175,7 +190,7 @@ router.patch(
     >,
   ) => {
     try {
-      const group = await getRepository(Band).findOne({
+      const group = await getRepository(Groups).findOne({
         id: req.params.groupId,
       });
 
@@ -183,7 +198,7 @@ router.patch(
         return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
       }
 
-      const { membership } = await getRepository(MusicianBand).findOne({
+      const { membership } = await getRepository(MusicianGroup).findOne({
         where: {
           musician: {
             id: req.userId,
@@ -199,7 +214,7 @@ router.patch(
       }
 
       const { genres, ...basicInfo } = req.body;
-      const update: DeepPartial<Band> = { ...basicInfo };
+      const update: DeepPartial<Groups> = { ...basicInfo };
       const newGenres: Genre[] = [];
       if (genres) {
         for (let i = 0; i < genres.length; i++) {
@@ -213,7 +228,7 @@ router.patch(
         update['genres'] = newGenres;
       }
 
-      await getRepository(Band).save({ id: req.params.groupId, ...update });
+      await getRepository(Groups).save({ id: req.params.groupId, ...update });
 
       return res.sendStatus(200);
     } catch (err) {
@@ -240,7 +255,7 @@ router.delete(
     >,
   ) => {
     try {
-      const group = await getRepository(Band).findOne({
+      const group = await getRepository(Groups).findOne({
         id: req.params.groupId,
       });
 
@@ -248,7 +263,7 @@ router.delete(
         return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
       }
 
-      const { membership } = await getRepository(MusicianBand).findOne({
+      const { membership } = await getRepository(MusicianGroup).findOne({
         where: {
           musician: {
             id: req.userId,
@@ -263,7 +278,7 @@ router.delete(
         return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
       }
 
-      await getRepository(Band).delete({ id: req.params.groupId });
+      await getRepository(Groups).delete({ id: req.params.groupId });
       res.sendStatus(200);
     } catch (err) {
       return res

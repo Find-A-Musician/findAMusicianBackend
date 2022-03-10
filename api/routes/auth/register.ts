@@ -21,16 +21,33 @@ router.post(
     req: Request<{}, getResponsesBody<Register>, getRequestBody<Register>, {}>,
     res: core.Response<getResponsesBody<Register>, {}, getHTTPCode<Register>>,
   ) => {
-    const body = req.body;
+    const {
+      email,
+      givenName,
+      familyName,
+      phone,
+      facebookUrl,
+      instagramUrl,
+      twitterUrl,
+      password,
+      location,
+      promotion,
+      genres,
+      instruments,
+    } = req.body;
 
     const saltRound = 10;
     let hash: string;
 
-    if (await getRepository(Musician).findOne({ email: body.email })) {
+    const tokenRepository = getRepository(Token);
+    const musicianRepository = getRepository(Musician);
+
+    if (await getRepository(Musician).findOne({ email: email })) {
       return res.status(401).json({ msg: 'E_USER_ALREADY_EXIST' });
     }
+
     try {
-      hash = await bcrypt.hash(body.password, saltRound);
+      hash = await bcrypt.hash(password, saltRound);
     } catch (err) {
       return res.status(500).json({
         msg: 'E_HASH_ERROR',
@@ -39,51 +56,50 @@ router.post(
     }
 
     try {
-      const newMusician = new Musician();
-
-      // Save basic info
-      newMusician.email = body.email;
-      newMusician.givenName = body.givenName;
-      newMusician.familyName = body.familyName;
-      newMusician.phone = body.phone;
-      newMusician.facebookUrl = body.facebookUrl;
-      newMusician.instagramUrl = body.instagramUrl;
-      newMusician.twitterUrl = body.twitterUrl;
-      newMusician.password = hash;
-      newMusician.location = body.location;
-      newMusician.promotion = body.promotion;
-
       // Get all the genres of the req
       const newMusicianGenres: Genre[] = [];
-      for (let i = 0; i < body.genres.length; i++) {
+      for (let i = 0; i < genres.length; i++) {
         newMusicianGenres.push(
-          await getRepository(Genre).findOne({ name: body.genres[i].name }),
+          await getRepository(Genre).findOne({ name: genres[i].name }),
         );
       }
 
       // Get all the instruments of the req
       const newMusicianInstruments: Instrument[] = [];
-      for (let i = 0; i < body.genres.length; i++) {
+      for (let i = 0; i < instruments.length; i++) {
         newMusicianInstruments.push(
           await getRepository(Instrument).findOne({
-            name: body.instruments[i].name,
+            name: instruments[i].name,
           }),
         );
       }
 
-      newMusician.genres = newMusicianGenres;
-      newMusician.instruments = newMusicianInstruments;
+      const newMusician = musicianRepository.create({
+        email,
+        givenName,
+        familyName,
+        phone,
+        facebookUrl,
+        instagramUrl,
+        twitterUrl,
+        password: hash,
+        location,
+        promotion,
+        genres: newMusicianGenres,
+        instruments: newMusicianInstruments,
+      });
 
-      const { id: userId } = await getRepository(Musician).save(newMusician);
+      const { id: userId } = await musicianRepository.save(newMusician);
 
       const accessToken = generateToken(GrantTypes.AuthorizationCode, userId);
 
       const refreshToken = generateToken(GrantTypes.RefreshToken, userId);
 
-      const token = new Token();
-      token.token = refreshToken;
-      token.grandType = 'RefreshToken';
-      token.musician = newMusician;
+      const token = tokenRepository.create({
+        token: refreshToken,
+        grandType: 'RefreshToken',
+        musician: newMusician,
+      });
 
       await getRepository(Token).save(token);
 

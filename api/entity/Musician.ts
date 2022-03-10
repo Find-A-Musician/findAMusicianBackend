@@ -9,7 +9,7 @@ import {
 import { Genre } from './Genre';
 import { Instrument } from './Instrument';
 import { Event } from './Event';
-import { MusicianBand } from './MusicianGroup';
+import { MusicianGroup } from './MusicianGroup';
 
 export type Promotion = 'L1' | 'L2' | 'L3' | 'M1' | 'M2';
 export type Location = 'Douai' | 'Lille';
@@ -63,10 +63,10 @@ export class Musician {
   @JoinTable()
   genres: Genre[];
 
-  @OneToMany(() => MusicianBand, (musicianBand) => musicianBand.musician, {
+  @OneToMany(() => MusicianGroup, (musicianGroup) => musicianGroup.musician, {
     onDelete: 'CASCADE',
   })
-  musicianGroups: MusicianBand[];
+  musicianGroups: MusicianGroup[];
 
   @ManyToMany(() => Event, (event) => event.admins, { onDelete: 'CASCADE' })
   adminEvents: Event[];

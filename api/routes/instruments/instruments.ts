@@ -26,6 +26,7 @@ router.get(
 
       return res.status(200).json(instruments);
     } catch (err) {
+      console.log(err);
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });

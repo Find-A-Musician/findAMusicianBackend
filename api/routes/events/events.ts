@@ -93,19 +93,12 @@ router.post(
     >,
   ) => {
     try {
+      const eventRepository = getRepository(Event);
+
       const { name, description, startDate, endDate, adress, genres } =
         req.body;
 
-      const admin = new Musician();
-      admin.id = req.userId;
-
-      const newEvent = new Event();
-      newEvent.name = name;
-      newEvent.description = description;
-      newEvent.startDate = startDate;
-      newEvent.endDate = endDate;
-      newEvent.adress = adress;
-      newEvent.admins = [admin];
+      const admin = await getRepository(Musician).findOne({ id: req.userId });
 
       const evtGenres: Genre[] = [];
       for (let i = 0; i < genres.length; i++) {
@@ -113,9 +106,18 @@ router.post(
           await getRepository(Genre).findOne({ name: genres[i].name }),
         );
       }
-      newEvent.genres = evtGenres;
 
-      await getRepository(Event).save(newEvent);
+      const newEvent = eventRepository.create({
+        name,
+        description,
+        startDate,
+        endDate,
+        adress,
+        admins: [admin],
+        genres: evtGenres,
+      });
+
+      await eventRepository.save(newEvent);
 
       return res.status(201).json(newEvent);
     } catch (err) {

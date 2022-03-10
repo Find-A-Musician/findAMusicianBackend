@@ -1,23 +1,23 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { Band } from './Band';
+import { Groups } from './Groups';
 import { Instrument } from './Instrument';
 import { Musician } from './Musician';
 
 export type Membership = 'pending' | 'member' | 'admin' | 'declined';
 
 @Entity()
-export class MusicianBand {
+export class MusicianGroup {
   @ManyToOne(() => Musician, (musician) => musician.musicianGroups, {
     primary: true,
     onDelete: 'CASCADE',
   })
   musician: Musician;
 
-  @ManyToOne(() => Band, (band) => band.members, {
+  @ManyToOne(() => Groups, (group) => group.members, {
     primary: true,
     onDelete: 'CASCADE',
   })
-  group: Band;
+  group: Groups;
 
   @Column({
     type: 'enum',

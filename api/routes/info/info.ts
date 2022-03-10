@@ -3,7 +3,7 @@ import type { operations } from '../../types/schema';
 import type { getHTTPCode, getResponsesBody } from '@typing';
 import type core from 'express-serve-static-core';
 import { getRepository } from 'typeorm';
-import { Musician, Band, Event } from '../../entity';
+import { Musician, Groups, Event } from '../../entity';
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.get(
   ) => {
     try {
       const nbMusician = await getRepository(Musician).count();
-      const nbGroups = await getRepository(Band).count();
+      const nbGroups = await getRepository(Groups).count();
       const nbEvents = await getRepository(Event).count();
 
       return res.status(200).json({

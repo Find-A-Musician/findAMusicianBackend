@@ -18,20 +18,22 @@ router.post(
     req: Request<{}, getResponsesBody<Login>, getRequestBody<Login>, {}>,
     res: core.Response<getResponsesBody<Login>, {}, getHTTPCode<Login>>,
   ) => {
-    const body = req.body;
-
-    const musician = await getRepository(Musician).findOne({
-      email: body.email,
-    });
-
-    if (!musician) {
-      return res.status(400).json({ msg: 'E_UNFOUND_USER' });
-    }
-
-    const password = musician.password;
-    const userId = musician.id;
-
     try {
+      const body = req.body;
+
+      const tokenRepository = getRepository(Token);
+
+      const musician = await getRepository(Musician).findOne({
+        email: body.email,
+      });
+
+      if (!musician) {
+        return res.status(400).json({ msg: 'E_UNFOUND_USER' });
+      }
+
+      const password = musician.password;
+      const userId = musician.id;
+
       const result = await bcrypt.compare(body.password, password);
 
       if (!result) {
@@ -42,12 +44,13 @@ router.post(
 
       const refreshToken = generateToken(GrantTypes.RefreshToken, userId);
 
-      const token = new Token();
-      token.token = refreshToken;
-      token.grandType = 'RefreshToken';
-      token.musician = musician;
+      const token = tokenRepository.create({
+        token: refreshToken,
+        grandType: 'RefreshToken',
+        musician,
+      });
 
-      await getRepository(Token).save(token);
+      await tokenRepository.save(token);
 
       const musicianInfo = await getRepository(Musician).findOne({
         where: { id: userId },

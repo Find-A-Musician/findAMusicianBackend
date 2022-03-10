@@ -55,7 +55,7 @@ export default async function createAPIType(): Promise<void> {
 
     console.log('✅ API Types have been generated ! ');
   } catch (err) {
-    console.log('❌ Genere types failed');
+    console.log('❌ Generate types failed');
     throw new Error(err);
   }
 }

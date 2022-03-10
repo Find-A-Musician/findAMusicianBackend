@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinTable,
@@ -7,12 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Genre } from '.';
-import { MusicianBand } from './MusicianGroup';
+import { MusicianGroup } from './MusicianGroup';
 import { Event } from './Event';
 import { Location } from './Musician';
 
 @Entity()
-export class Band {
+export class Groups extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -32,10 +33,10 @@ export class Band {
   @JoinTable()
   genres: Genre[];
 
-  @OneToMany(() => MusicianBand, (musicianBand) => musicianBand.group, {
+  @OneToMany(() => MusicianGroup, (musicianGroup) => musicianGroup.group, {
     onDelete: 'CASCADE',
   })
-  members: MusicianBand[];
+  members: MusicianGroup[];
 
   @ManyToMany(() => Event, (event) => event.groups, { onDelete: 'CASCADE' })
   events: Event[];
