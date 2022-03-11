@@ -132,19 +132,16 @@ const schema: HandlerDefinition = {
         'application/json': {
           schema: {
             type: 'object',
-            required: [
-              'name',
-              'description',
-              'start_date',
-              'end_date',
-              'adress',
-            ],
             properties: {
               name: { type: 'string' },
               description: { type: 'string' },
-              start_date: { type: 'string', format: 'date-time' },
-              end_date: { type: 'string', format: 'date-time' },
+              startDate: { type: 'string', format: 'date-time' },
+              endDate: { type: 'string', format: 'date-time' },
               adress: { type: 'string' },
+              genres: {
+                type: 'array',
+                items: { $ref: '#/components/schemas/genre' },
+              },
             },
           },
         },
@@ -152,7 +149,7 @@ const schema: HandlerDefinition = {
     },
     responses: {
       200: {
-        description: 'The event has been deleted',
+        description: 'The event has been modified',
         content: {
           'application/json': {
             schema: {

@@ -1,7 +1,4 @@
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
 import express from 'express';
-import { v4 as uuidV4 } from 'uuid';
 import invitationRouter from './groupInvitation';
 import type { operations } from '@schema';
 import type {
@@ -10,19 +7,27 @@ import type {
   getRequestBody,
   getResponsesBody,
 } from '@typing';
+
+import { DeepPartial, getRepository } from 'typeorm';
+import {
+  Groups,
+  Musician,
+  MusicianGroup,
+  Genre,
+  Instrument,
+} from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 
 type GetGroups = operations['getGroups'];
-type PostGroups = operations['createGroup'];
 type GetGroupsById = operations['getGroupsById'];
+type PostGroups = operations['createGroup'];
 type PatchGroupsById = operations['patchGroupsById'];
 type DeleteGroupsById = operations['deleteGroupsById'];
 
 const router = express.Router();
 
 router.use('/invitation', invitationRouter);
-//return a list of all the groups registered
 
 router.get(
   '/',
@@ -30,125 +35,22 @@ router.get(
     req: Request<{}, getResponsesBody<GetGroups>, {}, {}>,
     res: core.Response<getResponsesBody<GetGroups>, {}, getHTTPCode<GetGroups>>,
   ) => {
-    const response: getResponsesBody<GetGroups> = [];
     try {
-      // Get all the groups and their information
-      const { rows: groups } = await pg.query(sql`
-            SELECT * FROM groups
-        `);
-
-      // Assigning each groupInformation key/values
-      groups.forEach((group, index) => {
-        response[index] = {
-          groupInformation: group,
-          groupMembers: [],
-        };
+      const groups = await getRepository(Groups).find({
+        relations: [
+          'members',
+          'genres',
+          'members.musician',
+          'members.musician.instruments',
+          'members.musician.genres',
+        ],
       });
 
-      //get each genre for each group
-      for (let index = 0; index < groups.length; index++) {
-        const { rows: genres } = await pg.query(sql`
-            SELECT genres.* FROM genres
-            INNER JOIN groups_genres
-            ON groups_genres.genre=genres.id
-            WHERE groups_genres."group"=${groups[index].id}
-        `);
-        response[index].groupInformation.genre = genres;
-      }
-
-      //get every musicians of each group
-      for (let index = 0; index < groups.length; index++) {
-        const { rows: groupMembers } = await pg.query(sql`
-            SELECT given_name, family_name, instruments.name as instrument, role, membership
-            FROM groups_musicians
-            INNER JOIN musicians 
-              ON musicians.id = groups_musicians.musician
-            INNER JOIN instruments 
-              ON groups_musicians.instrument = instruments.id
-            WHERE groups_musicians."group"=${groups[index].id}
-          `);
-        response[index].groupMembers = groupMembers;
-      }
-      return res.status(200).json(response);
+      return res.status(200).json(groups);
     } catch (err) {
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
-    }
-  },
-);
-
-// create a new group
-
-router.post(
-  '/',
-  async (
-    req: Request<
-      {},
-      getResponsesBody<PostGroups>,
-      getRequestBody<PostGroups>,
-      {}
-    >,
-    res: core.Response<
-      getResponsesBody<PostGroups>,
-      {},
-      getHTTPCode<PostGroups>
-    >,
-  ) => {
-    try {
-      const groupId = uuidV4();
-
-      try {
-        await pg.query(sql`
-      INSERT INTO groups (
-        id,
-        name,
-        description,
-        location
-      ) VALUES (
-        ${groupId},
-        ${req.body.group.name},
-        ${req.body.group.description},
-        ${req.body.group.location}
-      )
-    `);
-      } catch (err) {
-        return res.status(422).json({ msg: 'E_GROUP_NAME_ALREADY_TAKEN' });
-      }
-
-      for (let index = 0; index < req.body.group.genre.length; index++) {
-        await pg.query(sql`
-          INSERT INTO groups_genres (
-            "group",
-            genre
-          ) VALUES (
-            ${groupId},
-            ${req.body.group.genre[index].id}
-          )
-        `);
-      }
-
-      await pg.query(sql`
-        INSERT INTO groups_musicians (
-          "group",
-          musician,
-          instrument,
-          membership,
-          role
-        ) VALUES (
-          ${groupId},
-          ${req.userId},
-          ${req.body.instrument.id},
-          'member',
-          'admin'
-        )
-      `);
-
-      return res.sendStatus(201);
-    } catch (err) {
-      return res
-        .status(500)
-        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -168,42 +70,102 @@ router.get(
       getHTTPCode<GetGroupsById>
     >,
   ) => {
-    const response = {
-      groupInformation: {},
-      groupMembers: [],
-    };
     try {
-      const { rows: groups } = await pg.query(sql`
-          SELECT * FROM groups
-          WHERE id = ${req.params.groupId}
-      `);
+      const group = await getRepository(Groups).findOne({
+        where: { id: req.params.groupId },
+        relations: [
+          'members',
+          'genres',
+          'members.musician',
+          'members.musician.instruments',
+          'members.musician.genres',
+        ],
+      });
 
-      if (groups.length === 0) {
-        return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
+      if (!group) {
+        return res.status(404).json({ msg: 'E_UNFOUND_GROUP' });
       }
 
-      response.groupInformation = groups[0];
+      return res.status(200).json(group);
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    }
+  },
+);
 
-      const { rows: genres } = await pg.query(sql`
-          SELECT genres.* FROM genres
-          INNER JOIN groups_genres
-          ON groups_genres.genre=genres.id
-          WHERE groups_genres."group"=${req.params.groupId}
-      `);
-      response.groupInformation['genre'] = genres;
+/**
+ * This post create a new Band entity and create a new MusicianBand
+ * entity with the req.userId as the admin of the new group created
+ */
+router.post(
+  '/',
+  async (
+    req: Request<
+      {},
+      getResponsesBody<PostGroups>,
+      getRequestBody<PostGroups>,
+      {}
+    >,
+    res: core.Response<
+      getResponsesBody<PostGroups>,
+      {},
+      getHTTPCode<PostGroups>
+    >,
+  ) => {
+    try {
+      const groupRepository = getRepository(Groups);
+      const musicianGroupRepository = getRepository(MusicianGroup);
+      const {
+        body: {
+          group: { name, description, location, genres: groupGenre },
+          instruments,
+        },
+      } = req;
 
-      const { rows: groupMembers } = await pg.query(sql`
-          SELECT given_name, family_name, instruments.name as instrument, role, membership
-          FROM groups_musicians
-          INNER JOIN musicians
-            ON musicians.id = groups_musicians.musician
-          INNER JOIN instruments
-            ON groups_musicians.instrument = instruments.id
-          WHERE groups_musicians."group"=${req.params.groupId}
-        `);
-      response['groupMembers'] = groupMembers;
+      const genres: Genre[] = [];
+      for (let i = 0; i < groupGenre.length; i++) {
+        genres.push(
+          await getRepository(Genre).findOne({
+            name: groupGenre[i].name,
+          }),
+        );
+      }
+      // Create the new group entity and save it
+      const newGroup = groupRepository.create({
+        name,
+        description,
+        location,
+        genres,
+      });
 
-      return res.status(200).json(response as getResponsesBody<GetGroupsById>);
+      await groupRepository.save(newGroup);
+
+      // Save the req userId as the admin of this new Group
+      const musician = await getRepository(Musician).findOne({
+        id: req.userId,
+      });
+
+      const musicianGroupInstruments: Instrument[] = [];
+      for (let i = 0; i < instruments.length; i++) {
+        musicianGroupInstruments.push(
+          await getRepository(Instrument).findOne({
+            name: instruments[i].name,
+          }),
+        );
+      }
+
+      const musicianGroup = musicianGroupRepository.create({
+        musician,
+        group: newGroup,
+        instruments: musicianGroupInstruments,
+        membership: 'admin',
+      });
+
+      await musicianGroupRepository.save(musicianGroup);
+
+      return res.sendStatus(201);
     } catch (err) {
       return res
         .status(500)
@@ -228,52 +190,47 @@ router.patch(
     >,
   ) => {
     try {
-      const { rows: admin } = await pg.query(sql`
-      SELECT musician, role 
-      FROM groups_musicians
-      WHERE "group" = ${req.params.groupId}
-    `);
+      const group = await getRepository(Groups).findOne({
+        id: req.params.groupId,
+      });
 
-      if (admin.length === 0) {
+      if (!group) {
         return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
       }
 
-      if (
-        admin.some(({ musician, role }) => {
-          return role !== 'member' && musician === req.userId;
-        })
-      ) {
-        // update the group information
-        await pg.query(sql`
-        UPDATE groups 
-        SET 
-          name = ${req.body.name},
-          description = ${req.body.description},
-          location = ${req.body.location}
-        WHERE id = ${req.params.groupId}
-      `);
+      const { membership } = await getRepository(MusicianGroup).findOne({
+        where: {
+          musician: {
+            id: req.userId,
+          },
+          group: {
+            id: req.params.groupId,
+          },
+        },
+      });
 
-        // delete all the genres of the group
-        await pg.query(sql`
-        DELETE FROM groups_genres WHERE "group"=${req.params.groupId}
-      `);
-        // adding the new ones
-        req.body.genre.forEach(async (genre) => {
-          await pg.query(sql`
-            INSERT INTO groups_genres (
-              "group",
-              genre
-            ) VALUES (
-              ${req.params.groupId},
-              ${genre}
-            )
-          `);
-        });
-
-        return res.sendStatus(200);
-      } else {
+      if (!(membership == 'admin')) {
         return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
       }
+
+      const { genres, ...basicInfo } = req.body;
+      const update: DeepPartial<Groups> = { ...basicInfo };
+      const newGenres: Genre[] = [];
+      if (genres) {
+        for (let i = 0; i < genres.length; i++) {
+          newGenres.push(
+            await getRepository(Genre).findOne({
+              name: genres[i].name,
+            }),
+          );
+        }
+
+        update['genres'] = newGenres;
+      }
+
+      await getRepository(Groups).save({ id: req.params.groupId, ...update });
+
+      return res.sendStatus(200);
     } catch (err) {
       return res
         .status(500)
@@ -298,29 +255,31 @@ router.delete(
     >,
   ) => {
     try {
-      const { rows: admin } = await pg.query(sql`
-        SELECT musician, role 
-        FROM groups_musicians
-        WHERE "group" = ${req.params.groupId}
-      `);
+      const group = await getRepository(Groups).findOne({
+        id: req.params.groupId,
+      });
 
-      if (admin.length === 0) {
+      if (!group) {
         return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
       }
 
-      if (
-        admin.some(
-          ({ musician, role }) => role === 'admin' && musician === req.userId,
-        )
-      ) {
-        await pg.query(sql`
-          DELETE FROM groups WHERE id = ${req.params.groupId}
+      const { membership } = await getRepository(MusicianGroup).findOne({
+        where: {
+          musician: {
+            id: req.userId,
+          },
+          group: {
+            id: req.params.groupId,
+          },
+        },
+      });
 
-        `);
-        return res.sendStatus(200);
-      } else {
+      if (!(membership == 'admin')) {
         return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
       }
+
+      await getRepository(Groups).delete({ id: req.params.groupId });
+      res.sendStatus(200);
     } catch (err) {
       return res
         .status(500)

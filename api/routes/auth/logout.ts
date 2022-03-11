@@ -1,10 +1,10 @@
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
 import express from 'express';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { operations } from '@schema';
 import type { getHTTPCode, getResponsesBody } from '@typing';
+import { getRepository } from 'typeorm';
+import { Token, Musician } from '../../entity';
 
 type Logout = operations['logout'];
 
@@ -17,14 +17,11 @@ router.delete(
     res: core.Response<getResponsesBody<Logout>, {}, getHTTPCode<Logout>>,
   ) => {
     try {
-      await pg.query(sql`
-            DELETE FROM tokens
-            WHERE musician = ${req.userId}
-        `);
+      const musician = await getRepository(Musician).findOne({
+        id: req.userId,
+      });
 
-      // Delete the accessToken and refreshToken cookie
-      res.clearCookie('accessToken');
-      res.clearCookie('refreshToken');
+      await getRepository(Token).delete({ musician });
 
       return res.status(200).json('the user has been logout');
     } catch (err) {

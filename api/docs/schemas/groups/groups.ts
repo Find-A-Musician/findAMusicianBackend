@@ -16,10 +16,24 @@ const schema: HandlerDefinition = {
               type: 'array',
               items: {
                 type: 'object',
-                required: ['groupInformation', 'groupMembers'],
+                required: [
+                  'id',
+                  'name',
+                  'description',
+                  'location',
+                  'genres',
+                  'members',
+                ],
                 properties: {
-                  groupInformation: { $ref: '#/components/schemas/group' },
-                  groupMembers: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  description: { type: 'string' },
+                  location: { type: 'string', enum: ['Douai', 'Lille'] },
+                  genres: {
+                    type: 'array',
+                    items: { $ref: '#/components/schemas/genre' },
+                  },
+                  members: {
                     type: 'array',
                     items: {
                       $ref: '#/components/schemas/groupMember',
@@ -54,16 +68,18 @@ const schema: HandlerDefinition = {
         'application/json': {
           schema: {
             type: 'object',
-            required: ['group', 'instrument'],
+            required: ['group', 'instruments'],
             properties: {
               group: {
                 $ref: '#/components/schemas/group',
               },
-              genres: {
+
+              instruments: {
                 type: 'array',
-                items: { $ref: '#/components/schemas/genre' },
+                items: {
+                  $ref: '#/components/schemas/instrument',
+                },
               },
-              instrument: { $ref: '#/components/schemas/instrument' },
             },
           },
           example: {
@@ -71,17 +87,19 @@ const schema: HandlerDefinition = {
               name: 'Red Mustard',
               description: 'the craziest group ever',
               location: 'Lille',
-              genre: [
+              genres: [
                 {
                   id: 'd5e352dc-29a6-4a2d-a226-29d6866d1b5d',
                   name: 'rock',
                 },
               ],
             },
-            instrument: {
-              id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-              name: 'drums',
-            },
+            instruments: [
+              {
+                id: 'cd836a31-1663-4a11-8a88-0a249aa70793',
+                name: 'batterie',
+              },
+            ],
           },
         },
       },

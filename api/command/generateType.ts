@@ -1,22 +1,14 @@
-import docs from '../docs/config/index';
-import fs from 'fs';
-import { series } from 'async';
-import { exec } from 'child_process';
-// import rimraf from 'rimraf';
 import path from 'path';
-// import schemas from '../api/docs/schemas';
+import fs from 'fs';
+import docs from '../docs/config/index';
+import openApiTS, { SchemaObject } from 'openapi-typescript';
 
-export default async function createAPITypes(): Promise<void> {
+export default async function createAPIType(): Promise<void> {
   const schemaObject: {
     [key: string]: string;
   } = {};
 
   try {
-    // console.log('🗑️ Delete existing type');
-    // rimraf.sync(path.join(__dirname, '..', 'docs', 'config', 'paths.ts'), {});
-    // rimraf.sync(path.join(__dirname, '..', 'types', 'doc.json'), {});
-    // rimraf.sync(path.join(__dirname, '..', 'types', 'schema.ts'), {});
-
     console.log('🔧 building the paths object...');
     // get every files of the schemas directory
     const schemaFiles = readDir('./api/docs/schemas').map(
@@ -47,23 +39,23 @@ export default async function createAPITypes(): Promise<void> {
         '; export default paths',
     );
 
-    console.log('🚧 Writing the JSON API file...');
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'types', 'doc.json'),
-      JSON.stringify(docs),
+    console.log('🚧 Creating the typescript definitions...');
+    const types = await openApiTS(
+      docs as unknown as Record<string, SchemaObject>,
+      {
+        formatter(node: SchemaObject) {
+          if (node.format === 'date-time') {
+            return 'Date';
+          }
+        },
+      },
     );
-    console.log('⏳ writing the types from the JSON file...');
 
-    series([
-      () =>
-        exec(
-          // eslint-disable-next-line
-          'npx openapi-typescript ./api/types/doc.json --output ./api/types/schema.ts',
-        ),
-    ]);
+    fs.writeFileSync(path.join(__dirname, '..', 'types', 'schema.ts'), types);
 
     console.log('✅ API Types have been generated ! ');
   } catch (err) {
+    console.log('❌ Generate types failed');
     throw new Error(err);
   }
 }
@@ -76,7 +68,7 @@ export default async function createAPITypes(): Promise<void> {
  * @author Romain Guarinoni
  */
 
-function readDir(dir: string) {
+function readDir(dir: string): string[] {
   let results: string[] = [];
   const files = fs.readdirSync(dir);
   files.forEach((file) => {

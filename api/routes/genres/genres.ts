@@ -1,9 +1,10 @@
 import express from 'express';
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
+
 import type { operations } from '@schema';
 import type { getHTTPCode, getResponsesBody } from '@typing';
 import type core from 'express-serve-static-core';
+import { getRepository } from 'typeorm';
+import { Genre } from '../../entity';
 
 const router = express.Router();
 
@@ -16,10 +17,8 @@ router.get(
     res: core.Response<getResponsesBody<GetGenres>, {}, getHTTPCode<GetGenres>>,
   ) => {
     try {
-      const { rows } = await pg.query(sql`
-        SELECT * FROM genres
-    `);
-      return res.status(200).json(rows);
+      const genres = await getRepository(Genre).find();
+      return res.status(200).json(genres);
     } catch (err) {
       return res
         .status(500)

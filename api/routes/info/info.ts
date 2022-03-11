@@ -1,9 +1,9 @@
 import express from 'express';
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
 import type { operations } from '../../types/schema';
 import type { getHTTPCode, getResponsesBody } from '@typing';
 import type core from 'express-serve-static-core';
+import { getRepository } from 'typeorm';
+import { Musician, Groups, Event } from '../../entity';
 
 const router = express.Router();
 
@@ -16,35 +16,14 @@ router.get(
     res: core.Response<getResponsesBody<Info>, {}, getHTTPCode<Info>>,
   ) => {
     try {
-      const [
-        {
-          rows: [{ count: nbMusician }],
-        },
-        {
-          rows: [{ count: nbGroups }],
-        },
-        {
-          rows: [{ count: nbEvents }],
-        },
-      ] = await Promise.all([
-        pg.query(sql`
-             SELECT COUNT(email)
-             FROM musicians
-         `),
-        pg.query(sql`
-           SELECT COUNT(id)
-           FROM groups
-       `),
-        pg.query(sql`
-          SELECT COUNT(id)
-          FROM events
-      `),
-      ]);
+      const nbMusician = await getRepository(Musician).count();
+      const nbGroups = await getRepository(Groups).count();
+      const nbEvents = await getRepository(Event).count();
 
       return res.status(200).json({
-        nbMusician: parseInt(nbMusician),
-        nbGroups: parseInt(nbGroups),
-        nbEvents: parseInt(nbEvents),
+        nbMusician,
+        nbGroups,
+        nbEvents,
       });
     } catch (err) {
       return res

@@ -1,38 +1,30 @@
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "target": "es6",
-      "moduleResolution": "node",
-      "noImplicitAny": false,
-      "removeComments": false,
-      "preserveConstEnums": true,
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "declaration": true,
-      "sourceMap": true,
-      "rootDir": "./",
-      "outDir": "./build",
-      "baseUrl" : ".",
-      "typeRoots": [
-        "@types",
-        "./node_modules/@types",
-      ],
-      "paths" : {
-        "@schema" : ["./api/types/schema"],
-        "@typing" : ["./api/types/typing"],
-        "@postgres" : ["./api/postgres"]
-      },
-      // Ensure that .d.ts files are created by tsc, but not .js files
-      "emitDeclarationOnly": true,
-      // Ensure that Babel can safely transpile files in the TypeScript project
-      "isolatedModules": true   
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "sourceMap": true,
+    "rootDir": "./",
+    "outDir": "./build",
+    "baseUrl": ".",
+    "typeRoots": ["@types", "./node_modules/@types"],
+    "paths": {
+      "@schema": ["./api/types/schema"],
+      "@typing": ["./api/types/typing"],
+      "@postgres": ["./api/postgres"]
     },
-    "include": [
-      "**/*.ts"
-    ],
-    "exclude": [
-      "node_modules",
-      "build"
-    ],
-   
-  }
+    // Ensure that .d.ts files are created by tsc, but not .js files
+    "emitDeclarationOnly": true,
+    // Ensure that Babel can safely transpile files in the TypeScript project
+    "isolatedModules": true,
+    "experimentalDecorators": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "build"]
+}

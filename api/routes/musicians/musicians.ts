@@ -1,6 +1,4 @@
 import express from 'express';
-import pg from '../../postgres';
-import sql from 'sql-template-strings';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
@@ -11,6 +9,8 @@ import type {
   getResponsesBody,
   getRequestQuery,
 } from '@typing';
+import { getRepository, ILike, FindOneOptions, Any } from 'typeorm';
+import { Musician } from '../../entity';
 
 type GetMusician = operations['getMusicians'];
 type GetMusicianById = operations['getMusicianById'];
@@ -33,85 +33,70 @@ router.get(
   ) => {
     try {
       const nameFilter = req.query.name ? `%${req.query.name}%` : null;
-      const genresFilter = req.query.genres || null;
-      const instrumentsFilter = req.query.instruments || null;
-      const locationFilter = req.query.location || null;
-      const promotionFilter = req.query.promotion || null;
+      const genresFilter = req.query.genres;
+      const instrumentsFilter = req.query.instruments;
+      const locationFilter = req.query.location;
+      const promotionFilter = req.query.promotion;
 
-      const { rows } = await pg.query(
-        sql`SELECT id,
-                  email,
-                  given_name as "givenName",
-                  family_name as "familyName",
-                  phone,
-                  facebook_url,
-                  twitter_url,
-                  instagram_url,
-                  promotion,
-                  location 
-              FROM musicians
-              WHERE
-                  (
-                    (cast(${nameFilter} as char) IS null OR given_name ILIKE ${nameFilter}) OR 
-                    (cast(${nameFilter} as char) IS null OR family_name ILIKE ${nameFilter})
-                  ) AND (
-                    (cast(${locationFilter} as char[]) IS null OR location = ANY(${locationFilter}))
-                  ) AND (
-                    (cast(${promotionFilter} as char[]) IS null OR promotion = ANY(${promotionFilter})) 
-                  )
-              `,
-      );
+      const commonFilter: FindOneOptions<Musician>['where'] = {};
+      const queryFilter: FindOneOptions<Musician>['where'] = [];
 
-      // contain the index of the musician that dont fit the query filter,
-      // meaning that the return rowss of following query are empty
-      const indexToRemove: number[] = [];
+      if (locationFilter) commonFilter.location = Any(locationFilter);
+      if (promotionFilter) commonFilter.promotion = Any(promotionFilter);
 
-      for (let i = 0; i < rows.length; i++) {
-        const { rows: instrumentsRows } = await pg.query(sql`
-        SELECT id,
-               name
-        FROM instruments
-        INNER JOIN musicians_instruments
-          ON id = musicians_instruments.instrument
-        WHERE 
-          (musicians_instruments.musician= ${rows[i].id}) AND
-          (cast(${instrumentsFilter} as char[]) IS null OR name = ANY(${instrumentsFilter}))
-    `);
-
-        if (instrumentsRows.length === 0 && instrumentsFilter) {
-          indexToRemove.push(i);
-        } else {
-          rows[i]['instruments'] = instrumentsRows;
-        }
+      if (nameFilter) {
+        // see https://github.com/typeorm/typeorm/issues/2929
+        queryFilter.push(
+          {
+            givenName: ILike(nameFilter),
+            ...commonFilter,
+          },
+          {
+            familyName: ILike(nameFilter),
+            ...commonFilter,
+          },
+        );
+      } else {
+        queryFilter.push(commonFilter);
       }
 
-      for (let i = 0; i < rows.length; i++) {
-        const { rows: genreRows } = await pg.query(sql`
-        SELECT id,
-               name
-        FROM genres
-        INNER JOIN musicians_genres
-          ON musicians_genres.genre=genres.id
-        WHERE 
-          (musicians_genres.musician = ${rows[i].id}) AND
-          (cast(${genresFilter} as char[]) IS null OR name = ANY(${genresFilter}))
-    `);
-        if (genreRows.length === 0 && genresFilter) {
-          if (indexToRemove.indexOf(i) === -1) {
-            indexToRemove.push(i);
+      // The where clause for the where of the join tables : genres and instruments
+      let joinQuery = '';
+      let joinValue = {};
+      if (instrumentsFilter && genresFilter) {
+        joinQuery =
+          'instruments.name = ANY(:instruments) AND genres.name = ANY(:genres)';
+        joinValue = { instruments: instrumentsFilter, genres: genresFilter };
+      } else if (instrumentsFilter) {
+        joinQuery = 'instruments.name = ANY(:instruments)';
+        joinValue = { instruments: instrumentsFilter };
+      } else if (genresFilter) {
+        joinQuery = 'genres.name = ANY(:genres)';
+        joinValue = { genres: genresFilter };
+      }
+
+      // This is a work around to make where clause on relation, see : https://github.com/typeorm/typeorm/issues/4396
+      const musicians = await getRepository(Musician).find({
+        join: {
+          alias: 'musician',
+          innerJoin: {
+            instruments: 'musician.instruments',
+            genres: 'musician.genres',
+          },
+        },
+        where: (qb) => {
+          if (joinQuery == '') {
+            qb.where(queryFilter).andWhere({});
+          } else {
+            qb.where(queryFilter).andWhere(joinQuery, joinValue);
           }
-        } else {
-          rows[i]['genres'] = genreRows;
-        }
-      }
+        },
+        relations: ['instruments', 'genres'],
+      });
 
-      // We filter the rows by removing the items contains in indexToRemove
-      const filterRows = rows.filter(
-        (_, index) => !indexToRemove.includes(index),
-      );
-
-      return res.status(200).json(filterRows);
+      return res.status(200).json(musicians);
     } catch (err) {
+      console.log(err);
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
@@ -135,44 +120,16 @@ router.get(
     >,
   ) => {
     try {
-      const { rows } = await pg.query(sql`
-        SELECT id,
-              email,
-              given_name as "givenName",
-              family_name as "familyName",
-              phone,
-              facebook_url,
-              twitter_url,
-              instagram_url,
-              promotion,
-              location 
-        FROM musicians
-        WHERE id = ${req.params.musicianId}
-      `);
+      const musician = await getRepository(Musician).findOne({
+        where: { id: req.params.musicianId },
+        relations: ['instruments', 'genres'],
+      });
 
-      if (rows.length === 0) {
-        return res.status(404).json({ msg: 'E_MUSICIAN_DOES_NOT_EXIST' });
+      if (!musician) {
+        return res.status(404).json({ msg: 'E_UNFOUND_USER' });
       }
 
-      const { rows: instrumentsRows } = await pg.query(sql`
-        SELECT instruments.* 
-        FROM instruments
-        INNER JOIN musicians_instruments
-        ON instruments.id = musicians_instruments.instrument
-        WHERE musicians_instruments.musician= ${req.params.musicianId}`);
-
-      rows[0]['instruments'] = instrumentsRows;
-
-      const { rows: genreRows } = await pg.query(sql`
-        SELECT genres.* 
-        FROM genres
-        INNER JOIN musicians_genres
-        ON musicians_genres.genre=genres.id
-        WHERE musicians_genres.musician = ${req.params.musicianId}`);
-
-      rows[0]['genres'] = genreRows;
-
-      return res.status(200).json(rows[0]);
+      res.status(200).json(musician);
     } catch (err) {
       console.log(err);
       return res

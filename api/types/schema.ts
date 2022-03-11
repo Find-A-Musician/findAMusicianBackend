@@ -103,17 +103,14 @@ export interface components {
     group: {
       id?: string;
       name: string;
-      desription?: string;
+      description: string;
       location: "Douai" | "Lille";
-      genre: components["schemas"]["genre"][];
-    } & {
-      description: unknown;
+      genres: components["schemas"]["genre"][];
     };
     groupMember: {
-      givenName?: string;
-      familyName?: string;
-      instrument?: string;
-      role?: "admin" | "member" | "declined";
+      musician?: components["schemas"]["musician"];
+      instruments?: components["schemas"]["instrument"][];
+      membership?: "admin" | "member" | "declined" | "pending";
     };
     instrument: {
       id: string;
@@ -127,10 +124,12 @@ export interface components {
       id?: string;
       name: string;
       description: string;
-      start_date: string;
-      end_date: string;
+      startDate: Date;
+      endDate: Date;
       adress: string;
-      admin?: components["schemas"]["musician"];
+      genres: components["schemas"]["genre"][];
+      groups: components["schemas"]["group"][];
+      admins: components["schemas"]["musician"][];
     };
     token: {
       accessToken: string;
@@ -244,6 +243,12 @@ export interface operations {
         };
       };
       /** Error intern server */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
       500: {
         content: {
           "application/json": components["schemas"]["httpError"];
@@ -253,19 +258,17 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          musician: {
-            email: string;
-            givenName: string;
-            familyName: string;
-            phone?: string | null;
-            facebook_url: string | null;
-            twitter_url: string | null;
-            instagram_url: string | null;
-            promotion: "L1" | "L2" | "L3" | "M1" | "M2";
-            location: "Douai" | "Lille";
-            instruments: components["schemas"]["instrument"][];
-            genres: components["schemas"]["genre"][];
-          };
+          email: string;
+          givenName: string;
+          familyName: string;
+          phone?: string | null;
+          facebookUrl?: string | null;
+          twitterUrl?: string | null;
+          instagramUrl?: string | null;
+          promotion: "L1" | "L2" | "L3" | "M1" | "M2";
+          location: "Douai" | "Lille";
+          instruments: components["schemas"]["instrument"][];
+          genres: components["schemas"]["genre"][];
           password: string;
         };
       };
@@ -344,7 +347,7 @@ export interface operations {
       };
     };
     responses: {
-      /** The event has been deleted */
+      /** The event has been modified */
       200: {
         content: {
           "application/json": string;
@@ -372,11 +375,12 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          name: string;
-          description: string;
-          start_date: string;
-          end_date: string;
-          adress: string;
+          name?: string;
+          description?: string;
+          startDate?: Date;
+          endDate?: Date;
+          adress?: string;
+          genres?: components["schemas"]["genre"][];
         };
       };
     };
@@ -404,7 +408,7 @@ export interface operations {
       /** The event has been created */
       201: {
         content: {
-          "application/json": string;
+          "application/json": components["schemas"]["event"];
         };
       };
       /** Event already created */
@@ -422,7 +426,15 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["event"];
+        "application/json": {
+          id?: string;
+          name: string;
+          description: string;
+          startDate: Date;
+          endDate: Date;
+          adress: string;
+          genres: components["schemas"]["genre"][];
+        };
       };
     };
   };
@@ -456,8 +468,12 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            groupInformation: components["schemas"]["group"];
-            groupMembers: components["schemas"]["groupMember"][];
+            id: string;
+            name: string;
+            description: string;
+            location: "Douai" | "Lille";
+            genres: components["schemas"]["genre"][];
+            members: components["schemas"]["groupMember"][];
           };
         };
       };
@@ -546,7 +562,12 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["group"];
+        "application/json": {
+          name?: string;
+          description?: string;
+          location?: "Douai" | "Lille";
+          genres?: components["schemas"]["genre"][];
+        };
       };
     };
   };
@@ -594,8 +615,12 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            groupInformation: components["schemas"]["group"];
-            groupMembers: components["schemas"]["groupMember"][];
+            id: string;
+            name: string;
+            description: string;
+            location: "Douai" | "Lille";
+            genres: components["schemas"]["genre"][];
+            members: components["schemas"]["groupMember"][];
           }[];
         };
       };
@@ -633,8 +658,7 @@ export interface operations {
       content: {
         "application/json": {
           group: components["schemas"]["group"];
-          genres?: components["schemas"]["genre"][];
-          instrument: components["schemas"]["instrument"];
+          instruments: components["schemas"]["instrument"][];
         };
       };
     };

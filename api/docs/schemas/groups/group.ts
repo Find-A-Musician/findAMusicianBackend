@@ -25,10 +25,24 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'object',
-              required: ['groupInformation', 'groupMembers'],
+              required: [
+                'id',
+                'name',
+                'description',
+                'location',
+                'genres',
+                'members',
+              ],
               properties: {
-                groupInformation: { $ref: '#/components/schemas/group' },
-                groupMembers: {
+                id: { type: 'string' },
+                name: { type: 'string' },
+                description: { type: 'string' },
+                location: { type: 'string', enum: ['Douai', 'Lille'] },
+                genres: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/genre' },
+                },
+                members: {
                   type: 'array',
                   items: {
                     $ref: '#/components/schemas/groupMember',
@@ -82,7 +96,16 @@ const schema: HandlerDefinition = {
       content: {
         'application/json': {
           schema: {
-            $ref: '#/components/schemas/group',
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+              description: { type: 'string' },
+              location: { type: 'string', enum: ['Douai', 'Lille'] },
+              genres: {
+                type: 'array',
+                items: { $ref: '#/components/schemas/genre' },
+              },
+            },
           },
         },
       },

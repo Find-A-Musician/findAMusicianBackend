@@ -1,20 +1,13 @@
-import express from 'express';
+import 'reflect-metadata';
 import generateType from './api/command/generateType';
 import server from './api/server/server';
 import http from 'http';
+import createConnection from './api/db/createConnection';
+
+// import reset from './api/db/reset';
 
 const PORT = process.env.PORT || 8000;
 const httpApp = new http.Server(server);
-
-if (process.env.NODE_ENV === 'production') {
-  // Static folder
-  server.use(express.static(__dirname + '/public/'));
-
-  // Handle SPA
-  server.get(/.*/, (req, res) =>
-    res.sendFile(__dirname + '/public/index.html'),
-  );
-}
 
 httpApp.listen(PORT, async () => {
   if (process.env.NODE_ENV === 'development') {
@@ -28,7 +21,10 @@ httpApp.listen(PORT, async () => {
       throw new Error('E_TYPES_FAILED');
     }
   }
-  {
-    console.log(' 🔌 Listening on port : http://localhost:' + PORT);
-  }
+
+  await createConnection();
+
+  // await reset();
+
+  console.log(' 🔌 Listening on port : http://localhost:' + PORT);
 });
