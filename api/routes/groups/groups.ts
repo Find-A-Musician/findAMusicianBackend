@@ -5,10 +5,17 @@ import type {
   getHTTPCode,
   getPathParams,
   getRequestBody,
+  getRequestQuery,
   getResponsesBody,
 } from '@typing';
 
-import { DeepPartial, getRepository } from 'typeorm';
+import {
+  Any,
+  DeepPartial,
+  FindOneOptions,
+  getRepository,
+  ILike,
+} from 'typeorm';
 import {
   Groups,
   Musician,
@@ -32,22 +39,52 @@ router.use('/invitation', invitationRouter);
 router.get(
   '/',
   async (
-    req: Request<{}, getResponsesBody<GetGroups>, {}, {}>,
+    req: Request<
+      {},
+      getResponsesBody<GetGroups>,
+      {},
+      getRequestQuery<GetGroups>
+    >,
     res: core.Response<getResponsesBody<GetGroups>, {}, getHTTPCode<GetGroups>>,
   ) => {
     try {
+      const nameFilter = req.query.name ? `%${req.query.name}%` : null;
+      const locationFilter = req.query.location;
+      const genresFilter = req.query.genres;
+
+      const commonFilter: FindOneOptions<Groups>['where'] = {};
+
+      if (locationFilter) commonFilter.location = Any(locationFilter);
+      if (nameFilter) commonFilter.name = ILike(nameFilter);
+
+      let joinQuery = '';
+      let joinValue = {};
+      if (genresFilter) {
+        joinQuery = 'genres.name = ANY(:genres)';
+        joinValue = { genres: genresFilter };
+      }
+
       const groups = await getRepository(Groups).find({
-        relations: [
-          'members',
-          'genres',
-          'members.musician',
-          'members.musician.instruments',
-          'members.musician.genres',
-        ],
+        join: {
+          alias: 'group',
+          innerJoin: {
+            genres: 'group.genres',
+            members: 'group.members',
+          },
+        },
+        where: (qb) => {
+          if (joinQuery == '') {
+            qb.where(commonFilter);
+          } else {
+            qb.where(commonFilter).andWhere(joinQuery, joinValue);
+          }
+        },
+        relations: ['genres', 'members', 'members.musician'],
       });
 
       return res.status(200).json(groups);
     } catch (err) {
+      console.log(err);
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
