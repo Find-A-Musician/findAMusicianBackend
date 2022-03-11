@@ -88,6 +88,7 @@ export interface components {
   schemas: {
     musician: {
       id: string;
+      /** Format: email */
       email: string;
       givenName: string;
       familyName: string;
@@ -124,7 +125,9 @@ export interface components {
       id?: string;
       name: string;
       description: string;
+      /** Format: date-time */
       startDate: Date;
+      /** Format: date-time */
       endDate: Date;
       adress: string;
       genres: components["schemas"]["genre"][];
@@ -176,6 +179,7 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
+          /** Format: email */
           email?: string;
           password?: string;
         };
@@ -258,6 +262,7 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
+          /** Format: email */
           email: string;
           givenName: string;
           familyName: string;
@@ -377,7 +382,9 @@ export interface operations {
         "application/json": {
           name?: string;
           description?: string;
+          /** Format: date-time */
           startDate?: Date;
+          /** Format: date-time */
           endDate?: Date;
           adress?: string;
           genres?: components["schemas"]["genre"][];
@@ -430,7 +437,9 @@ export interface operations {
           id?: string;
           name: string;
           description: string;
+          /** Format: date-time */
           startDate: Date;
+          /** Format: date-time */
           endDate: Date;
           adress: string;
           genres: components["schemas"]["genre"][];
