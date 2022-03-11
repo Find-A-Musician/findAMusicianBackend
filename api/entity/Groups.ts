@@ -34,10 +34,10 @@ export class Groups extends BaseEntity {
   genres: Genre[];
 
   @OneToMany(() => MusicianGroup, (musicianGroup) => musicianGroup.group, {
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE'
   })
   members: MusicianGroup[];
 
-  @ManyToMany(() => Event, (event) => event.groups, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Event, (event) => event.groups, { onDelete: 'CASCADE', cascade: true })
   events: Event[];
 }
