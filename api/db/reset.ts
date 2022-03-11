@@ -24,7 +24,7 @@ export default async function reset(): Promise<void> {
     genRep.query('DELETE FROM genre');
     musRep.query('DELETE FROM musician');
     groRep.query('DELETE FROM groups');
-    musGrouRep.query('DELETE FROM musician_groups');
+    musGrouRep.query('DELETE FROM musician_group');
     eveRep.query('DELETE FROM event');
 
     console.log('🚮 Reset all the DB tables');
