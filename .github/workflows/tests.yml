@@ -29,11 +29,11 @@ jobs:
       - name: Run the docker containers
         run: docker-compose up -d
 
-      - name: Run the jest tests
-        run: npm run test
-        env:
-          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+#       - name: Run the jest tests
+#         run: npm run test
+#         env:
+#           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+#           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
 
       - name: Codecov
         uses: codecov/codecov-action@v2
