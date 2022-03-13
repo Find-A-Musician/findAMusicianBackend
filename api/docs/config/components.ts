@@ -22,6 +22,7 @@ const components: OpenAPIV3.Document['components'] = {
         },
         givenName: { type: 'string' },
         familyName: { type: 'string' },
+        description: { type: 'string', nullable: true },
         phone: { type: 'string', nullable: true },
         facebook_url: { type: 'string', nullable: true },
         twitter_url: { type: 'string', nullable: true },
