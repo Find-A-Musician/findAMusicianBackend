@@ -497,8 +497,9 @@ const paths: OpenAPIV3.Document['paths'] = {
             example: {
               name: 'Insane event',
               description: 'An insane event',
-              startDate: '2022-03-13T16:09:18.813Z',
-              endDate: '2022-03-13T16:09:18.813Z',
+
+              startDate: '2022-03-13T17:09:41.957Z',
+              endDate: '2022-03-13T17:09:41.957Z',
               adress: 'somewhere',
               genres: [{ id: 'id', name: 'rock' }],
             },
@@ -799,6 +800,37 @@ const paths: OpenAPIV3.Document['paths'] = {
       tags: ['groups'],
       description: 'Get a list of all the groups',
       security: [{ BearerAuth: [] }],
+      parameters: [
+        {
+          in: 'query',
+          name: 'name',
+          required: false,
+          schema: { type: 'string', example: 'Periphery' },
+          description: 'The query filter for the group name',
+        },
+        {
+          in: 'query',
+          required: false,
+          name: 'location',
+          schema: {
+            type: 'array',
+            items: { type: 'string' },
+            example: ['Douai'],
+          },
+          description: 'The query filter for the group location',
+        },
+        {
+          in: 'query',
+          name: 'genres',
+          required: false,
+          schema: {
+            type: 'array',
+            items: { type: 'string' },
+            example: ['rock', 'jazz'],
+          },
+          description: 'The query filter for group genre',
+        },
+      ],
       responses: {
         '200': {
           description: 'An array of groups',

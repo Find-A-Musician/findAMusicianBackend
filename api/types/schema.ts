@@ -631,6 +631,16 @@ export interface operations {
   };
   /** Get a list of all the groups */
   getGroups: {
+    parameters: {
+      query: {
+        /** The query filter for the group name */
+        name?: string;
+        /** The query filter for the group location */
+        location?: string[];
+        /** The query filter for group genre */
+        genres?: string[];
+      };
+    };
     responses: {
       /** An array of groups */
       200: {

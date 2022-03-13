@@ -86,7 +86,7 @@ router.get(
         },
         where: (qb) => {
           if (joinQuery == '') {
-            qb.where(queryFilter).andWhere({});
+            qb.where(queryFilter);
           } else {
             qb.where(queryFilter).andWhere(joinQuery, joinValue);
           }

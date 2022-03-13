@@ -7,6 +7,44 @@ const schema: HandlerDefinition = {
     tags: ['groups'],
     description: 'Get a list of all the groups',
     security: [{ BearerAuth: [] }],
+    parameters: [
+      {
+        in: 'query',
+        name: 'name',
+        required: false,
+        schema: {
+          type: 'string',
+          example: 'Periphery',
+        },
+        description: 'The query filter for the group name',
+      },
+      {
+        in: 'query',
+        required: false,
+        name: 'location',
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['Douai'],
+        },
+        description: 'The query filter for the group location',
+      },
+      {
+        in: 'query',
+        name: 'genres',
+        required: false,
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['rock', 'jazz'],
+        },
+        description: 'The query filter for group genre',
+      },
+    ],
     responses: {
       200: {
         description: 'An array of groups',
