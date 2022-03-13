@@ -6,6 +6,53 @@ const schema: HandlerDefinition = {
     operationId: 'getEvents',
     tags: ['events'],
     description: 'Get a list of all the events',
+    parameters: [
+      {
+        in: 'query',
+        name: 'name',
+        required: false,
+        schema: {
+          type: 'string',
+          example: 'imt tremplin',
+        },
+        description: 'The query filter for the event name',
+      },
+      {
+        in: 'query',
+        name: 'genres',
+        required: false,
+        schema: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: ['rock', 'jazz'],
+        },
+        description: 'The query filter for the event genre',
+      },
+      {
+        in: 'query',
+        name: 'startdate',
+        required: false,
+        schema: {
+          type: 'string',
+          format: 'date-time',
+          example: '2022-03-11T20:23:51.992Z',
+        },
+        description: 'The query filter for the event startDate',
+      },
+      {
+        in: 'query',
+        name: 'enddate',
+        required: false,
+        schema: {
+          type: 'string',
+          format: 'date-time',
+          example: '2022-03-12T20:23:51.992Z',
+        },
+        description: 'The query filter for the event endDate',
+      },
+    ],
     security: [{ BearerAuth: [] }],
     responses: {
       200: {
