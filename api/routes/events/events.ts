@@ -131,7 +131,7 @@ router.get(
     try {
       const event = await getRepository(Event).findOne({
         where: { id: req.params.eventId },
-        relations: ['genres', 'groups', 'admins'],
+        relations: ['genres', 'groups', 'admins', 'groups.genre'],
       });
 
       if (!event) {

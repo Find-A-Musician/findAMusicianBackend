@@ -162,7 +162,7 @@ const components: OpenAPIV3.Document['components'] = {
         },
         groups: {
           type: 'array',
-          items: { $ref: '#/components/schemas/group' },
+          items: { $ref: '#/components/schemas/groupDescription' },
         },
         admins: {
           type: 'array',

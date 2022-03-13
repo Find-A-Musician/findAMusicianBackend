@@ -157,7 +157,7 @@ export interface components {
       endDate: Date;
       adress: string;
       genres: components["schemas"]["genre"][];
-      groups: components["schemas"]["group"][];
+      groups: components["schemas"]["groupDescription"][];
       admins: components["schemas"]["musicianMinimized"][];
     };
     token: {

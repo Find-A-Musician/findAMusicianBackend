@@ -562,8 +562,8 @@ const openApiDocs: OpenAPIV3.Document = {
               example: {
                 name: 'Insane event',
                 description: 'An insane event',
-                startDate: '2022-03-14T15:47:59.269Z',
-                endDate: '2022-03-14T15:47:59.269Z',
+                startDate: '2022-03-13T16:00:28.015Z',
+                endDate: '2022-03-13T16:00:28.015Z',
                 adress: 'somewhere',
                 genres: [{ id: 'id', name: 'rock' }],
               },
@@ -646,31 +646,7 @@ const openApiDocs: OpenAPIV3.Document = {
             description: 'The group information',
             content: {
               'application/json': {
-                schema: {
-                  type: 'object',
-                  required: [
-                    'id',
-                    'name',
-                    'description',
-                    'location',
-                    'genres',
-                    'members',
-                  ],
-                  properties: {
-                    id: { type: 'string' },
-                    name: { type: 'string' },
-                    description: { type: 'string' },
-                    location: { type: 'string', enum: ['Douai', 'Lille'] },
-                    genres: {
-                      type: 'array',
-                      items: { $ref: '#/components/schemas/genre' },
-                    },
-                    members: {
-                      type: 'array',
-                      items: { $ref: '#/components/schemas/groupMember' },
-                    },
-                  },
-                },
+                schema: { $ref: '#/components/schemas/group' },
               },
             },
           },
@@ -902,31 +878,7 @@ const openApiDocs: OpenAPIV3.Document = {
               'application/json': {
                 schema: {
                   type: 'array',
-                  items: {
-                    type: 'object',
-                    required: [
-                      'id',
-                      'name',
-                      'description',
-                      'location',
-                      'genres',
-                      'members',
-                    ],
-                    properties: {
-                      id: { type: 'string' },
-                      name: { type: 'string' },
-                      description: { type: 'string' },
-                      location: { type: 'string', enum: ['Douai', 'Lille'] },
-                      genres: {
-                        type: 'array',
-                        items: { $ref: '#/components/schemas/genre' },
-                      },
-                      members: {
-                        type: 'array',
-                        items: { $ref: '#/components/schemas/groupMember' },
-                      },
-                    },
-                  },
+                  items: { $ref: '#/components/schemas/group' },
                 },
               },
             },
@@ -954,7 +906,7 @@ const openApiDocs: OpenAPIV3.Document = {
                 type: 'object',
                 required: ['group', 'instruments'],
                 properties: {
-                  group: { $ref: '#/components/schemas/group' },
+                  group: { $ref: '#/components/schemas/groupDescription' },
                   instruments: {
                     type: 'array',
                     items: { $ref: '#/components/schemas/instrument' },
@@ -1446,11 +1398,58 @@ const openApiDocs: OpenAPIV3.Document = {
           },
         },
       },
+      musicianMinimized: {
+        type: 'object',
+        required: [
+          'email',
+          'id',
+          'givenName',
+          'familyName',
+          'promotion',
+          'location',
+        ],
+        properties: {
+          id: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+          givenName: { type: 'string' },
+          familyName: { type: 'string' },
+          phone: { type: 'string', nullable: true },
+          facebook_url: { type: 'string', nullable: true },
+          twitter_url: { type: 'string', nullable: true },
+          instagram_url: { type: 'string', nullable: true },
+          promotion: { type: 'string', enum: ['L1', 'L2', 'L3', 'M1', 'M2'] },
+          location: { type: 'string', enum: ['Douai', 'Lille'] },
+        },
+      },
       group: {
+        type: 'object',
+        required: [
+          'name',
+          'description',
+          'location',
+          'genres',
+          'id',
+          'members',
+        ],
+        properties: {
+          id: { type: 'string' },
+          name: { type: 'string' },
+          description: { type: 'string' },
+          location: { type: 'string', enum: ['Douai', 'Lille'] },
+          genres: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/genre' },
+          },
+          members: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/groupMember' },
+          },
+        },
+      },
+      groupDescription: {
         type: 'object',
         required: ['name', 'description', 'location', 'genres'],
         properties: {
-          id: { type: 'string' },
           name: { type: 'string' },
           description: { type: 'string' },
           location: { type: 'string', enum: ['Douai', 'Lille'] },
@@ -1463,7 +1462,7 @@ const openApiDocs: OpenAPIV3.Document = {
       groupMember: {
         type: 'object',
         properties: {
-          musician: { $ref: '#/components/schemas/musician' },
+          musician: { $ref: '#/components/schemas/musicianMinimized' },
           instruments: {
             type: 'array',
             items: { $ref: '#/components/schemas/instrument' },
@@ -1509,11 +1508,11 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           groups: {
             type: 'array',
-            items: { $ref: '#/components/schemas/group' },
+            items: { $ref: '#/components/schemas/groupDescription' },
           },
           admins: {
             type: 'array',
-            items: { $ref: '#/components/schemas/musician' },
+            items: { $ref: '#/components/schemas/musicianMinimized' },
           },
         },
       },
