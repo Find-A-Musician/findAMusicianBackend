@@ -394,6 +394,18 @@ export interface operations {
   };
   /** Get a list of all the events */
   getEvents: {
+    parameters: {
+      query: {
+        /** The query filter for the event name */
+        name?: string;
+        /** The query filter for the event genre */
+        genres?: string[];
+        /** The query filter for the event startDate */
+        startdate?: Date;
+        /** The query filter for the event endDate */
+        enddate?: Date;
+      };
+    };
     responses: {
       /** A list of all the events */
       200: {
