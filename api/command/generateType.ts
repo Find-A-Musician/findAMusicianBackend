@@ -2,6 +2,27 @@ import path from 'path';
 import fs from 'fs';
 import docs from '../docs/config/index';
 import openApiTS, { SchemaObject } from 'openapi-typescript';
+import parserTypescript from 'prettier/parser-typescript.js';
+import prettier from 'prettier';
+
+let prettierOptions: prettier.Options = {
+  parser: 'typescript',
+  plugins: [parserTypescript],
+};
+
+const userOptions = {
+  semi: true,
+  printWidth: 80,
+  singleQuote: true,
+  trailingComma: 'all',
+  proseWrap: 'always',
+} as prettier.Options;
+
+prettierOptions = {
+  ...(userOptions || {}),
+  ...prettierOptions,
+  plugins: [...(prettierOptions.plugins as prettier.Plugin[])],
+};
 
 export default async function createAPIType(): Promise<void> {
   const schemaObject: {
@@ -32,11 +53,17 @@ export default async function createAPIType(): Promise<void> {
         });
     }
 
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'docs', 'config', 'paths.ts'),
+    console.log('📝 Formatting the schema');
+    const schemaObjectFormatted = prettier.format(
       "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const paths:OpenAPIV3.Document['paths'] = " +
         JSON.stringify(schemaObject) +
         '; export default paths',
+      prettierOptions,
+    );
+
+    fs.writeFileSync(
+      path.join(__dirname, '..', 'docs', 'config', 'paths.ts'),
+      schemaObjectFormatted,
     );
 
     console.log('🚧 Creating the typescript definitions...');

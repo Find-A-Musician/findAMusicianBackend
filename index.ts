@@ -11,15 +11,10 @@ const httpApp = new http.Server(server);
 
 httpApp.listen(PORT, async () => {
   if (process.env.NODE_ENV === 'development') {
-    try {
-      await generateType();
-      console.log(
-        '📕 Swager documention : http://localhost:' + PORT + '/api-docs',
-      );
-    } catch (err) {
-      console.log(err);
-      throw new Error('E_TYPES_FAILED');
-    }
+    await generateType();
+    console.log(
+      '📕 Swager documention : http://localhost:' + PORT + '/api-docs',
+    );
   }
 
   await createConnection();
