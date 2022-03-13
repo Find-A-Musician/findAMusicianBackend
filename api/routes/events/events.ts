@@ -5,9 +5,17 @@ import type {
   getResponsesBody,
   getRequestBody,
   getPathParams,
+  getRequestQuery,
 } from '@typing';
 import type core from 'express-serve-static-core';
-import { DeepPartial, getRepository } from 'typeorm';
+import {
+  DeepPartial,
+  FindOneOptions,
+  getRepository,
+  ILike,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+} from 'typeorm';
 import { Event, Genre, Musician } from '../../entity';
 
 const router = express.Router();
@@ -25,17 +33,76 @@ router.get(
       {},
       getResponsesBody<GetEvents>,
       getRequestBody<GetEvents>,
-      getPathParams<GetEvents>
+      getRequestQuery<GetEvents>
     >,
     res: core.Response<getResponsesBody<GetEvents>, {}, getHTTPCode<GetEvents>>,
   ) => {
     try {
+      const nameFilter = req.query.name ? `%${req.query.name}%` : null;
+      const genresFilter = req.query.genres;
+      const startDateFilter = req.query.startdate;
+      const endDateFilter = req.query.enddate;
+
+      const commonFilter: FindOneOptions<Musician>['where'] = {};
+      const queryFilter: FindOneOptions<Musician>['where'] = [];
+
+      if (nameFilter) commonFilter['name'] = ILike(nameFilter);
+
+      /**
+       * The condition for the date is : startDate >= startDateFilter OR endDate <= endDateFitlter
+       */
+      if (startDateFilter && endDateFilter) {
+        // see https://github.com/typeorm/typeorm/issues/2929
+        queryFilter.push(
+          {
+            startDate: MoreThanOrEqual(startDateFilter),
+            ...commonFilter,
+          },
+          {
+            endDate: LessThanOrEqual(endDateFilter),
+            ...commonFilter,
+          },
+        );
+      } else if (startDateFilter) {
+        queryFilter.push({
+          startDate: MoreThanOrEqual(startDateFilter),
+          ...commonFilter,
+        });
+      } else if (endDateFilter) {
+        queryFilter.push({
+          endDate: LessThanOrEqual(endDateFilter),
+          ...commonFilter,
+        });
+      }
+
+      let joinQuery = '';
+      let joinValue = {};
+      if (genresFilter) {
+        joinQuery = 'genres.name = ANY(:genres)';
+        joinValue = { genres: genresFilter };
+      }
+
       const events = await getRepository(Event).find({
+        join: {
+          alias: 'event',
+          innerJoin: {
+            groups: 'event.groups',
+            genres: 'event.genres',
+          },
+        },
+        where: (qb) => {
+          if (joinQuery == '') {
+            qb.where(queryFilter).andWhere({});
+          } else {
+            qb.where(queryFilter).andWhere(joinQuery, joinValue);
+          }
+        },
         relations: ['genres', 'groups', 'admins'],
       });
 
       return res.status(200).json(events);
     } catch (err) {
+      console.log(err);
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
