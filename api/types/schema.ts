@@ -712,7 +712,7 @@ export interface operations {
       /** The group has been created */
       201: {
         content: {
-          "application/json": string;
+          "application/json": components["schemas"]["group"];
         };
       };
       /** The group already exist */

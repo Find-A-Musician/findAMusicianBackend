@@ -185,6 +185,7 @@ router.post(
         adress,
         admins: [admin],
         genres: evtGenres,
+        groups: [],
       });
 
       await eventRepository.save(newEvent);

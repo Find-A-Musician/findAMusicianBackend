@@ -148,7 +148,7 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'string',
+              $ref: '#/components/schemas/group',
             },
           },
         },
