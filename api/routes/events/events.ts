@@ -191,8 +191,8 @@ router.post(
 
       return res.status(201).json(newEvent);
     } catch (err) {
-      if (err.constraint === 'events_name_key') {
-        return res.status(401).json({ msg: 'E_EVENT_NAME_ALREADY_TAKEN' });
+      if (err.code == 23505) {
+        return res.status(409).json({ msg: 'E_EVENT_ALREADY_EXIST' });
       } else {
         return res
           .status(500)

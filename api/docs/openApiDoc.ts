@@ -223,8 +223,8 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '401': {
-            description: 'Error intern server',
+          '409': {
+            description: 'The user already exist',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -562,8 +562,8 @@ const openApiDocs: OpenAPIV3.Document = {
               example: {
                 name: 'Insane event',
                 description: 'An insane event',
-                startDate: '2022-03-14T15:41:07.784Z',
-                endDate: '2022-03-14T15:41:07.784Z',
+                startDate: '2022-03-14T15:46:17.124Z',
+                endDate: '2022-03-14T15:46:17.124Z',
                 adress: 'somewhere',
                 genres: [{ id: 'id', name: 'rock' }],
               },
@@ -579,8 +579,8 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '401': {
-            description: 'Event already created',
+          '409': {
+            description: 'The Event already exist',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -988,8 +988,8 @@ const openApiDocs: OpenAPIV3.Document = {
             description: 'The group has been created',
             content: { 'application/json': { schema: { type: 'string' } } },
           },
-          '422': {
-            description: 'An error in the request body',
+          '409': {
+            description: 'The group already exist',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },

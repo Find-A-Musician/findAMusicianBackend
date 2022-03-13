@@ -252,8 +252,8 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      401: {
+      /** The user already exist */
+      409: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -473,8 +473,8 @@ export interface operations {
           "application/json": components["schemas"]["event"];
         };
       };
-      /** Event already created */
-      401: {
+      /** The Event already exist */
+      409: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -715,8 +715,8 @@ export interface operations {
           "application/json": string;
         };
       };
-      /** An error in the request body */
-      422: {
+      /** The group already exist */
+      409: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };

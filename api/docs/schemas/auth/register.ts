@@ -104,8 +104,8 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      401: {
-        description: 'Error intern server',
+      409: {
+        description: 'The user already exist',
         content: {
           'application/json': {
             schema: {

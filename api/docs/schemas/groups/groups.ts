@@ -153,8 +153,8 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      422: {
-        description: 'An error in the request body',
+      409: {
+        description: 'The group already exist',
         content: {
           'application/json': {
             schema: {

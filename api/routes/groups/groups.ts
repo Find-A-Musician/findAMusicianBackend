@@ -204,6 +204,10 @@ router.post(
 
       return res.sendStatus(201);
     } catch (err) {
+      if (err.code == 23505) {
+        res.status(409).json({ msg: 'E_GROUP_ALREADY_EXIST' });
+      }
+
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
