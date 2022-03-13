@@ -22,6 +22,9 @@ export class Musician {
   @Column('varchar', { unique: true, length: 255 })
   email: string;
 
+  @Column('text', { nullable: true })
+  description: string;
+
   @Column('varchar')
   givenName: string;
 

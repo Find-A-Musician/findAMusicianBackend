@@ -46,6 +46,8 @@ export default async function reset(): Promise<void> {
     // mdp : romain123
     const romain = musRep.create({
       email: 'romain.guar91@gmail.com',
+      description:
+        'Je suis romain guarinoni. Un vrai boute-en-train ! Je code et je fais de la musique. Dans ces 2 domaines je suis très problement bien meilleur que toi désolé fréro le sang.',
       givenName: 'Romain',
       familyName: 'Guarinoni',
       promotion: 'M1',
