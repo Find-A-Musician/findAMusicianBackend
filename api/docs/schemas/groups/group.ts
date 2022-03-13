@@ -24,31 +24,7 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'object',
-              required: [
-                'id',
-                'name',
-                'description',
-                'location',
-                'genres',
-                'members',
-              ],
-              properties: {
-                id: { type: 'string' },
-                name: { type: 'string' },
-                description: { type: 'string' },
-                location: { type: 'string', enum: ['Douai', 'Lille'] },
-                genres: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/genre' },
-                },
-                members: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/components/schemas/groupMember',
-                  },
-                },
-              },
+              $ref: '#/components/schemas/group',
             },
           },
         },

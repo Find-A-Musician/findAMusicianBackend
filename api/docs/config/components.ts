@@ -47,11 +47,57 @@ const components: OpenAPIV3.Document['components'] = {
         },
       },
     },
+    musicianMinimized: {
+      type: 'object',
+      required: [
+        'email',
+        'id',
+        'givenName',
+        'familyName',
+        'promotion',
+        'location',
+      ],
+      properties: {
+        id: { type: 'string' },
+        email: {
+          type: 'string',
+          format: 'email',
+        },
+        givenName: { type: 'string' },
+        familyName: { type: 'string' },
+        phone: { type: 'string', nullable: true },
+        facebook_url: { type: 'string', nullable: true },
+        twitter_url: { type: 'string', nullable: true },
+        instagram_url: { type: 'string', nullable: true },
+        promotion: {
+          type: 'string',
+          enum: ['L1', 'L2', 'L3', 'M1', 'M2'],
+        },
+        location: { type: 'string', enum: ['Douai', 'Lille'] },
+      },
+    },
     group: {
+      type: 'object',
+      required: ['name', 'description', 'location', 'genres', 'id', 'members'],
+      properties: {
+        id: { type: 'string' },
+        name: { type: 'string' },
+        description: { type: 'string' },
+        location: { type: 'string', enum: ['Douai', 'Lille'] },
+        genres: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/genre' },
+        },
+        members: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/groupMember' },
+        },
+      },
+    },
+    groupDescription: {
       type: 'object',
       required: ['name', 'description', 'location', 'genres'],
       properties: {
-        id: { type: 'string' },
         name: { type: 'string' },
         description: { type: 'string' },
         location: { type: 'string', enum: ['Douai', 'Lille'] },
@@ -64,7 +110,7 @@ const components: OpenAPIV3.Document['components'] = {
     groupMember: {
       type: 'object',
       properties: {
-        musician: { $ref: '#/components/schemas/musician' },
+        musician: { $ref: '#/components/schemas/musicianMinimized' },
         instruments: {
           type: 'array',
           items: { $ref: '#/components/schemas/instrument' },
@@ -120,7 +166,7 @@ const components: OpenAPIV3.Document['components'] = {
         },
         admins: {
           type: 'array',
-          items: { $ref: '#/components/schemas/musician' },
+          items: { $ref: '#/components/schemas/musicianMinimized' },
         },
       },
     },

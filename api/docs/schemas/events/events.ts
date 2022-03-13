@@ -114,8 +114,8 @@ const schema: HandlerDefinition = {
           example: {
             name: 'Insane event',
             description: 'An insane event',
-            startDate: new Date(Date.now()),
-            endDate: new Date(Date.now()),
+            startDate: '2022-03-13T16:00:28.015Z',
+            endDate: '2022-03-13T16:00:28.015Z',
             adress: 'somewhere',
             genres: [
               {
