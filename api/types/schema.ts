@@ -18,6 +18,10 @@ export interface paths {
   "/register": {
     post: operations["register"];
   };
+  "/events/admins": {
+    /** Add a musician as an admin of an event */
+    post: operations["addEventAdmin"];
+  };
   "/events/{eventId}": {
     /** Get an event by his Id */
     get: operations["getEventById"];
@@ -277,6 +281,43 @@ export interface operations {
           instruments: components["schemas"]["instrument"][];
           genres: components["schemas"]["genre"][];
           password: string;
+        };
+      };
+    };
+  };
+  /** Add a musician as an admin of an event */
+  addEventAdmin: {
+    responses: {
+      /** The musician has been added to the event's admins */
+      200: {
+        content: {
+          "application/json": components["schemas"]["event"];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The event or the musician does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          eventId: string;
+          musicianId: string;
         };
       };
     };

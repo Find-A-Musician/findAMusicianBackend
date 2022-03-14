@@ -16,6 +16,7 @@ import {
   LessThanOrEqual,
   MoreThanOrEqual,
 } from 'typeorm';
+import eventsAdminsRouter from './admins';
 import { Event, Genre, Musician } from '../../entity';
 
 const router = express.Router();
@@ -25,6 +26,8 @@ type PostEvents = operations['postEvents'];
 type GetEventsById = operations['getEventById'];
 type PatchEventsById = operations['patchEventById'];
 type DeleteEventsById = operations['deleteEventById'];
+
+router.use('/admins', eventsAdminsRouter);
 
 router.get(
   '/',
