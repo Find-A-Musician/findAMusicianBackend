@@ -1,9 +1,23 @@
 import path from 'path';
 import fs from 'fs';
-import docs from '../docs/config/index';
 import openApiTS, { SchemaObject } from 'openapi-typescript';
+import info from '../docs/config/basicInfo';
+import servers from '../docs/config/servers';
+import components from '../docs/config/components';
+import tags from '../docs/config/tags';
+import security from '../docs/config/security';
+import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 import parserTypescript from 'prettier/parser-typescript.js';
 import prettier from 'prettier';
+
+const docs: Omit<OpenAPIV3.Document, 'paths'> = {
+  openapi: '3.0.1',
+  info,
+  servers,
+  security,
+  components,
+  tags,
+};
 
 let prettierOptions: prettier.Options = {
   parser: 'typescript',
@@ -24,10 +38,8 @@ prettierOptions = {
   plugins: [...(prettierOptions.plugins as prettier.Plugin[])],
 };
 
-export default async function createAPIType(): Promise<void> {
-  const schemaObject: {
-    [key: string]: string;
-  } = {};
+(async function () {
+  const schemaObject = {};
 
   try {
     console.log('🔧 building the paths object...');
@@ -53,22 +65,14 @@ export default async function createAPIType(): Promise<void> {
         });
     }
 
-    console.log('📝 Formatting the schema');
-    const schemaObjectFormatted = prettier.format(
-      "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const paths:OpenAPIV3.Document['paths'] = " +
-        JSON.stringify(schemaObject) +
-        '; export default paths',
-      prettierOptions,
-    );
-
-    fs.writeFileSync(
-      path.join(__dirname, '..', 'docs', 'config', 'paths.ts'),
-      schemaObjectFormatted,
-    );
+    const openApiDefinition: OpenAPIV3.Document = {
+      paths: schemaObject,
+      ...docs,
+    };
 
     console.log('🚧 Creating the typescript definitions...');
     const types = await openApiTS(
-      docs as unknown as Record<string, SchemaObject>,
+      openApiDefinition as unknown as Record<string, SchemaObject>,
       {
         formatter(node: SchemaObject) {
           if (node.format === 'date-time') {
@@ -78,6 +82,19 @@ export default async function createAPIType(): Promise<void> {
       },
     );
 
+    console.log('📝 Writing the docs');
+    const openApiDoc = prettier.format(
+      "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const openApiDocs:OpenAPIV3.Document = " +
+        JSON.stringify(openApiDefinition) +
+        '; export default openApiDocs',
+      prettierOptions,
+    );
+
+    fs.writeFileSync(
+      path.join(__dirname, '..', 'docs', 'openApiDoc.ts'),
+      openApiDoc,
+    );
+
     fs.writeFileSync(path.join(__dirname, '..', 'types', 'schema.ts'), types);
 
     console.log('✅ API Types have been generated ! ');
@@ -85,7 +102,7 @@ export default async function createAPIType(): Promise<void> {
     console.log('❌ Generate types failed');
     throw new Error(err);
   }
-}
+})();
 
 /**
  *
