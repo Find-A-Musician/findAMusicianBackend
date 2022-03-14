@@ -107,15 +107,35 @@ export interface components {
       instruments: components["schemas"]["instrument"][];
       genres: components["schemas"]["genre"][];
     };
+    musicianMinimized: {
+      id: string;
+      /** Format: email */
+      email: string;
+      givenName: string;
+      familyName: string;
+      phone?: string | null;
+      facebook_url?: string | null;
+      twitter_url?: string | null;
+      instagram_url?: string | null;
+      promotion: "L1" | "L2" | "L3" | "M1" | "M2";
+      location: "Douai" | "Lille";
+    };
     group: {
-      id?: string;
+      id: string;
+      name: string;
+      description: string;
+      location: "Douai" | "Lille";
+      genres: components["schemas"]["genre"][];
+      members: components["schemas"]["groupMember"][];
+    };
+    groupDescription: {
       name: string;
       description: string;
       location: "Douai" | "Lille";
       genres: components["schemas"]["genre"][];
     };
     groupMember: {
-      musician?: components["schemas"]["musician"];
+      musician?: components["schemas"]["musicianMinimized"];
       instruments?: components["schemas"]["instrument"][];
       membership?: "admin" | "member" | "declined" | "pending";
     };
@@ -137,8 +157,8 @@ export interface components {
       endDate: Date;
       adress: string;
       genres: components["schemas"]["genre"][];
-      groups: components["schemas"]["group"][];
-      admins: components["schemas"]["musician"][];
+      groups: components["schemas"]["groupDescription"][];
+      admins: components["schemas"]["musicianMinimized"][];
     };
     token: {
       accessToken: string;
@@ -531,14 +551,7 @@ export interface operations {
       /** The group information */
       200: {
         content: {
-          "application/json": {
-            id: string;
-            name: string;
-            description: string;
-            location: "Douai" | "Lille";
-            genres: components["schemas"]["genre"][];
-            members: components["schemas"]["groupMember"][];
-          };
+          "application/json": components["schemas"]["group"];
         };
       };
       /** The group does not exist */
@@ -688,14 +701,7 @@ export interface operations {
       /** An array of groups */
       200: {
         content: {
-          "application/json": {
-            id: string;
-            name: string;
-            description: string;
-            location: "Douai" | "Lille";
-            genres: components["schemas"]["genre"][];
-            members: components["schemas"]["groupMember"][];
-          }[];
+          "application/json": components["schemas"]["group"][];
         };
       };
       /** Error intern server */
@@ -731,7 +737,7 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          group: components["schemas"]["group"];
+          group: components["schemas"]["groupDescription"];
           instruments: components["schemas"]["instrument"][];
         };
       };

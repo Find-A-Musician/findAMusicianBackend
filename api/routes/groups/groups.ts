@@ -110,13 +110,7 @@ router.get(
     try {
       const group = await getRepository(Groups).findOne({
         where: { id: req.params.groupId },
-        relations: [
-          'members',
-          'genres',
-          'members.musician',
-          'members.musician.instruments',
-          'members.musician.genres',
-        ],
+        relations: ['members', 'genres', 'members.musician'],
       });
 
       if (!group) {
