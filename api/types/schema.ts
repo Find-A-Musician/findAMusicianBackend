@@ -168,6 +168,12 @@ export interface components {
       msg: string;
       stack?: string;
     };
+    _links: {
+      self: string;
+      first: string;
+      previous?: string;
+      next?: string;
+    };
   };
 }
 
@@ -861,13 +867,24 @@ export interface operations {
         location?: string[];
         /** The query filter for promotion */
         promotion?: string[];
+        /** The start index of the query */
+        start?: number;
+        /** The number of musicians returned */
+        limit?: number;
       };
     };
     responses: {
       /** A list of all the musicians informations */
       200: {
         content: {
-          "application/json": components["schemas"]["musician"][];
+          "application/json": {
+            _links: components["schemas"]["_links"];
+            results: components["schemas"]["musician"][];
+            size: number;
+            limit: number;
+            start: number;
+            total?: number;
+          };
         };
       };
       /** Error intern server */
