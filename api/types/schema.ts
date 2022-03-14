@@ -92,10 +92,12 @@ export interface components {
       email: string;
       givenName: string;
       familyName: string;
+      description?: string | null;
       phone?: string | null;
       facebook_url?: string | null;
       twitter_url?: string | null;
       instagram_url?: string | null;
+      isLookingForGroups?: boolean;
       promotion: "L1" | "L2" | "L3" | "M1" | "M2";
       location: "Douai" | "Lille";
       instruments: components["schemas"]["instrument"][];

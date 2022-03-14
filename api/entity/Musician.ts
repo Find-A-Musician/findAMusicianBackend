@@ -58,6 +58,9 @@ export class Musician {
   @Column('text')
   password: string;
 
+  @Column('boolean', { default: false })
+  isLookingForGroups: boolean;
+
   @ManyToMany(() => Instrument, { onDelete: 'CASCADE' })
   @JoinTable()
   instruments: Instrument[];
