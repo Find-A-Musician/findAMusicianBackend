@@ -138,8 +138,8 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      401: {
-        description: 'Event already created',
+      409: {
+        description: 'The Event already exist',
         content: {
           'application/json': {
             schema: {

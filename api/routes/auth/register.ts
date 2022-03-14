@@ -42,10 +42,6 @@ router.post(
     const tokenRepository = getRepository(Token);
     const musicianRepository = getRepository(Musician);
 
-    if (await getRepository(Musician).findOne({ email: email })) {
-      return res.status(401).json({ msg: 'E_USER_ALREADY_EXIST' });
-    }
-
     try {
       hash = await bcrypt.hash(password, saltRound);
     } catch (err) {
@@ -111,6 +107,10 @@ router.post(
         musician: newMusician,
       });
     } catch (err) {
+      if (err.code == 23505) {
+        return res.status(409).json({ msg: 'E_USER_ALREADY_EXIST' });
+      }
+
       return res.status(500).json({
         msg: 'E_SQL_ERROR',
         stack: JSON.stringify(err),
