@@ -831,7 +831,9 @@ export interface operations {
       /** The group information */
       200: {
         content: {
-          "application/json": components["schemas"]["musician"];
+          "application/json": components["schemas"]["musician"] & {
+            groups: components["schemas"]["groupDescription"][];
+          };
         };
       };
       /** The group does not exist */
