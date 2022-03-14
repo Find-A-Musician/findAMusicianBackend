@@ -202,7 +202,7 @@ router.post(
 
       await musicianGroupRepository.save(musicianGroup);
 
-      return res.sendStatus(201);
+      return res.status(201).json({ members: [musician], ...newGroup });
     } catch (err) {
       if (err.code == 23505) {
         res.status(409).json({ msg: 'E_GROUP_ALREADY_EXIST' });

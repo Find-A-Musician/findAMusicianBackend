@@ -562,8 +562,8 @@ const openApiDocs: OpenAPIV3.Document = {
               example: {
                 name: 'Insane event',
                 description: 'An insane event',
-                startDate: '2022-03-14T15:46:17.124Z',
-                endDate: '2022-03-14T15:46:17.124Z',
+                startDate: '2022-03-14T15:47:59.269Z',
+                endDate: '2022-03-14T15:47:59.269Z',
                 adress: 'somewhere',
                 genres: [{ id: 'id', name: 'rock' }],
               },
@@ -986,7 +986,11 @@ const openApiDocs: OpenAPIV3.Document = {
         responses: {
           '201': {
             description: 'The group has been created',
-            content: { 'application/json': { schema: { type: 'string' } } },
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/group' },
+              },
+            },
           },
           '409': {
             description: 'The group already exist',
