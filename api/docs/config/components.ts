@@ -27,6 +27,7 @@ const components: OpenAPIV3.Document['components'] = {
         facebook_url: { type: 'string', nullable: true },
         twitter_url: { type: 'string', nullable: true },
         instagram_url: { type: 'string', nullable: true },
+        isLookingForGroups: { type: 'boolean' },
         promotion: {
           type: 'string',
           enum: ['L1', 'L2', 'L3', 'M1', 'M2'],

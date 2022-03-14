@@ -497,9 +497,8 @@ const paths: OpenAPIV3.Document['paths'] = {
             example: {
               name: 'Insane event',
               description: 'An insane event',
-
-              startDate: '2022-03-13T17:09:41.957Z',
-              endDate: '2022-03-13T17:09:41.957Z',
+              startDate: '2022-03-14T12:14:57.914Z',
+              endDate: '2022-03-14T12:14:57.914Z',
               adress: 'somewhere',
               genres: [{ id: 'id', name: 'rock' }],
             },
