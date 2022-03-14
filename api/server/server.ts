@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import docs from '../docs/config/index';
+import openApiDocs from '../docs/openApiDoc';
 import authenticateToken from '../auth/authenticateToken';
 import * as OpenApiValidator from 'express-openapi-validator';
 // router import
@@ -43,11 +43,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // serve the API documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(docs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocs));
 
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: docs,
+    apiSpec: openApiDocs,
     validateRequests: true,
     validateResponses: false,
   }),
