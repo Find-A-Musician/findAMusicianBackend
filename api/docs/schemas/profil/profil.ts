@@ -13,7 +13,22 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/musician',
+              type: 'object',
+              allOf: [
+                { $ref: '#/components/schemas/musician' },
+                {
+                  type: 'object',
+                  required: ['groups'],
+                  properties: {
+                    groups: {
+                      type: 'array',
+                      items: {
+                        $ref: '#/components/schemas/groupDescription',
+                      },
+                    },
+                  },
+                },
+              ],
             },
           },
         },

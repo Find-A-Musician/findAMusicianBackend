@@ -1234,7 +1234,24 @@ const openApiDocs: OpenAPIV3.Document = {
             description: 'The user profil information',
             content: {
               'application/json': {
-                schema: { $ref: '#/components/schemas/musician' },
+                schema: {
+                  type: 'object',
+                  allOf: [
+                    { $ref: '#/components/schemas/musician' },
+                    {
+                      type: 'object',
+                      required: ['groups'],
+                      properties: {
+                        groups: {
+                          type: 'array',
+                          items: {
+                            $ref: '#/components/schemas/groupDescription',
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
               },
             },
           },

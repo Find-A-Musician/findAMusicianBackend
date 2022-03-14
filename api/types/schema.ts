@@ -886,7 +886,9 @@ export interface operations {
       /** The user profil information */
       200: {
         content: {
-          "application/json": components["schemas"]["musician"];
+          "application/json": components["schemas"]["musician"] & {
+            groups: components["schemas"]["groupDescription"][];
+          };
         };
       };
       /** Error intern server */
