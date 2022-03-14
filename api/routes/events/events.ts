@@ -76,6 +76,8 @@ router.get(
           endDate: LessThanOrEqual(endDateFilter),
           ...commonFilter,
         });
+      } else {
+        queryFilter.push(commonFilter);
       }
 
       let joinQuery = '';
@@ -100,7 +102,7 @@ router.get(
             qb.where(queryFilter).andWhere(joinQuery, joinValue);
           }
         },
-        relations: ['genres', 'groups', 'admins'],
+        relations: ['genres', 'groups', 'admins', 'groups.genres'],
       });
 
       return res.status(200).json(events);
