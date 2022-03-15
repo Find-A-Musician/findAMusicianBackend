@@ -34,11 +34,11 @@ router.get(
     try {
       // Pagination
       const start =
-        req.query.start !== undefined || req.query.start !== null
+        req.query.start !== undefined && req.query.start !== null
           ? req.query.start
           : 0;
       const limit =
-        req.query.limit !== undefined || req.query.limit !== null
+        req.query.limit !== undefined && req.query.limit !== null
           ? req.query.limit
           : 20;
       const baseURL = req.protocol + '://' + req.headers.host + '/';
