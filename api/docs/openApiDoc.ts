@@ -503,6 +503,20 @@ const openApiDocs: OpenAPIV3.Document = {
             },
             description: 'The query filter for the event endDate',
           },
+          {
+            in: 'query',
+            name: 'start',
+            required: false,
+            schema: { type: 'number', example: 0 },
+            description: 'The start index of the query',
+          },
+          {
+            in: 'query',
+            name: 'limit',
+            required: false,
+            schema: { type: 'number', example: 20 },
+            description: 'The number of events returned',
+          },
         ],
         security: [{ BearerAuth: [] }],
         responses: {
@@ -511,8 +525,26 @@ const openApiDocs: OpenAPIV3.Document = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/event' },
+                  type: 'object',
+                  required: [
+                    'results',
+                    '_links',
+                    'size',
+                    'limit',
+                    'start',
+                    'total',
+                  ],
+                  properties: {
+                    _links: { $ref: '#/components/schemas/_links' },
+                    results: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/event' },
+                    },
+                    size: { type: 'number' },
+                    limit: { type: 'number' },
+                    total: { type: 'number' },
+                    start: { type: 'number' },
+                  },
                 },
               },
             },
@@ -870,6 +902,20 @@ const openApiDocs: OpenAPIV3.Document = {
             },
             description: 'The query filter for group genre',
           },
+          {
+            in: 'query',
+            name: 'start',
+            required: false,
+            schema: { type: 'number', example: 0 },
+            description: 'The start index of the query',
+          },
+          {
+            in: 'query',
+            name: 'limit',
+            required: false,
+            schema: { type: 'number', example: 20 },
+            description: 'The number of groups returned',
+          },
         ],
         responses: {
           '200': {
@@ -877,8 +923,26 @@ const openApiDocs: OpenAPIV3.Document = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/group' },
+                  type: 'object',
+                  required: [
+                    'results',
+                    '_links',
+                    'size',
+                    'limit',
+                    'start',
+                    'total',
+                  ],
+                  properties: {
+                    _links: { $ref: '#/components/schemas/_links' },
+                    results: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/group' },
+                    },
+                    size: { type: 'number' },
+                    limit: { type: 'number' },
+                    total: { type: 'number' },
+                    start: { type: 'number' },
+                  },
                 },
               },
             },
@@ -1182,6 +1246,20 @@ const openApiDocs: OpenAPIV3.Document = {
             },
             description: 'The query filter for promotion',
           },
+          {
+            in: 'query',
+            name: 'start',
+            required: false,
+            schema: { type: 'number', example: 0 },
+            description: 'The start index of the query',
+          },
+          {
+            in: 'query',
+            name: 'limit',
+            required: false,
+            schema: { type: 'number', example: 20 },
+            description: 'The number of musicians returned',
+          },
         ],
         responses: {
           '200': {
@@ -1189,8 +1267,26 @@ const openApiDocs: OpenAPIV3.Document = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/musician' },
+                  type: 'object',
+                  required: [
+                    'results',
+                    '_links',
+                    'size',
+                    'limit',
+                    'start',
+                    'total',
+                  ],
+                  properties: {
+                    _links: { $ref: '#/components/schemas/_links' },
+                    results: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/musician' },
+                    },
+                    size: { type: 'number' },
+                    limit: { type: 'number' },
+                    start: { type: 'number' },
+                    total: { type: 'number' },
+                  },
                 },
               },
             },
@@ -1528,6 +1624,16 @@ const openApiDocs: OpenAPIV3.Document = {
         type: 'object',
         required: ['msg'],
         properties: { msg: { type: 'string' }, stack: { type: 'string' } },
+      },
+      _links: {
+        type: 'object',
+        required: ['self', 'first'],
+        properties: {
+          self: { type: 'string' },
+          first: { type: 'string' },
+          previous: { type: 'string' },
+          next: { type: 'string' },
+        },
       },
     },
     securitySchemes: {

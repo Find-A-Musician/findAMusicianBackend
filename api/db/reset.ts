@@ -80,13 +80,40 @@ export default async function reset(): Promise<void> {
     });
 
     const periphery = groRep.create({
-      name: 'periphery',
+      name: 'Periphery',
       description: 'trop trop cool',
       genres: [metal, rock],
       location: 'Lille',
     });
 
-    await groRep.save([spiritbox, periphery]);
+    const slipknot = groRep.create({
+      name: 'Slipknot',
+      description: 'Du metak bien enervé',
+      genres: [metal],
+      location: 'Douai',
+    });
+
+    const allThatRemains = groRep.create({
+      name: 'All that Remains',
+      description: "metal core à l'ancienne",
+      genres: [metal],
+      location: 'Lille',
+    });
+
+    const jazzGroup = groRep.create({
+      name: 'jazz band',
+      description: 'du jazz',
+      genres: [jazz],
+      location: 'Douai',
+    });
+
+    await groRep.save([
+      spiritbox,
+      periphery,
+      slipknot,
+      allThatRemains,
+      jazzGroup,
+    ]);
     console.log('🎙️ groups saved');
 
     const spiritboxMusician1 = musGrouRep.create({
@@ -110,10 +137,34 @@ export default async function reset(): Promise<void> {
       instruments: [guitare, piano],
     });
 
+    const slipknotMusician = musGrouRep.create({
+      musician: romain,
+      group: slipknot,
+      membership: 'member',
+      instruments: [guitare],
+    });
+
+    const allMusician = musGrouRep.create({
+      musician: romain,
+      group: allThatRemains,
+      membership: 'member',
+      instruments: [guitare],
+    });
+
+    const jazzMusician = musGrouRep.create({
+      musician: dorian,
+      group: jazzGroup,
+      membership: 'member',
+      instruments: [guitare],
+    });
+
     await musGrouRep.save([
       spiritboxMusician1,
       spiritboxMusician2,
       peripheryMusician,
+      slipknotMusician,
+      allMusician,
+      jazzMusician,
     ]);
 
     console.log('👨‍🎤 group musicians saved');

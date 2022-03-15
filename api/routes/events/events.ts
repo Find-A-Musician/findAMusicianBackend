@@ -41,6 +41,20 @@ router.get(
     res: core.Response<getResponsesBody<GetEvents>, {}, getHTTPCode<GetEvents>>,
   ) => {
     try {
+      // Pagination
+      const start =
+        req.query.start !== undefined && req.query.start !== null
+          ? req.query.start
+          : 0;
+      const limit =
+        req.query.limit !== undefined && req.query.limit !== null
+          ? req.query.limit
+          : 20;
+      const baseURL = req.protocol + '://' + req.headers.host + '/';
+      const reqUrl = new URL(req.originalUrl, baseURL);
+      const url = reqUrl.origin + reqUrl.pathname;
+
+      // Filters
       const nameFilter = req.query.name ? `%${req.query.name}%` : null;
       const genresFilter = req.query.genres;
       const startDateFilter = req.query.startdate;
@@ -87,7 +101,7 @@ router.get(
         joinValue = { genres: genresFilter };
       }
 
-      const events = await getRepository(Event).find({
+      const [events, count] = await getRepository(Event).findAndCount({
         join: {
           alias: 'event',
           innerJoin: {
@@ -103,9 +117,42 @@ router.get(
           }
         },
         relations: ['genres', 'groups', 'admins', 'groups.genres'],
+        skip: start,
+        take: limit,
       });
 
-      return res.status(200).json(events);
+      const _links: Pick<
+        Extract<getResponsesBody<GetEvents>, { limit: number }>,
+        '_links'
+      > = {
+        _links: {
+          self: url,
+          first: `${url}?start=0&limit=${limit}`,
+        },
+      };
+
+      if (start != 0) {
+        if (start < limit) {
+          _links._links.previous = `${url}?start=0&limit=${limit}`;
+        } else {
+          _links._links.previous = `${url}?start=${
+            start - limit
+          }&limit=${limit}`;
+        }
+      }
+
+      if (start + limit < count) {
+        _links._links.next = `${url}?start=${start + limit}&limit=${limit}`;
+      }
+
+      return res.status(200).json({
+        results: events,
+        size: events.length,
+        limit,
+        start,
+        total: count,
+        ..._links,
+      });
     } catch (err) {
       console.log(err);
       return res

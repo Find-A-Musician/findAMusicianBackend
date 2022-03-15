@@ -70,6 +70,26 @@ const schema: HandlerDefinition = {
         },
         description: 'The query filter for promotion',
       },
+      {
+        in: 'query',
+        name: 'start',
+        required: false,
+        schema: {
+          type: 'number',
+          example: 0,
+        },
+        description: 'The start index of the query',
+      },
+      {
+        in: 'query',
+        name: 'limit',
+        required: false,
+        schema: {
+          type: 'number',
+          example: 20,
+        },
+        description: 'The number of musicians returned',
+      },
     ],
     responses: {
       200: {
@@ -77,9 +97,29 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'array',
-              items: {
-                $ref: '#/components/schemas/musician',
+              type: 'object',
+              required: [
+                'results',
+                '_links',
+                'size',
+                'limit',
+                'start',
+                'total',
+              ],
+              properties: {
+                _links: {
+                  $ref: '#/components/schemas/_links',
+                },
+                results: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/musician',
+                  },
+                },
+                size: { type: 'number' },
+                limit: { type: 'number' },
+                start: { type: 'number' },
+                total: { type: 'number' },
               },
             },
           },

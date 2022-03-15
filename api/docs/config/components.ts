@@ -186,6 +186,16 @@ const components: OpenAPIV3.Document['components'] = {
         stack: { type: 'string' },
       },
     },
+    _links: {
+      type: 'object',
+      required: ['self', 'first'],
+      properties: {
+        self: { type: 'string' },
+        first: { type: 'string' },
+        previous: { type: 'string' },
+        next: { type: 'string' },
+      },
+    },
   },
   securitySchemes: {
     BearerAuth: {

@@ -168,6 +168,12 @@ export interface components {
       msg: string;
       stack?: string;
     };
+    _links: {
+      self: string;
+      first: string;
+      previous?: string;
+      next?: string;
+    };
   };
 }
 
@@ -467,13 +473,24 @@ export interface operations {
         startdate?: Date;
         /** The query filter for the event endDate */
         enddate?: Date;
+        /** The start index of the query */
+        start?: number;
+        /** The number of events returned */
+        limit?: number;
       };
     };
     responses: {
       /** A list of all the events */
       200: {
         content: {
-          "application/json": components["schemas"]["event"][];
+          "application/json": {
+            _links: components["schemas"]["_links"];
+            results: components["schemas"]["event"][];
+            size: number;
+            limit: number;
+            total: number;
+            start: number;
+          };
         };
       };
       /** Error intern server */
@@ -695,13 +712,24 @@ export interface operations {
         location?: string[];
         /** The query filter for group genre */
         genres?: string[];
+        /** The start index of the query */
+        start?: number;
+        /** The number of groups returned */
+        limit?: number;
       };
     };
     responses: {
       /** An array of groups */
       200: {
         content: {
-          "application/json": components["schemas"]["group"][];
+          "application/json": {
+            _links: components["schemas"]["_links"];
+            results: components["schemas"]["group"][];
+            size: number;
+            limit: number;
+            total: number;
+            start: number;
+          };
         };
       };
       /** Error intern server */
@@ -861,13 +889,24 @@ export interface operations {
         location?: string[];
         /** The query filter for promotion */
         promotion?: string[];
+        /** The start index of the query */
+        start?: number;
+        /** The number of musicians returned */
+        limit?: number;
       };
     };
     responses: {
       /** A list of all the musicians informations */
       200: {
         content: {
-          "application/json": components["schemas"]["musician"][];
+          "application/json": {
+            _links: components["schemas"]["_links"];
+            results: components["schemas"]["musician"][];
+            size: number;
+            limit: number;
+            start: number;
+            total: number;
+          };
         };
       };
       /** Error intern server */
