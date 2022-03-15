@@ -82,6 +82,10 @@ export interface paths {
     delete: operations["deleteProfil"];
     patch: operations["patchProfil"];
   };
+  "/profil/groups/{groupId}/leave": {
+    /** Leave a group */
+    post: operations["leaveGroup"];
+  };
 }
 
 export interface components {
@@ -978,6 +982,35 @@ export interface operations {
           location?: "Douai" | "Lille";
           genres?: components["schemas"]["genre"][];
           instruments?: components["schemas"]["instrument"][];
+        };
+      };
+    };
+  };
+  /** Leave a group */
+  leaveGroup: {
+    parameters: {
+      path: {
+        /** The id of the group to leave */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The user have leaved the group */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** This user is not in this group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };

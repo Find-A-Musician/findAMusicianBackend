@@ -8,7 +8,7 @@ const schema: HandlerDefinition = {
     tags: ['profil'],
     security: [{ BearerAuth: [] }],
     responses: {
-      '200': {
+      200: {
         description: 'The user profil information',
         content: {
           'application/json': {
