@@ -1,8 +1,8 @@
 import express from 'express';
-import { register } from '../../controllers/auth';
+import { getGenres } from '../../controllers/genres/genres';
 
 const router = express.Router();
 
-router.post('/', register);
+router.get('/', getGenres);
 
 export default router;

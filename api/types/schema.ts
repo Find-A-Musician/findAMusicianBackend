@@ -82,10 +82,6 @@ export interface paths {
     delete: operations["deleteProfil"];
     patch: operations["patchProfil"];
   };
-  "/test": {
-    /** A simple get route for testing */
-    get: operations["test"];
-  };
 }
 
 export interface components {
@@ -982,37 +978,6 @@ export interface operations {
           location?: "Douai" | "Lille";
           genres?: components["schemas"]["genre"][];
           instruments?: components["schemas"]["instrument"][];
-        };
-      };
-    };
-  };
-  /** A simple get route for testing */
-  test: {
-    responses: {
-      /** The test has been a success */
-      200: {
-        content: {
-          "application/json": {
-            userId: string;
-          };
-        };
-      };
-      /** Token not found */
-      401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Invalid token */
-      403: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
         };
       };
     };
