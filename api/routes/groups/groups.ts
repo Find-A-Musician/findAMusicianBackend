@@ -21,6 +21,7 @@ import {
   Musician,
   MusicianGroup,
   Genre,
+  Event,
   Instrument,
 } from '../../entity';
 import type core from 'express-serve-static-core';
@@ -31,6 +32,7 @@ type GetGroupsById = operations['getGroupsById'];
 type PostGroups = operations['createGroup'];
 type PatchGroupsById = operations['patchGroupsById'];
 type DeleteGroupsById = operations['deleteGroupsById'];
+type joinEvent = operations['groupJoinEvent'];
 
 const router = express.Router();
 
@@ -88,6 +90,52 @@ router.get(
       return res
         .status(500)
         .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
+    }
+  },
+);
+
+router.patch(
+  '/joinEvent',
+  async (
+    req: Request<
+      {},
+      getResponsesBody<joinEvent>,
+      getRequestBody<joinEvent>,
+      {}
+    >,
+    res: core.Response<getResponsesBody<joinEvent>, {}, getHTTPCode<joinEvent>>,
+  ) => {
+    try {
+      const group = await getRepository(Groups).findOne({
+        where: { id: req.body.groupId },
+        relations: ['events'],
+      });
+
+      console.log(req.body.groupId);
+      console.log(req.body.eventId);
+
+      if (!group) {
+        return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
+      }
+
+      const newEvent = await getRepository(Event).findOne({
+        id: req.body.eventId,
+      });
+
+      if (!newEvent) {
+        return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
+      }
+
+      group.events.push(newEvent);
+
+      await getRepository(Groups).save(group);
+
+      return res.sendStatus(200);
+    } catch (err) {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
     }
   },
 );
@@ -322,12 +370,5 @@ router.delete(
     }
   },
 );
-
-router.post(
-  '/joinEvent',
-  async (req,rep)=> {
-
-  })
-
 
 export default router;

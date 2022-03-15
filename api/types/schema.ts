@@ -48,6 +48,10 @@ export interface paths {
     /** Patch a group by it's Id */
     patch: operations["patchGroupsById"];
   };
+  "/groups/joinEvent": {
+    /** A group joins an event */
+    patch: operations["groupJoinEvent"];
+  };
   "/groups/invitation/response": {
     /** Respond to a group invitation */
     post: operations["responseGroupInvitation"];
@@ -661,6 +665,37 @@ export interface operations {
           description?: string;
           location?: "Douai" | "Lille";
           genres?: components["schemas"]["genre"][];
+        };
+      };
+    };
+  };
+  /** A group joins an event */
+  groupJoinEvent: {
+    responses: {
+      /** The group has joined the event */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The group or event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId?: string;
+          eventId?: string;
         };
       };
     };
