@@ -4,21 +4,22 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import openApiDocs from '../docs/openApiDoc';
 import authenticateToken from '../auth/authenticateToken';
+import RateLimit from 'express-rate-limit';
 import * as OpenApiValidator from 'express-openapi-validator';
+
 // router import
 import registerRouter from '../routes/auth/register';
 import loginRouter from '../routes/auth/login';
-import logoutRouter from '../routes/auth/logout';
-import musiciansRouter from '../routes/musicians/musicians';
-import instrumentRouter from '../routes/instruments/instruments';
-import genresRouter from '../routes/genres/genres';
 import refreshTokenRouter from '../routes/auth/refreshToken';
-import profilRouter from '../routes//profil/profil';
-import groupsRouter from '../routes/groups/groups';
-import eventsRoute from '../routes/events/events';
-import testRouter from '../routes/test/apiTest';
-import infoRouter from '../routes/info/info';
-import RateLimit from 'express-rate-limit';
+import logoutRouter from '../routes/auth/logout';
+
+import musiciansRouter from '../routes/musicians';
+import instrumentRouter from '../routes/instruments';
+import genresRouter from '../routes/genres';
+import profilRouter from '../routes/profil';
+import groupsRouter from '../routes/groups';
+import eventsRoute from '../routes/events';
+import infoRouter from '../routes/info';
 
 dotenv.config();
 
@@ -52,9 +53,6 @@ app.use(
     validateResponses: true,
   }),
 );
-
-// test route
-app.use('/test', authenticateToken, testRouter);
 
 // auth routes
 app.use('/register', registerRouter);

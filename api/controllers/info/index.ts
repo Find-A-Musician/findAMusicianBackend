@@ -1,0 +1,1 @@
+export { getInfo } from './info';
