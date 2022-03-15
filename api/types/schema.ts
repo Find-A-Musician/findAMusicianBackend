@@ -701,13 +701,24 @@ export interface operations {
         location?: string[];
         /** The query filter for group genre */
         genres?: string[];
+        /** The start index of the query */
+        start?: number;
+        /** The number of groups returned */
+        limit?: number;
       };
     };
     responses: {
       /** An array of groups */
       200: {
         content: {
-          "application/json": components["schemas"]["group"][];
+          "application/json": {
+            _links: components["schemas"]["_links"];
+            results: components["schemas"]["group"][];
+            size: number;
+            limit: number;
+            total: number;
+            start: number;
+          };
         };
       };
       /** Error intern server */
@@ -883,7 +894,7 @@ export interface operations {
             size: number;
             limit: number;
             start: number;
-            total?: number;
+            total: number;
           };
         };
       };

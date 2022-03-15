@@ -870,6 +870,20 @@ const openApiDocs: OpenAPIV3.Document = {
             },
             description: 'The query filter for group genre',
           },
+          {
+            in: 'query',
+            name: 'start',
+            required: false,
+            schema: { type: 'number', example: 0 },
+            description: 'The start index of the query',
+          },
+          {
+            in: 'query',
+            name: 'limit',
+            required: false,
+            schema: { type: 'number', example: 20 },
+            description: 'The number of groups returned',
+          },
         ],
         responses: {
           '200': {
@@ -877,8 +891,26 @@ const openApiDocs: OpenAPIV3.Document = {
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/group' },
+                  type: 'object',
+                  required: [
+                    'results',
+                    '_links',
+                    'size',
+                    'limit',
+                    'start',
+                    'total',
+                  ],
+                  properties: {
+                    _links: { $ref: '#/components/schemas/_links' },
+                    results: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/group' },
+                    },
+                    size: { type: 'number' },
+                    limit: { type: 'number' },
+                    total: { type: 'number' },
+                    start: { type: 'number' },
+                  },
                 },
               },
             },
@@ -1204,7 +1236,14 @@ const openApiDocs: OpenAPIV3.Document = {
               'application/json': {
                 schema: {
                   type: 'object',
-                  required: ['results', '_links', 'size', 'limit', 'start'],
+                  required: [
+                    'results',
+                    '_links',
+                    'size',
+                    'limit',
+                    'start',
+                    'total',
+                  ],
                   properties: {
                     _links: { $ref: '#/components/schemas/_links' },
                     results: {
