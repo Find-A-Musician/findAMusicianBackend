@@ -10,7 +10,7 @@ import type {
   getRequestQuery,
 } from '@typing';
 import { getRepository, ILike, FindOneOptions, Any } from 'typeorm';
-import { Musician } from '../../entity';
+import { Musician, MusicianGroup } from '../../entity';
 
 type GetMusician = operations['getMusicians'];
 type GetMusicianById = operations['getMusicianById'];
@@ -176,7 +176,23 @@ router.get(
         return res.status(404).json({ msg: 'E_UNFOUND_USER' });
       }
 
-      res.status(200).json(musician);
+      const musicianGroups = await getRepository(MusicianGroup).find({
+        where: [
+          {
+            musician,
+            membership: 'admin',
+          },
+          {
+            musician,
+            membership: 'member',
+          },
+        ],
+        relations: ['group', 'group.genres'],
+      });
+
+      const groups = musicianGroups.map(({ group }) => group);
+
+      return res.status(200).json({ ...musician, groups });
     } catch (err) {
       console.log(err);
       return res
