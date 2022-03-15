@@ -52,6 +52,26 @@ const schema: HandlerDefinition = {
         },
         description: 'The query filter for the event endDate',
       },
+      {
+        in: 'query',
+        name: 'start',
+        required: false,
+        schema: {
+          type: 'number',
+          example: 0,
+        },
+        description: 'The start index of the query',
+      },
+      {
+        in: 'query',
+        name: 'limit',
+        required: false,
+        schema: {
+          type: 'number',
+          example: 20,
+        },
+        description: 'The number of events returned',
+      },
     ],
     security: [{ BearerAuth: [] }],
     responses: {
@@ -60,8 +80,30 @@ const schema: HandlerDefinition = {
         content: {
           'application/json': {
             schema: {
-              type: 'array',
-              items: { $ref: '#/components/schemas/event' },
+              type: 'object',
+              required: [
+                'results',
+                '_links',
+                'size',
+                'limit',
+                'start',
+                'total',
+              ],
+              properties: {
+                _links: {
+                  $ref: '#/components/schemas/_links',
+                },
+                results: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/event',
+                  },
+                },
+                size: { type: 'number' },
+                limit: { type: 'number' },
+                total: { type: 'number' },
+                start: { type: 'number' },
+              },
             },
           },
         },

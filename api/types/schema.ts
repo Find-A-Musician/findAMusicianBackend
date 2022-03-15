@@ -473,13 +473,24 @@ export interface operations {
         startdate?: Date;
         /** The query filter for the event endDate */
         enddate?: Date;
+        /** The start index of the query */
+        start?: number;
+        /** The number of events returned */
+        limit?: number;
       };
     };
     responses: {
       /** A list of all the events */
       200: {
         content: {
-          "application/json": components["schemas"]["event"][];
+          "application/json": {
+            _links: components["schemas"]["_links"];
+            results: components["schemas"]["event"][];
+            size: number;
+            limit: number;
+            total: number;
+            start: number;
+          };
         };
       };
       /** Error intern server */
