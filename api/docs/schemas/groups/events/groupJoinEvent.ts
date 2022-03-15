@@ -1,8 +1,8 @@
-import { HandlerDefinition } from '../../../types/typing';
+import { HandlerDefinition } from '../../../../types/typing';
 
 const schema: HandlerDefinition = {
-  path: '/groups/joinEvent',
-  patch: {
+  path: '/groups/event/join',
+  post: {
     operationId: 'groupJoinEvent',
     description: 'A group joins an event',
     security: [{ BearerAuth: [] }],

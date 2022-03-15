@@ -40,6 +40,10 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/groups/event/join": {
+    /** A group joins an event */
+    post: operations["groupJoinEvent"];
+  };
   "/groups/{groupId}": {
     /** Get a group information by it's Id */
     get: operations["getGroupsById"];
@@ -48,19 +52,15 @@ export interface paths {
     /** Patch a group by it's Id */
     patch: operations["patchGroupsById"];
   };
-  "/groups/joinEvent": {
-    /** A group joins an event */
-    patch: operations["groupJoinEvent"];
-  };
-  "/groups/invitation/response": {
-    /** Respond to a group invitation */
-    post: operations["responseGroupInvitation"];
-  };
   "/groups": {
     /** Get a list of all the groups */
     get: operations["getGroups"];
     /** Create a new group */
     post: operations["createGroup"];
+  };
+  "/groups/invitation/response": {
+    /** Respond to a group invitation */
+    post: operations["responseGroupInvitation"];
   };
   "/groups/invitation/send": {
     /** Invite a musician in a group */
@@ -560,6 +560,37 @@ export interface operations {
       };
     };
   };
+  /** A group joins an event */
+  groupJoinEvent: {
+    responses: {
+      /** The group has joined the event */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The group or event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId?: string;
+          eventId?: string;
+        };
+      };
+    };
+  };
   /** Get a group information by it's Id */
   getGroupsById: {
     parameters: {
@@ -669,74 +700,6 @@ export interface operations {
       };
     };
   };
-  /** A group joins an event */
-  groupJoinEvent: {
-    responses: {
-      /** The group has joined the event */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The group or event does not exist */
-      404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          groupId?: string;
-          eventId?: string;
-        };
-      };
-    };
-  };
-  /** Respond to a group invitation */
-  responseGroupInvitation: {
-    responses: {
-      /** The user membershhip has been updated */
-      201: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The user has already responded */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** User can't respond to this invitation */
-      401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          groupId: string;
-          response: "declined" | "member";
-        };
-      };
-    };
-  };
   /** Get a list of all the groups */
   getGroups: {
     parameters: {
@@ -802,6 +765,43 @@ export interface operations {
         "application/json": {
           group: components["schemas"]["groupDescription"];
           instruments: components["schemas"]["instrument"][];
+        };
+      };
+    };
+  };
+  /** Respond to a group invitation */
+  responseGroupInvitation: {
+    responses: {
+      /** The user membershhip has been updated */
+      201: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user has already responded */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** User can't respond to this invitation */
+      401: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId: string;
+          response: "declined" | "member";
         };
       };
     };
