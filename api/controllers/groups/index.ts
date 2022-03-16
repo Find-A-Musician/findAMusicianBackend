@@ -5,3 +5,5 @@ export {
   modifyGroupById,
   deleteGroupById,
 } from './groups';
+
+export { groupJoinEvent } from './groupEvents';

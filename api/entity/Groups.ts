@@ -38,6 +38,8 @@ export class Groups extends BaseEntity {
   })
   members: MusicianGroup[];
 
-  @ManyToMany(() => Event, (event) => event.groups, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Event, (event) => event.groups, {
+    onDelete: 'CASCADE',
+  })
   events: Event[];
 }
