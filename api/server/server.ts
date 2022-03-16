@@ -8,10 +8,10 @@ import RateLimit from 'express-rate-limit';
 import * as OpenApiValidator from 'express-openapi-validator';
 
 // router import
-import registerRouter from '../routes/auth/register';
-import loginRouter from '../routes/auth/login';
-import refreshTokenRouter from '../routes/auth/refreshToken';
-import logoutRouter from '../routes/auth/logout';
+import registerRouter from '../routes/register';
+import loginRouter from '../routes/login';
+import refreshTokenRouter from '../routes/refreshToken';
+import logoutRouter from '../routes/logout';
 
 import musiciansRouter from '../routes/musicians';
 import instrumentRouter from '../routes/instruments';

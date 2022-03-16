@@ -1,8 +1,8 @@
 import express from 'express';
-import { logout } from '../../controllers/auth';
+import { refreshToken } from '../controllers/auth';
 
 const router = express.Router();
 
-router.delete('/', logout);
+router.post('/', refreshToken);
 
 export default router;

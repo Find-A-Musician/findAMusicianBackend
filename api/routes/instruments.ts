@@ -1,5 +1,5 @@
 import express from 'express';
-import { getInstruments } from '../../controllers/instruments/instruments';
+import { getInstruments } from '../controllers/instruments/instruments';
 
 const router = express.Router();
 
