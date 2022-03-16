@@ -11,7 +11,7 @@ const httpApp = new http.Server(server);
 httpApp.listen(PORT, async () => {
   await createConnection();
 
-  // await reset();
+  //await reset();
   console.log('📕 Swager documention : http://localhost:' + PORT + '/api-docs');
   console.log(' 🔌 Listening on port : http://localhost:' + PORT);
 });

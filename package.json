@@ -27,6 +27,7 @@
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@faker-js/faker": "^6.0.0",
     "@types/async": "^3.2.7",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie": "^0.4.1",
@@ -75,7 +76,8 @@
     "types": "tsc --project ./",
     "generateTypes": "ts-node api/command/generateType",
     "resetdb": "ts-node api/db/reset",
-    "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
+    "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./",
+    "seed": "ts-node api/db/seed"
   },
   "repository": {
     "type": "git",
