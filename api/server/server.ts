@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { NextFunction } from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import openApiDocs from '../docs/openApiDoc';
@@ -12,6 +12,19 @@ import registerRouter from '../routes/register';
 import loginRouter from '../routes/login';
 import refreshTokenRouter from '../routes/refreshToken';
 import logoutRouter from '../routes/logout';
+import type {
+  InternalServerError,
+  UnsupportedMediaType,
+  RequestEntityTooLarge,
+  BadRequest,
+  MethodNotAllowed,
+  NotAcceptable,
+  NotFound,
+  Unauthorized,
+  Forbidden,
+} from 'express-openapi-validator/dist/framework/types';
+
+import type { Request, Response } from 'express';
 
 import musiciansRouter from '../routes/musicians';
 import instrumentRouter from '../routes/instruments';
@@ -79,13 +92,26 @@ app.use('/events', authenticateToken, eventsRoute);
 // info route
 app.use('/info', infoRouter);
 
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  // format error
-  res.status(err.status || 500).json({
-    message: err.message,
-    errors: err.errors,
-  });
-});
+type ErrorOpenApi =
+  | InternalServerError
+  | UnsupportedMediaType
+  | RequestEntityTooLarge
+  | BadRequest
+  | MethodNotAllowed
+  | NotAcceptable
+  | NotFound
+  | Unauthorized
+  | Forbidden;
+
+app.use(
+  (err: ErrorOpenApi, req: Request, res: Response, next: NextFunction) => {
+    // format error
+    res.status(err.status || 500).json({
+      message: err.message,
+      errors: err.errors,
+    });
+    next();
+  },
+);
 
 export default app;

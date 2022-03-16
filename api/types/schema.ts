@@ -216,8 +216,8 @@ export interface operations {
       content: {
         "application/json": {
           /** Format: email */
-          email?: string;
-          password?: string;
+          email: string;
+          password: string;
         };
       };
     };
