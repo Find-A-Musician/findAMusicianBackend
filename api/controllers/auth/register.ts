@@ -109,7 +109,7 @@ const register = async (
     }
 
     return res.status(500).json({
-      msg: 'E_SQL_ERROR',
+      msg: 'E_SERVER_ERROR',
       stack: JSON.stringify(err),
     });
   }

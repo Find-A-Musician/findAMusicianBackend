@@ -154,7 +154,7 @@ export const getGroupById = async (
   } catch (err) {
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 
@@ -232,7 +232,7 @@ export const createGroup = async (
 
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 
@@ -300,7 +300,7 @@ export const modifyGroupById = async (
   } catch (err) {
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 
@@ -352,6 +352,6 @@ export const deleteGroupById = async (
   } catch (err) {
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };

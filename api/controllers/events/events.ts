@@ -149,7 +149,7 @@ export const getAllEvents = async (
     console.log(err);
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 
@@ -182,7 +182,7 @@ export const getEventById = async (
   } catch (err) {
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 
@@ -291,7 +291,7 @@ export const modifyEventById = async (
 
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 
@@ -333,6 +333,6 @@ export const deleteEventById = async (
   } catch (err) {
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };

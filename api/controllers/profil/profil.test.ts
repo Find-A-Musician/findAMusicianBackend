@@ -158,7 +158,7 @@ describe('/profil', () => {
       .send(body)
       .expect(500)
       .then(({ body: { msg } }) =>
-        expect(msg).toStrictEqual('E_SQL_ERROR_GENRES'),
+        expect(msg).toStrictEqual('E_SERVER_ERROR_GENRES'),
       );
   });
 
@@ -186,7 +186,7 @@ describe('/profil', () => {
       .send(body)
       .expect(500)
       .then(({ body: { msg } }) =>
-        expect(msg).toStrictEqual('E_SQL_ERROR_INSTRUMENTS'),
+        expect(msg).toStrictEqual('E_SERVER_ERROR_INSTRUMENTS'),
       );
   });
 });

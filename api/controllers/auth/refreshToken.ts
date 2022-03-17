@@ -48,7 +48,7 @@ const refreshToken = async (
   } catch (err) {
     return res
       .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
 

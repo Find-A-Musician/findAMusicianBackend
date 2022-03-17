@@ -63,6 +63,6 @@ export const addAdminToEvent = async (
     return res.status(200).json(event);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    res.status(500).json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
   }
 };
