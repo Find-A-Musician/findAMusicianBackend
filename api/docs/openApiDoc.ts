@@ -1637,7 +1637,7 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           membership: {
             type: 'string',
-            enum: ['admin', 'member', 'declined', 'pending'],
+            enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
           },
         },
       },

@@ -126,7 +126,7 @@ export default async function reset(): Promise<void> {
     const spiritboxMusician2 = musGrouRep.create({
       musician: dorian,
       group: spiritbox,
-      membership: 'member',
+      membership: 'lite_admin',
       instruments: [guitare],
     });
 

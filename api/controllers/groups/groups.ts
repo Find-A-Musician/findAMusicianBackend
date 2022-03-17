@@ -275,7 +275,7 @@ export const modifyGroupById = async (
       },
     });
 
-    if (!(membership == 'admin')) {
+    if (!(membership == 'admin' || membership == 'lite_admin')) {
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 

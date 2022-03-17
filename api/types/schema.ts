@@ -141,7 +141,7 @@ export interface components {
     groupMember: {
       musician?: components["schemas"]["musicianMinimized"];
       instruments?: components["schemas"]["instrument"][];
-      membership?: "admin" | "member" | "declined" | "pending";
+      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
     };
     instrument: {
       id: string;
