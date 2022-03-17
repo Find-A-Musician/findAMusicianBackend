@@ -21,6 +21,11 @@ router.delete(
   groupController.removeGroupLiteAdmin,
 );
 
+router.delete(
+  '/:groupId/kick/:musicianId',
+  groupController.kickMusicianFromGroup,
+);
+
 // router.use('/invitation', invitationRouter);
 
 export default router;

@@ -9,3 +9,4 @@ export {
 export { groupJoinEvent } from './groupEvents';
 
 export { addGroupLiteAdmin, removeGroupLiteAdmin } from './admin';
+export { kickMusicianFromGroup } from './kick';
