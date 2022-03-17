@@ -7,3 +7,5 @@ export {
 } from './groups';
 
 export { groupJoinEvent } from './groupEvents';
+
+export { addGroupLiteAdmin, removeGroupLiteAdmin } from './admin';
