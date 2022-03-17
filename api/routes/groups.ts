@@ -21,6 +21,11 @@ router.delete(
   groupController.removeGroupLiteAdmin,
 );
 
+router.post(
+  '/:groupId/admins/transfer/:musicianId',
+  groupController.transferGroupAdmin,
+);
+
 router.delete(
   '/:groupId/kick/:musicianId',
   groupController.kickMusicianFromGroup,
