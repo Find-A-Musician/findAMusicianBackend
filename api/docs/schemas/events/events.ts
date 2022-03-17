@@ -13,7 +13,7 @@ const schema: HandlerDefinition = {
         required: false,
         schema: {
           type: 'string',
-          example: 'imt tremplin',
+          example: 'imtremplin',
         },
         description: 'The query filter for the event name',
       },
