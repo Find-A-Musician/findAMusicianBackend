@@ -23,6 +23,7 @@ import type {
   Unauthorized,
   Forbidden,
 } from 'express-openapi-validator/dist/framework/types';
+import Logger from '../log/logger';
 
 import type { Request, Response } from 'express';
 
@@ -116,12 +117,15 @@ app.use(
       (err as ErrorOpenApi).status
     ) {
       // The error is throw by OpenApiValidator
+      Logger.info(err);
 
       res.status((err as ErrorOpenApi).status || 500).json({
         msg: (err as ErrorOpenApi).message,
         stack: (err as ErrorOpenApi).errors,
       });
     } else {
+      Logger.error(err);
+
       res.status(500).json({ status: 500, msg: 'E_UNKNOWN_ERROR', stack: err });
     }
     next();
