@@ -40,6 +40,12 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/groups/{groupId}/admins/lite_admins/{musicianId}": {
+    /** Give a group member the lite_admin membership */
+    post: operations["addGroupLiteAdmin"];
+    /** Remove a group member the lite_admin membership */
+    delete: operations["removeGroupLiteAdmin"];
+  };
   "/groups/event/join": {
     /** A group joins an event */
     post: operations["groupJoinEvent"];
@@ -141,7 +147,7 @@ export interface components {
     groupMember: {
       musician?: components["schemas"]["musicianMinimized"];
       instruments?: components["schemas"]["instrument"][];
-      membership?: "admin" | "member" | "declined" | "pending";
+      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
     };
     instrument: {
       id: string;
@@ -550,6 +556,80 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["genre"][];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Give a group member the lite_admin membership */
+  addGroupLiteAdmin: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+        /** The ID of the musician that receive lite_admin membership */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The musician became a lite_admin */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a member of the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Remove a group member the lite_admin membership */
+  removeGroupLiteAdmin: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+        /** The ID of the musician that receive lite_admin membership */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The lite_admin membership has been removed from the group member */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a lite_admin of the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
       /** Error intern server */
