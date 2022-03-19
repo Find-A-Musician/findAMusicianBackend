@@ -72,6 +72,10 @@ export interface paths {
     /** Invite a musician in a group */
     post: operations["sendGroupInvitation"];
   };
+  "/groups/{groupId}/kick/{musicianId}": {
+    /** Kick a member from a group */
+    delete: operations["groupKickMusician"];
+  };
   "/info": {
     /** Return the basic information of the app */
     get: operations["getApplicationInfo"];
@@ -921,6 +925,43 @@ export interface operations {
           musicianId: string;
           instrumentId: string;
           role: "lite_admin" | "member";
+        };
+      };
+    };
+  };
+  /** Kick a member from a group */
+  groupKickMusician: {
+    parameters: {
+      path: {
+        /** the Id of the group */
+        groupId: string;
+        /** the Id of the musician to kick */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The musician has been kicked from the group */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not in the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
