@@ -5,6 +5,7 @@ import { getRepository, Not } from 'typeorm';
 import { MusicianGroup } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
+import type { FindConditions } from 'typeorm';
 
 type KickGroupMusician = operations['groupKickMusician'];
 
@@ -33,16 +34,26 @@ export const kickMusicianFromGroup = async (
     const groupId = req.params.groupId;
     const musicianId = req.params.musicianId;
 
-    const admin = await musicianGroupRepository.findOne({
-      where: {
-        musician: {
-          id: req.userId,
-        },
-        group: {
-          id: groupId,
-        },
-        membership: 'admin',
+    const query: FindConditions<MusicianGroup> = {
+      musician: {
+        id: req.userId,
       },
+      group: {
+        id: groupId,
+      },
+    };
+
+    const admin = await musicianGroupRepository.findOne({
+      where: [
+        {
+          membership: 'admin',
+          ...query,
+        },
+        {
+          membership: 'lite_admin',
+          ...query,
+        },
+      ],
       relations: ['musician', 'group'],
     });
 
