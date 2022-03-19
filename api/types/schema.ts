@@ -36,6 +36,10 @@ export interface paths {
     /** Post a new event */
     post: operations["postEvents"];
   };
+  "/events/{eventId}/kick/{groupId}": {
+    /** Delete a group from an event */
+    delete: operations["eventKickGroup"];
+  };
   "/genres": {
     /** Get a list of all genres */
     get: operations["getGenres"];
@@ -549,6 +553,43 @@ export interface operations {
           endDate: Date;
           adress: string;
           genres: components["schemas"]["genre"][];
+        };
+      };
+    };
+  };
+  /** Delete a group from an event */
+  eventKickGroup: {
+    parameters: {
+      path: {
+        /** The ID of the event */
+        eventId: string;
+        /** The ID of the group to kick */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The musician has been kicked from the group */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not in the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
