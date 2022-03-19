@@ -44,6 +44,10 @@ export interface paths {
     /** Get a list of all genres */
     get: operations["getGenres"];
   };
+  "/groups/{groupId}/admins/transfer/{musicianId}": {
+    /** Transfer the admin membership to another member */
+    post: operations["transferGroupAdmin"];
+  };
   "/groups/{groupId}/admins/lite_admins/{musicianId}": {
     /** Give a group member the lite_admin membership */
     post: operations["addGroupLiteAdmin"];
@@ -601,6 +605,43 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["genre"][];
+        };
+      };
+      /** Error intern server */
+      500: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Transfer the admin membership to another member */
+  transferGroupAdmin: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+        /** The ID of the musician that will become the admin */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The admin membership has been transfered */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a member of the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
       /** Error intern server */
