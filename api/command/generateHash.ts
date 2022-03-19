@@ -1,5 +1,6 @@
 import readline from 'readline';
 import bcrypt from 'bcrypt';
+import Logger from '../log/logger';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -10,10 +11,10 @@ rl.question('What is your password ', function (password) {
   const saltRound = 10;
   bcrypt.hash(password, saltRound, async function (err, hash) {
     if (err) {
-      console.log('An error has occured...');
+      Logger.error(`An error has occured when creating a hash \n ${err}`);
       rl.close();
     }
-    console.log('-------------------HASH-----------------\n' + hash);
+    Logger.info('-------------------HASH-----------------\n' + hash);
     rl.close();
   });
 });

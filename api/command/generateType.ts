@@ -9,6 +9,7 @@ import security from '../docs/config/security';
 import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
 import parserTypescript from 'prettier/parser-typescript.js';
 import prettier from 'prettier';
+import Logger from '../log/logger';
 
 const docs: Omit<OpenAPIV3.Document, 'paths'> = {
   openapi: '3.0.1',
@@ -42,7 +43,7 @@ prettierOptions = {
   const schemaObject = {};
 
   try {
-    console.log('🔧 building the paths object...');
+    Logger.info('🔧 building the paths object...');
     // get every files of the schemas directory
     const schemaFiles = readDir('./api/docs/schemas').map(
       (file) => file.split('schemas/')[1].split('.')[0],
@@ -60,7 +61,7 @@ prettierOptions = {
           },
         )
         .catch((err) => {
-          console.log(err);
+          Logger.error(`couldn't import an openAPiSchema \n ${err}`);
           throw new Error(err);
         });
     }
@@ -70,7 +71,7 @@ prettierOptions = {
       ...docs,
     };
 
-    console.log('🚧 Creating the typescript definitions...');
+    Logger.info('🚧 Creating the typescript definitions...');
     const types = await openApiTS(
       openApiDefinition as unknown as Record<string, SchemaObject>,
       {
@@ -82,7 +83,7 @@ prettierOptions = {
       },
     );
 
-    console.log('📝 Writing the docs');
+    Logger.info('📝 Writing the docs');
     const openApiDoc = prettier.format(
       "import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';const openApiDocs:OpenAPIV3.Document = " +
         JSON.stringify(openApiDefinition) +
@@ -97,9 +98,9 @@ prettierOptions = {
 
     fs.writeFileSync(path.join(__dirname, '..', 'types', 'schema.ts'), types);
 
-    console.log('✅ API Types have been generated ! ');
+    Logger.info('✅ API Types have been generated ! ');
   } catch (err) {
-    console.log('❌ Generate types failed');
+    Logger.error(`❌ Generate types failed\n${err}`);
     throw new Error(err);
   }
 })();

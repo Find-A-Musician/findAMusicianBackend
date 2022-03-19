@@ -6,6 +6,7 @@ import {
   MusicianGroup,
   Event,
 } from '../entity';
+import Logger from '../log/logger';
 import { getConnection } from 'typeorm';
 
 export default async function reset(): Promise<void> {
@@ -27,21 +28,21 @@ export default async function reset(): Promise<void> {
     musGrouRep.query('DELETE FROM musician_group');
     eveRep.query('DELETE FROM event');
 
-    console.log('🚮 Reset all the DB tables');
+    Logger.info('🚮 Reset all the DB tables');
 
     const metal = genRep.create({ name: 'metal' });
     const rock = genRep.create({ name: 'rock' });
     const jazz = genRep.create({ name: 'jazz' });
 
     await genRep.save([metal, rock, jazz]);
-    console.log('🎵 genres saved');
+    Logger.info('🎵 genres saved');
 
     const batterie = insRep.create({ name: 'batterie' });
     const guitare = insRep.create({ name: 'guitare' });
     const piano = insRep.create({ name: 'piano' });
 
     await insRep.save([batterie, guitare, piano]);
-    console.log('🎸 instruments saved');
+    Logger.info('🎸 instruments saved');
 
     // mdp : romain123
     const romain = musRep.create({
@@ -70,7 +71,7 @@ export default async function reset(): Promise<void> {
     });
 
     await musRep.save([romain, dorian]);
-    console.log('🧍‍♂️ musicians saved');
+    Logger.info('🧍‍♂️ musicians saved');
 
     const spiritbox = groRep.create({
       name: 'Spiritbox',
@@ -114,7 +115,7 @@ export default async function reset(): Promise<void> {
       allThatRemains,
       jazzGroup,
     ]);
-    console.log('🎙️ groups saved');
+    Logger.info('🎙️ groups saved');
 
     const spiritboxMusician1 = musGrouRep.create({
       musician: romain,
@@ -167,7 +168,7 @@ export default async function reset(): Promise<void> {
       jazzMusician,
     ]);
 
-    console.log('👨‍🎤 group musicians saved');
+    Logger.info('👨‍🎤 group musicians saved');
 
     const imtTremplin = eveRep.create({
       name: 'IMTremplin',
@@ -193,9 +194,9 @@ export default async function reset(): Promise<void> {
 
     await eveRep.save([imtTremplin, laPioche]);
 
-    console.log('🎫 events saved');
+    Logger.info('🎫 events saved');
   } catch (err) {
-    console.log("❌ Couldn't reset the db data", err);
+    Logger.info("❌ Couldn't reset the db data", err);
     throw err;
   }
 }

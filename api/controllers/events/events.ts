@@ -285,8 +285,6 @@ export const modifyEventById = async (
     await getRepository(Event).save({ id: req.params.eventId, ...update });
     return res.sendStatus(200);
   } catch (err) {
-    console.log(err);
-
     next(err);
   }
 };

@@ -2,11 +2,9 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "jest" : true
+    "jest": true
   },
-  "plugins": [
-    "prettier"
-  ],
+  "plugins": ["prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -16,16 +14,19 @@
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module",
-    "modules" : true
+    "modules": true
   },
   "rules": {
-    "prettier/prettier": ["error" , {
-      "semi": true,
-      "printWidth": 80,
-      "singleQuote": true,
-      "trailingComma": "all",
-      "proseWrap": "always"
-    }],
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": true,
+        "printWidth": 80,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "proseWrap": "always"
+      }
+    ],
     "new-cap": [
       "error",
       {
@@ -44,13 +45,15 @@
         }
       }
     ],
+    "no-console": "error",
 
-    "@typescript-eslint/ban-types": ["error",
+    "@typescript-eslint/ban-types": [
+      "error",
       {
-          "types": {
-              "{}": false
-          },
-          "extendDefaults": true
+        "types": {
+          "{}": false
+        },
+        "extendDefaults": true
       }
     ]
   }
