@@ -59,16 +59,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
   delete: {
@@ -121,16 +111,6 @@ const schema: HandlerDefinition = {
       },
       404: {
         description: 'The musician is not a lite_admin of the group',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
         content: {
           'application/json': {
             schema: {

@@ -39,16 +39,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
   patch: {
@@ -117,16 +107,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
   delete: {
@@ -168,16 +148,6 @@ const schema: HandlerDefinition = {
       },
       404: {
         description: 'The group does not exist',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
         content: {
           'application/json': {
             schema: {

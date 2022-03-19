@@ -114,16 +114,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
 };

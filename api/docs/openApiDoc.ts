@@ -56,14 +56,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -77,14 +69,6 @@ const openApiDocs: OpenAPIV3.Document = {
           '200': {
             description: 'All the token has been deleted',
             content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
           },
         },
       },
@@ -121,14 +105,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '401': {
             description: 'Invalid refresh token',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -232,14 +208,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -293,14 +261,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -330,14 +290,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The event does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -375,14 +327,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The event does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -441,14 +385,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The event does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -550,14 +486,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       post: {
@@ -614,14 +542,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '409': {
             description: 'The Event already exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -702,14 +622,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -750,14 +662,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The musician is not a member of the group',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -811,14 +715,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       delete: {
@@ -859,14 +755,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The musician is not a lite_admin of the group',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -952,14 +840,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       patch: {
@@ -1016,14 +896,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       delete: {
@@ -1055,14 +927,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The group does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1153,14 +1017,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       post: {
@@ -1222,14 +1078,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1272,14 +1120,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '401': {
             description: "User can't respond to this invitation",
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1338,14 +1178,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1392,14 +1224,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1424,14 +1248,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1448,14 +1264,6 @@ const openApiDocs: OpenAPIV3.Document = {
                   type: 'array',
                   items: { $ref: '#/components/schemas/instrument' },
                 },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
               },
             },
           },
@@ -1505,14 +1313,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The group does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1624,14 +1424,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1664,14 +1456,6 @@ const openApiDocs: OpenAPIV3.Document = {
                     },
                   ],
                 },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
               },
             },
           },
@@ -1717,14 +1501,6 @@ const openApiDocs: OpenAPIV3.Document = {
             description: 'The musician information has been updated',
             content: { 'application/json': { schema: { type: 'string' } } },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       delete: {
@@ -1735,14 +1511,6 @@ const openApiDocs: OpenAPIV3.Document = {
           '200': {
             description: 'The musician information has been updated',
             content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
           },
         },
       },
@@ -1769,14 +1537,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'This user is not in this group',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
