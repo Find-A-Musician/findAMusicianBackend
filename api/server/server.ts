@@ -104,12 +104,26 @@ type ErrorOpenApi =
   | Forbidden;
 
 app.use(
-  (err: ErrorOpenApi, req: Request, res: Response, next: NextFunction) => {
-    // format error
-    res.status(err.status || 500).json({
-      message: err.message,
-      errors: err.errors,
-    });
+  (
+    err: Error | ErrorOpenApi,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    if (
+      (err as ErrorOpenApi).message &&
+      (err as ErrorOpenApi).errors &&
+      (err as ErrorOpenApi).status
+    ) {
+      // The error is throw by OpenApiValidator
+
+      res.status((err as ErrorOpenApi).status || 500).json({
+        msg: (err as ErrorOpenApi).message,
+        stack: (err as ErrorOpenApi).errors,
+      });
+    } else {
+      res.status(500).json({ status: 500, msg: 'E_UNKNOWN_ERROR', stack: err });
+    }
     next();
   },
 );

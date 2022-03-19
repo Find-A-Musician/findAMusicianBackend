@@ -1,3 +1,5 @@
+import { getRepository } from 'typeorm';
+import { MusicianGroup } from '../../entity';
 import type { operations } from '@schema';
 import type core from 'express-serve-static-core';
 import type {
@@ -6,8 +8,7 @@ import type {
   getRequestBody,
   getPathParams,
 } from '@typing';
-import { getRepository } from 'typeorm';
-import { MusicianGroup } from '../../entity';
+import type { NextFunction } from 'express';
 
 type LeaveGroup = operations['leaveGroup'];
 
@@ -19,6 +20,7 @@ export const leaveGroupById = async (
     {}
   >,
   res: core.Response<getResponsesBody<LeaveGroup>, {}, getHTTPCode<LeaveGroup>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<LeaveGroup>, {}, getHTTPCode<LeaveGroup>>
 > => {
@@ -49,9 +51,6 @@ export const leaveGroupById = async (
 
     return res.sendStatus(200);
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };

@@ -1,8 +1,9 @@
+import { Event, Musician } from '../../entity';
+import { getRepository } from 'typeorm';
+import type { NextFunction } from 'express';
 import type { operations } from '@schema';
 import type { getHTTPCode, getResponsesBody, getRequestBody } from '@typing';
 import type core from 'express-serve-static-core';
-import { Event, Musician } from '../../entity';
-import { getRepository } from 'typeorm';
 
 type PostEventAdmins = operations['addEventAdmin'];
 
@@ -17,6 +18,7 @@ export const addAdminToEvent = async (
     {},
     getHTTPCode<PostEventAdmins>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<PostEventAdmins>,
@@ -62,7 +64,6 @@ export const addAdminToEvent = async (
 
     return res.status(200).json(event);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
