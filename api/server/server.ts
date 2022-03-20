@@ -120,13 +120,15 @@ app.use(
       Logger.info(err);
 
       res.status((err as ErrorOpenApi).status || 500).json({
-        msg: (err as ErrorOpenApi).message,
+        message: (err as ErrorOpenApi).message,
         stack: (err as ErrorOpenApi).errors,
       });
     } else {
       Logger.error(err);
 
-      res.status(500).json({ status: 500, msg: 'E_UNKNOWN_ERROR', stack: err });
+      res
+        .status(500)
+        .json({ status: 500, message: 'E_UNKNOWN_ERROR', stack: err });
     }
     next();
   },
