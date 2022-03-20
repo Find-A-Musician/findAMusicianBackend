@@ -1,13 +1,21 @@
 import winston from 'winston';
 import path from 'path';
 
-const levels = {
+const LEVELS = {
   error: 0,
   warn: 1,
   info: 2,
   http: 3,
   debug: 4,
-};
+} as const;
+
+const COLORS = {
+  error: 'red',
+  warn: 'yellow',
+  info: 'green',
+  http: 'magenta',
+  debug: 'white',
+} as const;
 
 const level = () => {
   const env = process.env.NODE_ENV || 'development';
@@ -15,15 +23,7 @@ const level = () => {
   return isDevelopment ? 'debug' : 'warn';
 };
 
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'white',
-};
-
-winston.addColors(colors);
+winston.addColors(COLORS);
 
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
@@ -44,7 +44,7 @@ const transports = [
 
 const Logger = winston.createLogger({
   level: level(),
-  levels,
+  levels: LEVELS,
   format,
   transports,
 });
