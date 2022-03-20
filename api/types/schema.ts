@@ -530,12 +530,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Get a list of all genres */
@@ -574,12 +568,6 @@ export interface operations {
       };
       /** The musician is not a member of the group */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };

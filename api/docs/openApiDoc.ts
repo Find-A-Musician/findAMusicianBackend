@@ -594,14 +594,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -791,14 +783,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The group or event does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },

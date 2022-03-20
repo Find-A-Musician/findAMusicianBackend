@@ -163,6 +163,7 @@ export const transferGroupAdmin = async (
     {},
     getHTTPCode<TransferGroupAdmin>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<TransferGroupAdmin>,
@@ -229,7 +230,6 @@ export const transferGroupAdmin = async (
 
     return res.sendStatus(204);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msg: 'E_SQL_ERROR' });
+    next(err);
   }
 };
