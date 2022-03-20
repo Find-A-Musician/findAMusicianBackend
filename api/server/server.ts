@@ -76,7 +76,7 @@ app.use('/logout', authenticateToken, logoutRouter);
 
 // musicians route
 app.use('/profil', authenticateToken, profilRouter);
-app.use('/musicians', musiciansRouter);
+app.use('/musicians', authenticateToken, musiciansRouter);
 
 // instruments route
 app.use('/instruments', instrumentRouter);
