@@ -1053,10 +1053,24 @@ export interface operations {
           "application/json": string;
         };
       };
+      /** The body is required for an admin leaving an event */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
       /** This user is not in this group */
       404: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
+          musicianId?: string;
         };
       };
     };

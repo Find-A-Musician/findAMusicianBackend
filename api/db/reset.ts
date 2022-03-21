@@ -58,6 +58,18 @@ export default async function reset(): Promise<void> {
       instruments: [guitare, piano, batterie],
     });
 
+    // mdp : alexandre123
+    const alexandre = musRep.create({
+      email: 'alexandre.lam@gmail.com',
+      givenName: 'Alexandre',
+      familyName: 'Lam',
+      promotion: 'M1',
+      location: 'Douai',
+      password: '$2b$10$I9uuTF2Qt.53VJrXtg13teq14vKqGCp0uSIfLUqtskpsLjoqBhM4K',
+      genres: [jazz],
+      instruments: [piano],
+    });
+
     // mdp : dorian123
     const dorian = musRep.create({
       email: 'dorian.viala@gmail.com',
@@ -70,7 +82,7 @@ export default async function reset(): Promise<void> {
       instruments: [guitare],
     });
 
-    await musRep.save([romain, dorian]);
+    await musRep.save([romain, dorian, alexandre]);
     Logger.info('🧍‍♂️ musicians saved');
 
     const spiritbox = groRep.create({
@@ -131,6 +143,13 @@ export default async function reset(): Promise<void> {
       instruments: [guitare],
     });
 
+    const spiritboxMusician3 = musGrouRep.create({
+      musician: alexandre,
+      group: spiritbox,
+      membership: 'lite_admin',
+      instruments: [piano],
+    });
+
     const peripheryMusician = musGrouRep.create({
       musician: romain,
       group: periphery,
@@ -162,6 +181,7 @@ export default async function reset(): Promise<void> {
     await musGrouRep.save([
       spiritboxMusician1,
       spiritboxMusician2,
+      spiritboxMusician3,
       peripheryMusician,
       slipknotMusician,
       allMusician,

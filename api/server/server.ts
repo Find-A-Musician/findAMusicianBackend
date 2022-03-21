@@ -124,8 +124,7 @@ app.use(
         stack: (err as ErrorOpenApi).errors,
       });
     } else {
-      Logger.error(err);
-
+      Logger.error(`500 error : \n${err}`);
       res
         .status(500)
         .json({ status: 500, message: 'E_UNKNOWN_ERROR', stack: err });
