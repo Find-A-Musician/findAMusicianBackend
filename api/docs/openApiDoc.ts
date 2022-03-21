@@ -1433,7 +1433,28 @@ const openApiDocs: OpenAPIV3.Document = {
                         groups: {
                           type: 'array',
                           items: {
-                            $ref: '#/components/schemas/groupDescription',
+                            type: 'object',
+                            properties: {
+                              instruments: {
+                                type: 'array',
+                                items: {
+                                  $ref: '#/components/schemas/instrument',
+                                },
+                              },
+                              membership: {
+                                type: 'string',
+                                enum: [
+                                  'admin',
+                                  'member',
+                                  'declined',
+                                  'pending',
+                                  'lite_admin',
+                                ],
+                              },
+                              group: {
+                                $ref: '#/components/schemas/groupDescription',
+                              },
+                            },
                           },
                         },
                       },

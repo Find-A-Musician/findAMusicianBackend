@@ -996,7 +996,16 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["musician"] & {
-            groups: components["schemas"]["groupDescription"][];
+            groups: {
+              instruments?: components["schemas"]["instrument"][];
+              membership?:
+                | "admin"
+                | "member"
+                | "declined"
+                | "pending"
+                | "lite_admin";
+              group?: components["schemas"]["groupDescription"];
+            }[];
           };
         };
       };

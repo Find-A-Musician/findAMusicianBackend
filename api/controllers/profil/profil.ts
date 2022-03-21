@@ -37,9 +37,7 @@ export const getUserProfil = async (
       relations: ['group', 'group.genres'],
     });
 
-    const groups = musicianGroups.map(({ group }) => group);
-
-    return res.status(200).json({ ...profil, groups });
+    return res.status(200).json({ ...profil, groups: musicianGroups });
   } catch (err) {
     next(err);
   }
