@@ -79,9 +79,19 @@ export const kickMusicianFromGroup = async (
       return res.status(404).json({ msg: 'E_MUSICIAN_NOT_IN_GROUP' });
     }
 
+    if (
+      musicianToKick.membership === 'lite_admin' &&
+      admin.membership === 'lite_admin'
+    ) {
+      return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+    }
+
     await musicianGroupRepository.delete({
       musician: {
         id: musicianId,
+      },
+      group: {
+        id: groupId,
       },
     });
 
