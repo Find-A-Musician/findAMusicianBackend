@@ -3,18 +3,19 @@
 import bcrypt from 'bcrypt';
 import generateToken from '../../auth/generateToken';
 import { GrantTypes } from '../../auth/generateToken';
-import type { Request } from 'express';
+import { Musician, Genre, Instrument, Token } from '../../entity';
+import { getRepository } from 'typeorm';
+import type { NextFunction, Request } from 'express';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 import type { operations } from '@schema';
-import { Musician, Genre, Instrument, Token } from '../../entity';
-import { getRepository } from 'typeorm';
 
 type Register = operations['register'];
 
 const register = async (
   req: Request<{}, getResponsesBody<Register>, getRequestBody<Register>, {}>,
   res: core.Response<getResponsesBody<Register>, {}, getHTTPCode<Register>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<Register>, {}, getHTTPCode<Register>>
 > => {
@@ -33,22 +34,14 @@ const register = async (
     instruments,
   } = req.body;
 
-  const saltRound = 10;
-  let hash: string;
-
-  const tokenRepository = getRepository(Token);
-  const musicianRepository = getRepository(Musician);
-
   try {
-    hash = await bcrypt.hash(password, saltRound);
-  } catch (err) {
-    return res.status(500).json({
-      msg: 'E_HASH_ERROR',
-      stack: JSON.stringify(err),
-    });
-  }
+    const saltRound = 10;
 
-  try {
+    const tokenRepository = getRepository(Token);
+    const musicianRepository = getRepository(Musician);
+
+    const hash = await bcrypt.hash(password, saltRound);
+
     // Get all the genres of the req
     const newMusicianGenres: Genre[] = [];
     for (let i = 0; i < genres.length; i++) {
@@ -108,10 +101,7 @@ const register = async (
       return res.status(409).json({ msg: 'E_USER_ALREADY_EXIST' });
     }
 
-    return res.status(500).json({
-      msg: 'E_SERVER_ERROR',
-      stack: JSON.stringify(err),
-    });
+    next(err);
   }
 };
 

@@ -223,12 +223,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -249,12 +243,6 @@ export interface operations {
           "application/json": string;
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Send a new access token */
@@ -270,12 +258,6 @@ export interface operations {
       };
       /** Invalid refresh token */
       401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -302,12 +284,6 @@ export interface operations {
       };
       /** The user already exist */
       409: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -354,12 +330,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -387,12 +357,6 @@ export interface operations {
       };
       /** The event does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -426,12 +390,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Modify an event info */
@@ -457,12 +415,6 @@ export interface operations {
       };
       /** The event does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -515,12 +467,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Post a new event */
@@ -534,12 +480,6 @@ export interface operations {
       };
       /** The Event already exist */
       409: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -590,12 +530,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Get a list of all genres */
@@ -605,12 +539,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["genre"][];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -640,12 +568,6 @@ export interface operations {
       };
       /** The musician is not a member of the group */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -681,12 +603,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Remove a group member the lite_admin membership */
@@ -718,12 +634,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** A group joins an event */
@@ -737,12 +647,6 @@ export interface operations {
       };
       /** The group or event does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -778,12 +682,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Delete a group by it's Id */
@@ -813,12 +711,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Patch a group by it's Id */
@@ -844,12 +736,6 @@ export interface operations {
       };
       /** The group does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -896,12 +782,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Create a new group */
@@ -915,12 +795,6 @@ export interface operations {
       };
       /** The group already exist */
       409: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -956,12 +830,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -989,12 +857,6 @@ export interface operations {
       };
       /** User that invite doesn't have the access */
       401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -1040,12 +902,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Return the basic information of the app */
@@ -1061,12 +917,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   getInstruments: {
@@ -1075,12 +925,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["instrument"][];
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -1104,12 +948,6 @@ export interface operations {
       };
       /** The group does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -1149,12 +987,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Get the user connected profil */
@@ -1168,12 +1000,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   deleteProfil: {
@@ -1184,12 +1010,6 @@ export interface operations {
           "application/json": string;
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   patchProfil: {
@@ -1198,12 +1018,6 @@ export interface operations {
       200: {
         content: {
           "application/json": string;
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -1241,12 +1055,6 @@ export interface operations {
       };
       /** This user is not in this group */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };

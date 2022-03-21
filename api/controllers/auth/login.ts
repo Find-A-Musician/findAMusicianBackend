@@ -1,17 +1,18 @@
 import bcrypt from 'bcrypt';
 import generateToken, { GrantTypes } from '../../auth/generateToken';
-import type { operations } from '@schema';
-import type { Request } from 'express';
-import type core from 'express-serve-static-core';
-import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 import { getRepository } from 'typeorm';
 import { Musician, Token } from '../../entity';
+import type { operations } from '@schema';
+import type { NextFunction, Request } from 'express';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 
 type Login = operations['login'];
 
 const login = async (
   req: Request<{}, getResponsesBody<Login>, getRequestBody<Login>, {}>,
   res: core.Response<getResponsesBody<Login>, {}, getHTTPCode<Login>>,
+  next: NextFunction,
 ): Promise<core.Response<getResponsesBody<Login>, {}, getHTTPCode<Login>>> => {
   try {
     const body = req.body;
@@ -60,7 +61,7 @@ const login = async (
       musician: musicianInfo,
     });
   } catch (err) {
-    return res.status(500).json({ msg: 'E_COMPARE_FAILED' });
+    next(err);
   }
 };
 

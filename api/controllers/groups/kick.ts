@@ -1,11 +1,11 @@
-import type { operations } from '@schema';
-import type { getHTTPCode, getPathParams, getResponsesBody } from '@typing';
-
 import { getRepository, Not } from 'typeorm';
 import { MusicianGroup } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { FindConditions } from 'typeorm';
+import type { NextFunction } from 'express';
+import type { operations } from '@schema';
+import type { getHTTPCode, getPathParams, getResponsesBody } from '@typing';
 
 type KickGroupMusician = operations['groupKickMusician'];
 
@@ -21,6 +21,7 @@ export const kickMusicianFromGroup = async (
     {},
     getHTTPCode<KickGroupMusician>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<KickGroupMusician>,
@@ -86,9 +87,6 @@ export const kickMusicianFromGroup = async (
 
     return res.sendStatus(204);
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };

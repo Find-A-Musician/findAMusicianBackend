@@ -33,16 +33,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
 
@@ -96,16 +86,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
   delete: {
@@ -119,16 +99,6 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'string',
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
             },
           },
         },

@@ -1,11 +1,10 @@
-import type { operations } from '@schema';
-import type { getHTTPCode, getPathParams, getResponsesBody } from '@typing';
-
 import { getRepository } from 'typeorm';
 import { Event } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
-
+import type { operations } from '@schema';
+import type { getHTTPCode, getPathParams, getResponsesBody } from '@typing';
+import type { NextFunction } from 'express';
 type KickEventGroup = operations['eventKickGroup'];
 
 export const kickGroupFromEvent = async (
@@ -20,6 +19,7 @@ export const kickGroupFromEvent = async (
     {},
     getHTTPCode<KickEventGroup>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<KickEventGroup>,
@@ -58,7 +58,6 @@ export const kickGroupFromEvent = async (
 
     return res.sendStatus(204);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msg: 'E_SQL_ERROR' });
+    next(err);
   }
 };

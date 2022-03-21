@@ -1,3 +1,5 @@
+import { getRepository, ILike, FindOneOptions, Any } from 'typeorm';
+import { Musician, MusicianGroup } from '../../entity';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
@@ -8,8 +10,7 @@ import type {
   getResponsesBody,
   getRequestQuery,
 } from '@typing';
-import { getRepository, ILike, FindOneOptions, Any } from 'typeorm';
-import { Musician, MusicianGroup } from '../../entity';
+import type { NextFunction } from 'express';
 
 type GetMusician = operations['getMusicians'];
 type GetMusicianById = operations['getMusicianById'];
@@ -26,6 +27,7 @@ export const getAllMusicians = async (
     {},
     getHTTPCode<GetMusician>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<GetMusician>, {}, getHTTPCode<GetMusician>>
 > => {
@@ -139,10 +141,7 @@ export const getAllMusicians = async (
       ..._links,
     });
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -158,6 +157,7 @@ export const getMusicianById = async (
     {},
     getHTTPCode<GetMusicianById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<GetMusicianById>,
@@ -193,9 +193,6 @@ export const getMusicianById = async (
 
     return res.status(200).json({ ...musician, groups });
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SERVER_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };

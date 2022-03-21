@@ -1,11 +1,11 @@
-import type { operations } from '@schema';
-import type { getHTTPCode, getPathParams, getResponsesBody } from '@typing';
-
 import { getRepository } from 'typeorm';
 import { MusicianGroup } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { FindConditions } from 'typeorm';
+import type { operations } from '@schema';
+import type { getHTTPCode, getPathParams, getResponsesBody } from '@typing';
+import type { NextFunction } from 'express';
 
 type AddGroupLiteAdmin = operations['addGroupLiteAdmin'];
 type RemoveGroupLiteAdmin = operations['removeGroupLiteAdmin'];
@@ -23,6 +23,7 @@ export const addGroupLiteAdmin = async (
     {},
     getHTTPCode<AddGroupLiteAdmin>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<AddGroupLiteAdmin>,
@@ -76,8 +77,7 @@ export const addGroupLiteAdmin = async (
 
     return res.sendStatus(204);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msg: 'E_SERVER_ERROR' });
+    next(err);
   }
 };
 
@@ -93,6 +93,7 @@ export const removeGroupLiteAdmin = async (
     {},
     getHTTPCode<RemoveGroupLiteAdmin>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<RemoveGroupLiteAdmin>,
@@ -146,8 +147,7 @@ export const removeGroupLiteAdmin = async (
 
     return res.sendStatus(204);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msg: 'E_SERVER_ERROR' });
+    next(err);
   }
 };
 
@@ -163,6 +163,7 @@ export const transferGroupAdmin = async (
     {},
     getHTTPCode<TransferGroupAdmin>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<TransferGroupAdmin>,
@@ -229,7 +230,6 @@ export const transferGroupAdmin = async (
 
     return res.sendStatus(204);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msg: 'E_SQL_ERROR' });
+    next(err);
   }
 };

@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import server from './api/server/server';
 import http from 'http';
 import createConnection from './api/db/createConnection';
+import Logger from './api/log/logger';
 
 // import reset from './api/db/reset';
 
@@ -12,6 +13,6 @@ httpApp.listen(PORT, async () => {
   await createConnection();
 
   // await reset();
-  console.log('📕 Swager documention : http://localhost:' + PORT + '/api-docs');
-  console.log(' 🔌 Listening on port : http://localhost:' + PORT);
+  Logger.info('📕 Swager documention : http://localhost:' + PORT + '/api-docs');
+  Logger.info(' 🔌 Listening on port : http://localhost:' + PORT);
 });
