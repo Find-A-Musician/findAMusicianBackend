@@ -7,4 +7,9 @@ router.get('/', musicianController.getAllMusicians);
 
 router.get('/:musicianId', musicianController.getMusicianById);
 
+router.get(
+  '/:musicianId/groups/:groupId/membership',
+  musicianController.getMusicianGroupMembership,
+);
+
 export default router;
