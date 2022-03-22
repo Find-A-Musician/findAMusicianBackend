@@ -5,3 +5,5 @@ export { Musician } from './Musician';
 export { MusicianGroup } from './MusicianGroup';
 export { Token } from './Token';
 export { Event } from './Event';
+export { Notification } from './notifications/Notification';
+export { MembershipNotification } from './notifications/group/MembershipNotification';

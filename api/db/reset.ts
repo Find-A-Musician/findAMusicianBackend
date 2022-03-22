@@ -5,6 +5,8 @@ import {
   Groups,
   MusicianGroup,
   Event,
+  Notification,
+  MembershipNotification,
 } from '../entity';
 import Logger from '../log/logger';
 import { createConnection, getConnection } from 'typeorm';
@@ -22,6 +24,8 @@ import config from './config';
     const groRep = connection.getRepository(Groups);
     const musGrouRep = connection.getRepository(MusicianGroup);
     const eveRep = connection.getRepository(Event);
+    const notRep = connection.getRepository(Notification);
+    const notMembershipRep = connection.getRepository(MembershipNotification);
 
     // Reset all the database for the moment
     insRep.query('DELETE FROM instrument');
@@ -30,6 +34,7 @@ import config from './config';
     groRep.query('DELETE FROM groups');
     musGrouRep.query('DELETE FROM musician_group');
     eveRep.query('DELETE FROM event');
+    notRep.query('DELETE FROM notification');
 
     Logger.info('🚮 Reset all the DB tables');
 
@@ -224,8 +229,17 @@ import config from './config';
     });
 
     await eveRep.save([imtTremplin, laPioche]);
-
     Logger.info('🎫 events saved');
+
+    const testNotification = notMembershipRep.create({
+      musician: romain,
+      group: spiritbox,
+      membership: 'admin',
+    });
+
+    notMembershipRep.save(testNotification);
+
+    Logger.info('📬 Notifications saved');
   } catch (err) {
     Logger.info(`❌ Couldn't reset the db data\n ${err.stack}`);
     throw err;
