@@ -149,6 +149,7 @@ export interface components {
       location: "Douai" | "Lille";
       genres: components["schemas"]["genre"][];
       members: components["schemas"]["groupMember"][];
+      events?: components["schemas"]["event"][];
     };
     groupDescription: {
       name: string;
@@ -178,9 +179,9 @@ export interface components {
       /** Format: date-time */
       endDate: Date;
       adress: string;
-      genres: components["schemas"]["genre"][];
-      groups: components["schemas"]["groupDescription"][];
-      admins: components["schemas"]["musicianMinimized"][];
+      genres?: components["schemas"]["genre"][];
+      groups?: components["schemas"]["groupDescription"][];
+      admins?: components["schemas"]["musicianMinimized"][];
     };
     token: {
       accessToken: string;

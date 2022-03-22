@@ -1627,6 +1627,10 @@ const openApiDocs: OpenAPIV3.Document = {
             type: 'array',
             items: { $ref: '#/components/schemas/groupMember' },
           },
+          events: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/event' },
+          },
         },
       },
       groupDescription: {
@@ -1668,16 +1672,7 @@ const openApiDocs: OpenAPIV3.Document = {
       },
       event: {
         type: 'object',
-        required: [
-          'name',
-          'description',
-          'startDate',
-          'endDate',
-          'adress',
-          'genres',
-          'groups',
-          'admins',
-        ],
+        required: ['name', 'description', 'startDate', 'endDate', 'adress'],
         properties: {
           id: { type: 'string' },
           name: { type: 'string' },
