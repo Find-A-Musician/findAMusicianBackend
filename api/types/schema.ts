@@ -58,6 +58,10 @@ export interface paths {
     /** A group joins an event */
     post: operations["groupJoinEvent"];
   };
+  "/groups/event/leave": {
+    /** A group leaves an event */
+    post: operations["groupLeaveEvent"];
+  };
   "/groups/{groupId}": {
     /** Get a group information by it's Id */
     get: operations["getGroupsById"];
@@ -644,6 +648,31 @@ export interface operations {
   groupJoinEvent: {
     responses: {
       /** The group has joined the event */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The group or event does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId?: string;
+          eventId?: string;
+        };
+      };
+    };
+  };
+  /** A group leaves an event */
+  groupLeaveEvent: {
+    responses: {
+      /** The group has left the event */
       200: {
         content: {
           "application/json": string;

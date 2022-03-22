@@ -11,6 +11,7 @@ router.patch('/:groupId', groupController.modifyGroupById);
 router.delete('/:groupId', groupController.deleteGroupById);
 
 router.post('/event/join', groupController.groupJoinEvent);
+router.delete('/event/delete', groupController.groupLeaveEvent);
 
 router.post(
   '/:groupId/admins/lite_admins/:musicianId',
