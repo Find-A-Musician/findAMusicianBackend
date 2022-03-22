@@ -8,6 +8,7 @@ import type { NextFunction } from 'express';
 
 type GetNotification = operations['getNotifications'];
 type DeleteNotificationById = operations['deleteNotificationById'];
+type DeleteAllNotifications = operations['deleteAllNotifications'];
 
 export const getNotifications = async (
   req: Request,
@@ -32,6 +33,36 @@ export const getNotifications = async (
     // console.log(notications[0]);
 
     return res.status(200).json(notications);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteAllNotifications = async (
+  req: Request,
+  res: core.Response<
+    getResponsesBody<DeleteAllNotifications>,
+    {},
+    getHTTPCode<DeleteAllNotifications>
+  >,
+  next: NextFunction,
+): Promise<
+  core.Response<
+    getResponsesBody<DeleteAllNotifications>,
+    {},
+    getHTTPCode<DeleteAllNotifications>
+  >
+> => {
+  try {
+    await getRepository(Notification).delete({
+      musician: {
+        id: req.userId,
+      },
+    });
+
+    // console.log(notications[0]);
+
+    return res.sendStatus(204);
   } catch (err) {
     next(err);
   }

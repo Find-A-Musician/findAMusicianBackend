@@ -113,6 +113,8 @@ export interface paths {
   "/profil/notifications": {
     /** Get all the notications of the user */
     get: operations["getNotifications"];
+    /** Delete all the notications of the user */
+    delete: operations["deleteAllNotifications"];
   };
   "/profil": {
     /** Get the user connected profil */
@@ -1101,10 +1103,21 @@ export interface operations {
   /** Get all the notications of the user */
   getNotifications: {
     responses: {
-      /** The user profil information */
+      /** The user notifications */
       200: {
         content: {
           "application/json": components["schemas"]["notification"][];
+        };
+      };
+    };
+  };
+  /** Delete all the notications of the user */
+  deleteAllNotifications: {
+    responses: {
+      /** All the notifications has been deleted */
+      204: {
+        content: {
+          "application/json": string;
         };
       };
     };

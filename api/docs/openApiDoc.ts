@@ -1555,7 +1555,7 @@ const openApiDocs: OpenAPIV3.Document = {
         security: [{ BearerAuth: [] }],
         responses: {
           '200': {
-            description: 'The user profil information',
+            description: 'The user notifications',
             content: {
               'application/json': {
                 schema: {
@@ -1564,6 +1564,18 @@ const openApiDocs: OpenAPIV3.Document = {
                 },
               },
             },
+          },
+        },
+      },
+      delete: {
+        description: 'Delete all the notications of the user',
+        operationId: 'deleteAllNotifications',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '204': {
+            description: 'All the notifications has been deleted',
+            content: { 'application/json': { schema: { type: 'string' } } },
           },
         },
       },
