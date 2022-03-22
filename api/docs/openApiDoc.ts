@@ -1516,6 +1516,27 @@ const openApiDocs: OpenAPIV3.Document = {
         },
       },
     },
+    '/profil/notifications': {
+      get: {
+        description: 'Get all the notications of the user',
+        operationId: 'getNotifications',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'The user profil information',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/notification' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/profil': {
       get: {
         description: 'Get the user connected profil',
@@ -1871,6 +1892,19 @@ const openApiDocs: OpenAPIV3.Document = {
           first: { type: 'string' },
           previous: { type: 'string' },
           next: { type: 'string' },
+        },
+      },
+      notification: {
+        type: 'object',
+        required: ['created_at', 'type'],
+        properties: {
+          type: { type: 'string' },
+          created_at: { type: 'string', format: 'date-time' },
+          group: { $ref: '#/components/schemas/groupDescription' },
+          membership: {
+            type: 'string',
+            enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
+          },
         },
       },
     },

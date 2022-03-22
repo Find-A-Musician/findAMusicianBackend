@@ -106,6 +106,10 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/profil/notifications": {
+    /** Get all the notications of the user */
+    get: operations["getNotifications"];
+  };
   "/profil": {
     /** Get the user connected profil */
     get: operations["getProfil"];
@@ -203,6 +207,13 @@ export interface components {
       first: string;
       previous?: string;
       next?: string;
+    };
+    notification: {
+      type: string;
+      /** Format: date-time */
+      created_at: Date;
+      group?: components["schemas"]["groupDescription"];
+      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
     };
   };
 }
@@ -1056,6 +1067,17 @@ export interface operations {
             start: number;
             total: number;
           };
+        };
+      };
+    };
+  };
+  /** Get all the notications of the user */
+  getNotifications: {
+    responses: {
+      /** The user profil information */
+      200: {
+        content: {
+          "application/json": components["schemas"]["notification"][];
         };
       };
     };

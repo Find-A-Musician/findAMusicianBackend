@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
+  Column,
 } from 'typeorm';
 import { Musician } from '../index';
 
@@ -24,4 +25,7 @@ export class Notification {
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   created_at: Date;
+
+  @Column('varchar')
+  type: string;
 }
