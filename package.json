@@ -75,7 +75,8 @@
     "prettier": "prettier --config .prettierrc './**/*.ts' --write",
     "types": "tsc --project ./",
     "generateTypes": "ts-node api/command/generateType",
-    "resetdb": "ts-node api/db/reset",
+    "seed": "ts-node api/db/reset",
+    "reset": "docker exec -i findAMusician_backend npm run seed",
     "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
   },
   "repository": {

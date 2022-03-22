@@ -7,10 +7,13 @@ import {
   Event,
 } from '../entity';
 import Logger from '../log/logger';
-import { getConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
+import config from './config';
 
-export default async function reset(): Promise<void> {
+(async function () {
   try {
+    await createConnection(config);
+
     const connection = getConnection();
     // get All the repo
     const insRep = connection.getRepository(Instrument);
@@ -219,4 +222,4 @@ export default async function reset(): Promise<void> {
     Logger.info("❌ Couldn't reset the db data", err);
     throw err;
   }
-}
+})();
