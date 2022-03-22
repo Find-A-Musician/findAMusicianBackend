@@ -1,3 +1,3 @@
 export { getUserProfil, modifyUserProfil, deleteUserProfil } from './profil';
 export { leaveGroupById } from './userGroup';
-export { getNotifications } from './notification';
+export { getNotifications, deleteNotificationById } from './notification';
