@@ -7,3 +7,6 @@ export { Token } from './Token';
 export { Event } from './Event';
 export { Notification } from './notifications/Notification';
 export { MembershipNotification } from './notifications/group/MembershipNotification';
+export { GroupDeletedNotification } from './notifications/group/GroupDeletedNotification';
+export { GroupInvitationNotification } from './notifications/group/GroupInvitationNotification';
+export { GroupKickNotification } from './notifications/group/GroupKickNotification';

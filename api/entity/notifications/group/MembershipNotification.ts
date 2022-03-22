@@ -17,7 +17,6 @@ export class MembershipNotification extends Notification {
   @Column({
     type: 'enum',
     enum: ['pending', 'member', 'admin', 'declined', 'lite_admin'],
-    default: 'pending',
   })
   membership: Membership;
 }

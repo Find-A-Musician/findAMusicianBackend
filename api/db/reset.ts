@@ -7,6 +7,8 @@ import {
   Event,
   Notification,
   MembershipNotification,
+  GroupKickNotification,
+  // GroupDeletedNotification,
 } from '../entity';
 import Logger from '../log/logger';
 import { createConnection, getConnection } from 'typeorm';
@@ -26,6 +28,10 @@ import config from './config';
     const eveRep = connection.getRepository(Event);
     const notRep = connection.getRepository(Notification);
     const notMembershipRep = connection.getRepository(MembershipNotification);
+    // const notGroupDeletedRep = connection.getRepository(
+    //   GroupDeletedNotification,
+    // );
+    const notGroupKickRep = connection.getRepository(GroupKickNotification);
 
     // Reset all the database for the moment
     insRep.query('DELETE FROM instrument');
@@ -231,13 +237,19 @@ import config from './config';
     await eveRep.save([imtTremplin, laPioche]);
     Logger.info('🎫 events saved');
 
-    const testNotification = notMembershipRep.create({
+    const notif1 = notMembershipRep.create({
       musician: romain,
       group: spiritbox,
       membership: 'admin',
     });
 
-    notMembershipRep.save(testNotification);
+    const notif3 = notGroupKickRep.create({
+      musician: romain,
+      group: spiritbox,
+    });
+
+    notMembershipRep.save(notif1);
+    notGroupKickRep.save(notif3);
 
     Logger.info('📬 Notifications saved');
   } catch (err) {
