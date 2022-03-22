@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
-import type { operations } from '@schema';
-import { Request } from 'express';
 import generateToken, { GrantTypes } from '../../auth/generateToken';
-import type core from 'express-serve-static-core';
-import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 import { getRepository } from 'typeorm';
 import { Token } from '../../entity';
+import type { operations } from '@schema';
+import type { NextFunction, Request } from 'express';
+import type core from 'express-serve-static-core';
+import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
 
 type AuthTokenResult = {
   userId: string;
@@ -17,6 +17,7 @@ type PostToken = operations['postRefreshToken'];
 const refreshToken = async (
   req: Request<{}, getResponsesBody<PostToken>, getRequestBody<PostToken>, {}>,
   res: core.Response<getResponsesBody<PostToken>, {}, getHTTPCode<PostToken>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<PostToken>, {}, getHTTPCode<PostToken>>
 > => {
@@ -46,9 +47,7 @@ const refreshToken = async (
       },
     );
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 

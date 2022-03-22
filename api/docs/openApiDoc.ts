@@ -56,14 +56,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -77,14 +69,6 @@ const openApiDocs: OpenAPIV3.Document = {
           '200': {
             description: 'All the token has been deleted',
             content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
           },
         },
       },
@@ -121,14 +105,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '401': {
             description: 'Invalid refresh token',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -232,14 +208,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -293,14 +261,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -330,14 +290,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The event does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -375,14 +327,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The event does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -447,14 +391,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -468,7 +404,7 @@ const openApiDocs: OpenAPIV3.Document = {
             in: 'query',
             name: 'name',
             required: false,
-            schema: { type: 'string', example: 'imt tremplin' },
+            schema: { type: 'string', example: 'imtremplin' },
             description: 'The query filter for the event name',
           },
           {
@@ -550,14 +486,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       post: {
@@ -620,8 +548,46 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
+        },
+      },
+    },
+    '/events/{eventId}/kick/{groupId}': {
+      delete: {
+        operationId: 'eventKickGroup',
+        tags: ['events'],
+        security: [{ BearerAuth: [] }],
+        description: 'Delete a group from an event',
+        parameters: [
+          {
+            in: 'path',
+            name: 'eventId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the event',
+          },
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group to kick',
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The musician has been kicked from the group',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The musician is not in the group',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -648,8 +614,139 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
+        },
+      },
+    },
+    '/groups/{groupId}/admins/transfer/{musicianId}': {
+      post: {
+        operationId: 'transferGroupAdmin',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Transfer the admin membership to another member',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+          {
+            in: 'path',
+            name: 'musicianId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the musician that will become the admin',
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The admin membership has been transfered',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The musician is not a member of the group',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/groups/{groupId}/admins/lite_admins/{musicianId}': {
+      post: {
+        operationId: 'addGroupLiteAdmin',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Give a group member the lite_admin membership',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+          {
+            in: 'path',
+            name: 'musicianId',
+            schema: { type: 'string' },
+            required: true,
+            description:
+              'The ID of the musician that receive lite_admin membership',
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The musician became a lite_admin',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The musician is not a member of the group',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+      delete: {
+        operationId: 'removeGroupLiteAdmin',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Remove a group member the lite_admin membership',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+          {
+            in: 'path',
+            name: 'musicianId',
+            schema: { type: 'string' },
+            required: true,
+            description:
+              'The ID of the musician that receive lite_admin membership',
+          },
+        ],
+        responses: {
+          '204': {
+            description:
+              'The lite_admin membership has been removed from the group member',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The musician is not a lite_admin of the group',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -692,14 +789,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -729,14 +818,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The group does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -799,14 +880,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       delete: {
@@ -838,14 +911,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The group does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -936,14 +1001,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       post: {
@@ -1005,14 +1062,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1055,14 +1104,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '401': {
             description: "User can't respond to this invitation",
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1121,8 +1162,46 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
+        },
+      },
+    },
+    '/groups/{groupId}/kick/{musicianId}': {
+      delete: {
+        operationId: 'groupKickMusician',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Kick a member from a group',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            required: true,
+            schema: { type: 'string' },
+            description: 'the Id of the group',
+          },
+          {
+            in: 'path',
+            name: 'musicianId',
+            required: true,
+            schema: { type: 'string' },
+            description: 'the Id of the musician to kick',
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The musician has been kicked from the group',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The musician is not in the group',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1153,14 +1232,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1180,8 +1251,46 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
+        },
+      },
+    },
+    '/musicians/{musicianId}/groups/{groupId}/membership': {
+      get: {
+        operationId: 'getMusicianGroupMembership',
+        description: 'Get the membership of a musician in a group',
+        security: [{ BearerAuth: [] }],
+        tags: ['musician'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'musicianId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the muscician',
+          },
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'The membership of the musician',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['membership'],
+                  properties: { membership: { type: 'string' } },
+                },
+              },
+            },
+          },
+          '404': {
+            description: 'The group or musician does not exist',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1234,14 +1343,6 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           '404': {
             description: 'The group does not exist',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1353,14 +1454,6 @@ const openApiDocs: OpenAPIV3.Document = {
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
     },
@@ -1386,21 +1479,34 @@ const openApiDocs: OpenAPIV3.Document = {
                         groups: {
                           type: 'array',
                           items: {
-                            $ref: '#/components/schemas/groupDescription',
+                            type: 'object',
+                            properties: {
+                              instruments: {
+                                type: 'array',
+                                items: {
+                                  $ref: '#/components/schemas/instrument',
+                                },
+                              },
+                              membership: {
+                                type: 'string',
+                                enum: [
+                                  'admin',
+                                  'member',
+                                  'declined',
+                                  'pending',
+                                  'lite_admin',
+                                ],
+                              },
+                              group: {
+                                $ref: '#/components/schemas/groupDescription',
+                              },
+                            },
                           },
                         },
                       },
                     },
                   ],
                 },
-              },
-            },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
               },
             },
           },
@@ -1446,14 +1552,6 @@ const openApiDocs: OpenAPIV3.Document = {
             description: 'The musician information has been updated',
             content: { 'application/json': { schema: { type: 'string' } } },
           },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
         },
       },
       delete: {
@@ -1464,14 +1562,6 @@ const openApiDocs: OpenAPIV3.Document = {
           '200': {
             description: 'The musician information has been updated',
             content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '500': {
-            description: 'Error intern server',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
           },
         },
       },
@@ -1491,21 +1581,38 @@ const openApiDocs: OpenAPIV3.Document = {
             description: 'The id of the group to leave',
           },
         ],
+        requestBody: {
+          required: false,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  musicianId: {
+                    type: 'string',
+                    description:
+                      "The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group",
+                  },
+                },
+              },
+            },
+          },
+        },
         responses: {
           '200': {
             description: 'The user have leaved the group',
             content: { 'application/json': { schema: { type: 'string' } } },
           },
-          '404': {
-            description: 'This user is not in this group',
+          '400': {
+            description: 'The body is required for an admin leaving an event',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
               },
             },
           },
-          '500': {
-            description: 'Error intern server',
+          '404': {
+            description: 'This user is not in this group',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1637,7 +1744,7 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           membership: {
             type: 'string',
-            enum: ['admin', 'member', 'declined', 'pending'],
+            enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
           },
         },
       },

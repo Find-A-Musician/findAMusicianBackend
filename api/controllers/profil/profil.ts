@@ -1,9 +1,10 @@
+import { DeepPartial, getRepository } from 'typeorm';
+import { Musician, Instrument, Genre, MusicianGroup } from '../../entity';
 import type { operations } from '@schema';
 import type { Request } from 'express';
 import type core from 'express-serve-static-core';
 import type { getHTTPCode, getResponsesBody, getRequestBody } from '@typing';
-import { DeepPartial, getRepository } from 'typeorm';
-import { Musician, Instrument, Genre, MusicianGroup } from '../../entity';
+import type { NextFunction } from 'express';
 
 type getProfil = operations['getProfil'];
 type patchProfil = operations['patchProfil'];
@@ -12,6 +13,7 @@ type deleteProfil = operations['deleteProfil'];
 export const getUserProfil = async (
   req: Request,
   res: core.Response<getResponsesBody<getProfil>, {}, getHTTPCode<getProfil>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<getProfil>, {}, getHTTPCode<getProfil>>
 > => {
@@ -35,13 +37,9 @@ export const getUserProfil = async (
       relations: ['group', 'group.genres'],
     });
 
-    const groups = musicianGroups.map(({ group }) => group);
-
-    return res.status(200).json({ ...profil, groups });
+    return res.status(200).json({ ...profil, groups: musicianGroups });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -57,6 +55,7 @@ export const modifyUserProfil = async (
     {},
     getHTTPCode<patchProfil>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<patchProfil>, {}, getHTTPCode<patchProfil>>
 > => {
@@ -95,10 +94,7 @@ export const modifyUserProfil = async (
 
     return res.sendStatus(200);
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -113,6 +109,7 @@ export const deleteUserProfil = async (
     {},
     getHTTPCode<deleteProfil>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<deleteProfil>, {}, getHTTPCode<deleteProfil>>
 > => {
@@ -121,8 +118,6 @@ export const deleteUserProfil = async (
 
     return res.status(200).json('The user has been deleted');
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };

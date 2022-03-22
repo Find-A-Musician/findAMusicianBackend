@@ -18,7 +18,8 @@
     "sql-template-strings": "^2.2.2",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.45",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.6.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
@@ -75,9 +76,9 @@
     "prettier": "prettier --config .prettierrc './**/*.ts' --write",
     "types": "tsc --project ./",
     "generateTypes": "ts-node api/command/generateType",
-    "resetdb": "ts-node api/db/reset",
-    "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./",
-    "seed": "ts-node api/db/seed"
+    "seed": "ts-node api/db/reset",
+    "reset": "docker exec -i findAMusician_backend npm run seed",
+    "compile": "babel --env-name=mjs --out-file-extension=.mjs --out-dir=build --extensions '.ts,.js' --source-maps=true --ignore node_modules, build ./"
   },
   "repository": {
     "type": "git",

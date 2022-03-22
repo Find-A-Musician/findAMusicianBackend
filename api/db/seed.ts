@@ -1,5 +1,5 @@
 import { getConnection } from 'typeorm';
-import { Genre, Musician } from '../entity';
+import { Genre } from '../entity';
 import createConnection from './createConnection';
 import { genreSeeder, groupSeeder, legacySeeder } from './seeder';
 

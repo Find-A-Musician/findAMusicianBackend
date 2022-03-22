@@ -7,6 +7,6 @@ router.get('/', profilController.getUserProfil);
 router.patch('/', profilController.modifyUserProfil);
 router.delete('/', profilController.deleteUserProfil);
 
-router.use('/groups', profilController.leaveGroupById);
+router.use('/groups/:groupId/leave', profilController.leaveGroupById);
 
 export default router;

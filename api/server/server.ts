@@ -23,6 +23,7 @@ import type {
   Unauthorized,
   Forbidden,
 } from 'express-openapi-validator/dist/framework/types';
+import Logger from '../log/logger';
 
 import type { Request, Response } from 'express';
 
@@ -75,7 +76,7 @@ app.use('/logout', authenticateToken, logoutRouter);
 
 // musicians route
 app.use('/profil', authenticateToken, profilRouter);
-app.use('/musicians', musiciansRouter);
+app.use('/musicians', authenticateToken, musiciansRouter);
 
 // instruments route
 app.use('/instruments', instrumentRouter);
@@ -104,12 +105,30 @@ type ErrorOpenApi =
   | Forbidden;
 
 app.use(
-  (err: ErrorOpenApi, req: Request, res: Response, next: NextFunction) => {
-    // format error
-    res.status(err.status || 500).json({
-      message: err.message,
-      errors: err.errors,
-    });
+  (
+    err: Error | ErrorOpenApi,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    if (
+      (err as ErrorOpenApi).message &&
+      (err as ErrorOpenApi).errors &&
+      (err as ErrorOpenApi).status
+    ) {
+      // The error is throw by OpenApiValidator
+      Logger.info(err);
+
+      res.status((err as ErrorOpenApi).status || 500).json({
+        message: (err as ErrorOpenApi).message,
+        stack: (err as ErrorOpenApi).errors,
+      });
+    } else {
+      Logger.error(`500 error : \n${err}`);
+      res
+        .status(500)
+        .json({ status: 500, message: 'E_UNKNOWN_ERROR', stack: err });
+    }
     next();
   },
 );

@@ -1,12 +1,12 @@
-import { HandlerDefinition } from '../../../types/typing';
+import { HandlerDefinition } from '@typing';
 
 const schema: HandlerDefinition = {
-  path: '/groups/{groupId}',
-  get: {
-    operationId: 'getGroupsById',
+  path: '/groups/{groupId}/admins/lite_admins/{musicianId}',
+  post: {
+    operationId: 'addGroupLiteAdmin',
     tags: ['groups'],
     security: [{ BearerAuth: [] }],
-    description: "Get a group information by it's Id",
+    description: 'Give a group member the lite_admin membership',
     parameters: [
       {
         in: 'path',
@@ -17,68 +17,20 @@ const schema: HandlerDefinition = {
         required: true,
         description: 'The ID of the group',
       },
-    ],
-    responses: {
-      200: {
-        description: 'The group information',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/group',
-            },
-          },
-        },
-      },
-      404: {
-        description: 'The group does not exist',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
-    },
-  },
-  patch: {
-    operationId: 'patchGroupsById',
-    description: "Patch a group by it's Id",
-    security: [{ BearerAuth: [] }],
-    tags: ['groups'],
-    parameters: [
       {
         in: 'path',
-        name: 'groupId',
+        name: 'musicianId',
         schema: {
           type: 'string',
         },
         required: true,
-        description: 'The ID of the group',
+        description:
+          'The ID of the musician that receive lite_admin membership',
       },
     ],
-    requestBody: {
-      required: true,
-      content: {
-        'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              name: { type: 'string' },
-              description: { type: 'string' },
-              location: { type: 'string', enum: ['Douai', 'Lille'] },
-              genres: {
-                type: 'array',
-                items: { $ref: '#/components/schemas/genre' },
-              },
-            },
-          },
-        },
-      },
-    },
     responses: {
-      200: {
-        description: 'The group has been deleted',
+      204: {
+        description: 'The musician became a lite_admin',
         content: {
           'application/json': {
             schema: {
@@ -98,7 +50,7 @@ const schema: HandlerDefinition = {
         },
       },
       404: {
-        description: 'The group does not exist',
+        description: 'The musician is not a member of the group',
         content: {
           'application/json': {
             schema: {
@@ -110,10 +62,10 @@ const schema: HandlerDefinition = {
     },
   },
   delete: {
-    operationId: 'deleteGroupsById',
-    description: "Delete a group by it's Id",
-    security: [{ BearerAuth: [] }],
+    operationId: 'removeGroupLiteAdmin',
     tags: ['groups'],
+    security: [{ BearerAuth: [] }],
+    description: 'Remove a group member the lite_admin membership',
     parameters: [
       {
         in: 'path',
@@ -124,10 +76,21 @@ const schema: HandlerDefinition = {
         required: true,
         description: 'The ID of the group',
       },
+      {
+        in: 'path',
+        name: 'musicianId',
+        schema: {
+          type: 'string',
+        },
+        required: true,
+        description:
+          'The ID of the musician that receive lite_admin membership',
+      },
     ],
     responses: {
-      200: {
-        description: 'The group has been deleted',
+      204: {
+        description:
+          'The lite_admin membership has been removed from the group member',
         content: {
           'application/json': {
             schema: {
@@ -147,7 +110,7 @@ const schema: HandlerDefinition = {
         },
       },
       404: {
-        description: 'The group does not exist',
+        description: 'The musician is not a lite_admin of the group',
         content: {
           'application/json': {
             schema: {

@@ -1,12 +1,3 @@
-import type { operations } from '@schema';
-import type {
-  getHTTPCode,
-  getPathParams,
-  getRequestBody,
-  getRequestQuery,
-  getResponsesBody,
-} from '@typing';
-
 import {
   Any,
   DeepPartial,
@@ -23,6 +14,15 @@ import {
 } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
+import type { NextFunction } from 'express';
+import type {
+  getHTTPCode,
+  getPathParams,
+  getRequestBody,
+  getRequestQuery,
+  getResponsesBody,
+} from '@typing';
+import type { operations } from '@schema';
 
 type GetGroups = operations['getGroups'];
 type GetGroupsById = operations['getGroupsById'];
@@ -33,6 +33,7 @@ type DeleteGroupsById = operations['deleteGroupsById'];
 export const getAllGroup = async (
   req: Request<{}, getResponsesBody<GetGroups>, {}, getRequestQuery<GetGroups>>,
   res: core.Response<getResponsesBody<GetGroups>, {}, getHTTPCode<GetGroups>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<GetGroups>, {}, getHTTPCode<GetGroups>>
 > => {
@@ -118,10 +119,7 @@ export const getAllGroup = async (
       ..._links,
     });
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -137,6 +135,7 @@ export const getGroupById = async (
     {},
     getHTTPCode<GetGroupsById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<GetGroupsById>, {}, getHTTPCode<GetGroupsById>>
 > => {
@@ -152,9 +151,7 @@ export const getGroupById = async (
 
     return res.status(200).json(group);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -170,6 +167,7 @@ export const createGroup = async (
     {}
   >,
   res: core.Response<getResponsesBody<PostGroups>, {}, getHTTPCode<PostGroups>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<PostGroups>, {}, getHTTPCode<PostGroups>>
 > => {
@@ -230,9 +228,7 @@ export const createGroup = async (
       res.status(409).json({ msg: 'E_GROUP_ALREADY_EXIST' });
     }
 
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -248,6 +244,7 @@ export const modifyGroupById = async (
     {},
     getHTTPCode<PatchGroupsById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<PatchGroupsById>,
@@ -275,7 +272,7 @@ export const modifyGroupById = async (
       },
     });
 
-    if (!(membership == 'admin')) {
+    if (!(membership == 'admin' || membership == 'lite_admin')) {
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 
@@ -298,9 +295,7 @@ export const modifyGroupById = async (
 
     return res.sendStatus(200);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -316,6 +311,7 @@ export const deleteGroupById = async (
     {},
     getHTTPCode<DeleteGroupsById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<DeleteGroupsById>,
@@ -350,8 +346,6 @@ export const deleteGroupById = async (
     await getRepository(Groups).delete({ id: req.params.groupId });
     res.sendStatus(200);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };

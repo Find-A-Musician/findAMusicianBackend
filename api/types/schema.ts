@@ -36,9 +36,23 @@ export interface paths {
     /** Post a new event */
     post: operations["postEvents"];
   };
+  "/events/{eventId}/kick/{groupId}": {
+    /** Delete a group from an event */
+    delete: operations["eventKickGroup"];
+  };
   "/genres": {
     /** Get a list of all genres */
     get: operations["getGenres"];
+  };
+  "/groups/{groupId}/admins/transfer/{musicianId}": {
+    /** Transfer the admin membership to another member */
+    post: operations["transferGroupAdmin"];
+  };
+  "/groups/{groupId}/admins/lite_admins/{musicianId}": {
+    /** Give a group member the lite_admin membership */
+    post: operations["addGroupLiteAdmin"];
+    /** Remove a group member the lite_admin membership */
+    delete: operations["removeGroupLiteAdmin"];
   };
   "/groups/event/join": {
     /** A group joins an event */
@@ -66,12 +80,20 @@ export interface paths {
     /** Invite a musician in a group */
     post: operations["sendGroupInvitation"];
   };
+  "/groups/{groupId}/kick/{musicianId}": {
+    /** Kick a member from a group */
+    delete: operations["groupKickMusician"];
+  };
   "/info": {
     /** Return the basic information of the app */
     get: operations["getApplicationInfo"];
   };
   "/instruments": {
     get: operations["getInstruments"];
+  };
+  "/musicians/{musicianId}/groups/{groupId}/membership": {
+    /** Get the membership of a musician in a group */
+    get: operations["getMusicianGroupMembership"];
   };
   "/musicians/{musicianId}": {
     /** Get a musician information by it's ID */
@@ -141,7 +163,7 @@ export interface components {
     groupMember: {
       musician?: components["schemas"]["musicianMinimized"];
       instruments?: components["schemas"]["instrument"][];
-      membership?: "admin" | "member" | "declined" | "pending";
+      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
     };
     instrument: {
       id: string;
@@ -205,12 +227,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -231,12 +247,6 @@ export interface operations {
           "application/json": string;
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Send a new access token */
@@ -252,12 +262,6 @@ export interface operations {
       };
       /** Invalid refresh token */
       401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -284,12 +288,6 @@ export interface operations {
       };
       /** The user already exist */
       409: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -336,12 +334,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -369,12 +361,6 @@ export interface operations {
       };
       /** The event does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -408,12 +394,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Modify an event info */
@@ -439,12 +419,6 @@ export interface operations {
       };
       /** The event does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -497,12 +471,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Post a new event */
@@ -516,12 +484,6 @@ export interface operations {
       };
       /** The Event already exist */
       409: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -543,6 +505,37 @@ export interface operations {
       };
     };
   };
+  /** Delete a group from an event */
+  eventKickGroup: {
+    parameters: {
+      path: {
+        /** The ID of the event */
+        eventId: string;
+        /** The ID of the group to kick */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The musician has been kicked from the group */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not in the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
   /** Get a list of all genres */
   getGenres: {
     responses: {
@@ -552,8 +545,95 @@ export interface operations {
           "application/json": components["schemas"]["genre"][];
         };
       };
-      /** Error intern server */
-      500: {
+    };
+  };
+  /** Transfer the admin membership to another member */
+  transferGroupAdmin: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+        /** The ID of the musician that will become the admin */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The admin membership has been transfered */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a member of the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Give a group member the lite_admin membership */
+  addGroupLiteAdmin: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+        /** The ID of the musician that receive lite_admin membership */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The musician became a lite_admin */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a member of the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Remove a group member the lite_admin membership */
+  removeGroupLiteAdmin: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+        /** The ID of the musician that receive lite_admin membership */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The lite_admin membership has been removed from the group member */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a lite_admin of the group */
+      404: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -571,12 +651,6 @@ export interface operations {
       };
       /** The group or event does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -612,12 +686,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Delete a group by it's Id */
@@ -647,12 +715,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Patch a group by it's Id */
@@ -678,12 +740,6 @@ export interface operations {
       };
       /** The group does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -730,12 +786,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Create a new group */
@@ -749,12 +799,6 @@ export interface operations {
       };
       /** The group already exist */
       409: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -790,12 +834,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -827,12 +865,6 @@ export interface operations {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
     requestBody: {
       content: {
@@ -841,6 +873,37 @@ export interface operations {
           musicianId: string;
           instrumentId: string;
           role: "lite_admin" | "member";
+        };
+      };
+    };
+  };
+  /** Kick a member from a group */
+  groupKickMusician: {
+    parameters: {
+      path: {
+        /** the Id of the group */
+        groupId: string;
+        /** the Id of the musician to kick */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** The musician has been kicked from the group */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not in the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -858,12 +921,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   getInstruments: {
@@ -874,8 +931,29 @@ export interface operations {
           "application/json": components["schemas"]["instrument"][];
         };
       };
-      /** Error intern server */
-      500: {
+    };
+  };
+  /** Get the membership of a musician in a group */
+  getMusicianGroupMembership: {
+    parameters: {
+      path: {
+        /** The ID of the muscician */
+        musicianId: string;
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The membership of the musician */
+      200: {
+        content: {
+          "application/json": {
+            membership: string;
+          };
+        };
+      };
+      /** The group or musician does not exist */
+      404: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -901,12 +979,6 @@ export interface operations {
       };
       /** The group does not exist */
       404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** Error intern server */
-      500: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -946,12 +1018,6 @@ export interface operations {
           };
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   /** Get the user connected profil */
@@ -961,14 +1027,17 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["musician"] & {
-            groups: components["schemas"]["groupDescription"][];
+            groups: {
+              instruments?: components["schemas"]["instrument"][];
+              membership?:
+                | "admin"
+                | "member"
+                | "declined"
+                | "pending"
+                | "lite_admin";
+              group?: components["schemas"]["groupDescription"];
+            }[];
           };
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -981,12 +1050,6 @@ export interface operations {
           "application/json": string;
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
     };
   };
   patchProfil: {
@@ -995,12 +1058,6 @@ export interface operations {
       200: {
         content: {
           "application/json": string;
-        };
-      };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -1036,16 +1093,24 @@ export interface operations {
           "application/json": string;
         };
       };
+      /** The body is required for an admin leaving an event */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
       /** This user is not in this group */
       404: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** Error intern server */
-      500: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
+          musicianId?: string;
         };
       };
     };

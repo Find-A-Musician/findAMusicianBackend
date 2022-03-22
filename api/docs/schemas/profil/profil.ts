@@ -23,22 +23,31 @@ const schema: HandlerDefinition = {
                     groups: {
                       type: 'array',
                       items: {
-                        $ref: '#/components/schemas/groupDescription',
+                        type: 'object',
+                        properties: {
+                          instruments: {
+                            type: 'array',
+                            items: { $ref: '#/components/schemas/instrument' },
+                          },
+                          membership: {
+                            type: 'string',
+                            enum: [
+                              'admin',
+                              'member',
+                              'declined',
+                              'pending',
+                              'lite_admin',
+                            ],
+                          },
+                          group: {
+                            $ref: '#/components/schemas/groupDescription',
+                          },
+                        },
                       },
                     },
                   },
                 },
               ],
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
             },
           },
         },
@@ -96,16 +105,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
   delete: {
@@ -119,16 +118,6 @@ const schema: HandlerDefinition = {
           'application/json': {
             schema: {
               type: 'string',
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
             },
           },
         },

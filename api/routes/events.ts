@@ -12,4 +12,6 @@ router.delete('/:eventId', eventController.deleteEventById);
 
 router.post('/admins', eventController.addAdminToEvent);
 
+router.delete('/:eventId/kick/:groupId', eventController.kickGroupFromEvent);
+
 export default router;

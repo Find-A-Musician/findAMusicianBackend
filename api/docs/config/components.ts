@@ -117,7 +117,7 @@ const components: OpenAPIV3.Document['components'] = {
         },
         membership: {
           type: 'string',
-          enum: ['admin', 'member', 'declined', 'pending'],
+          enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
         },
       },
     },

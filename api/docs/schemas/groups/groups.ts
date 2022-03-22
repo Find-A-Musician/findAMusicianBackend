@@ -99,16 +99,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
   post: {
@@ -171,16 +161,6 @@ const schema: HandlerDefinition = {
       },
       409: {
         description: 'The group already exist',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
         content: {
           'application/json': {
             schema: {

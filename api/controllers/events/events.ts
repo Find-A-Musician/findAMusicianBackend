@@ -1,12 +1,3 @@
-import type { operations } from '@schema';
-import type {
-  getHTTPCode,
-  getResponsesBody,
-  getRequestBody,
-  getPathParams,
-  getRequestQuery,
-} from '@typing';
-import type core from 'express-serve-static-core';
 import {
   DeepPartial,
   FindOneOptions,
@@ -16,6 +7,16 @@ import {
   MoreThanOrEqual,
 } from 'typeorm';
 import { Event, Genre, Musician } from '../../entity';
+import type core from 'express-serve-static-core';
+import type {
+  getHTTPCode,
+  getResponsesBody,
+  getRequestBody,
+  getPathParams,
+  getRequestQuery,
+} from '@typing';
+import type { operations } from '@schema';
+import type { NextFunction } from 'express';
 
 type GetEvents = operations['getEvents'];
 type PostEvents = operations['postEvents'];
@@ -31,6 +32,7 @@ export const getAllEvents = async (
     getRequestQuery<GetEvents>
   >,
   res: core.Response<getResponsesBody<GetEvents>, {}, getHTTPCode<GetEvents>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<GetEvents>, {}, getHTTPCode<GetEvents>>
 > => {
@@ -146,10 +148,7 @@ export const getAllEvents = async (
       ..._links,
     });
   } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -165,6 +164,7 @@ export const getEventById = async (
     {},
     getHTTPCode<GetEventsById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<GetEventsById>, {}, getHTTPCode<GetEventsById>>
 > => {
@@ -180,9 +180,7 @@ export const getEventById = async (
 
     return res.status(200).json(event);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -194,6 +192,7 @@ export const createEvent = async (
     getPathParams<PostEvents>
   >,
   res: core.Response<getResponsesBody<PostEvents>, {}, getHTTPCode<PostEvents>>,
+  next: NextFunction,
 ): Promise<
   core.Response<getResponsesBody<PostEvents>, {}, getHTTPCode<PostEvents>>
 > => {
@@ -229,9 +228,7 @@ export const createEvent = async (
     if (err.code == 23505) {
       return res.status(409).json({ msg: 'E_EVENT_ALREADY_EXIST' });
     } else {
-      return res
-        .status(500)
-        .json({ msg: 'E_SQL_ERR', stack: JSON.stringify(err) });
+      next(err);
     }
   }
 };
@@ -248,6 +245,7 @@ export const modifyEventById = async (
     {},
     getHTTPCode<PatchEventsById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<PatchEventsById>,
@@ -287,11 +285,7 @@ export const modifyEventById = async (
     await getRepository(Event).save({ id: req.params.eventId, ...update });
     return res.sendStatus(200);
   } catch (err) {
-    console.log(err);
-
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };
 
@@ -307,6 +301,7 @@ export const deleteEventById = async (
     {},
     getHTTPCode<DeleteEventsById>
   >,
+  next: NextFunction,
 ): Promise<
   core.Response<
     getResponsesBody<DeleteEventsById>,
@@ -331,8 +326,6 @@ export const deleteEventById = async (
     await getRepository(Event).delete({ id: req.params.eventId });
     return res.sendStatus(200);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ msg: 'E_SQL_ERROR', stack: JSON.stringify(err) });
+    next(err);
   }
 };

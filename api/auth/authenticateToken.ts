@@ -1,3 +1,4 @@
+import Logger from '../log/logger';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { GrantTypes } from './generateToken';
@@ -20,7 +21,13 @@ export default function authenticateToken(
     process.env.ACCESS_TOKEN_SECRET,
     (err, result: AuthTokenResult) => {
       if (err || result.grantType !== GrantTypes.AuthorizationCode) {
-        res.status(403).json({ msg: 'E_INVALID_TOKEN' });
+        const ip =
+          req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        Logger.warn(
+          `The request ${ip} : ${req.headers.host} has invalid token : ${err.name} : ${err.message} - ${err.stack}`,
+        );
+
+        return res.status(403).json({ msg: 'E_INVALID_TOKEN' });
       }
 
       req.userId = result.userId;

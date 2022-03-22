@@ -13,7 +13,7 @@ const schema: HandlerDefinition = {
         required: false,
         schema: {
           type: 'string',
-          example: 'imt tremplin',
+          example: 'imtremplin',
         },
         description: 'The query filter for the event name',
       },
@@ -108,16 +108,6 @@ const schema: HandlerDefinition = {
           },
         },
       },
-      500: {
-        description: 'Error intern server',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
     },
   },
 
@@ -182,16 +172,6 @@ const schema: HandlerDefinition = {
       },
       409: {
         description: 'The Event already exist',
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/httpError',
-            },
-          },
-        },
-      },
-      500: {
-        description: 'Error intern server',
         content: {
           'application/json': {
             schema: {
