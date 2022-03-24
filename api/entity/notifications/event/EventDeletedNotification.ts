@@ -1,24 +1,26 @@
 import { Genre, Notification } from '../../index';
 import { ChildEntity, Column, JoinTable, ManyToMany } from 'typeorm';
-import { Location } from '../../Musician';
 
 /**
- * @description This notification is used when a group
+ * @description This notification is used when an event
  * has been deleted
  */
 @ChildEntity()
-export class GroupDeletedNotification extends Notification {
+export class EventDeletedNotification extends Notification {
   @Column('varchar')
   name: string;
 
   @Column('text', { nullable: true })
   description: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['Douai', 'Lille'],
-  })
-  location: Location;
+  @Column('timestamp without time zone')
+  startDate: Date;
+
+  @Column('timestamp without time zone')
+  endDate: Date;
+
+  @Column('varchar')
+  adress: string;
 
   @ManyToMany(() => Genre, { onDelete: 'CASCADE' })
   @JoinTable()

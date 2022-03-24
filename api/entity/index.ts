@@ -8,5 +8,7 @@ export { Event } from './Event';
 export { Notification } from './notifications/Notification';
 export { MembershipNotification } from './notifications/group/MembershipNotification';
 export { GroupDeletedNotification } from './notifications/group/GroupDeletedNotification';
-export { GroupInvitationNotification } from './notifications/group/GroupInvitationNotification';
 export { GroupKickNotification } from './notifications/group/GroupKickNotification';
+export { EventDeletedNotification } from './notifications/event/EventDeletedNotification';
+export { EventGroupJoin } from './notifications/event/EventGroupJoin';
+export { EventGroupKickNotification } from './notifications/event/EventGroupKickNotification';
