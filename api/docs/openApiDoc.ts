@@ -1124,106 +1124,6 @@ const openApiDocs: OpenAPIV3.Document = {
         },
       },
     },
-    '/groups/invitation/response': {
-      post: {
-        operationId: 'responseGroupInvitation',
-        tags: ['groups'],
-        description: 'Respond to a group invitation',
-        security: [{ BearerAuth: [] }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['groupId', 'response'],
-                properties: {
-                  groupId: { type: 'string' },
-                  response: { type: 'string', enum: ['declined', 'member'] },
-                },
-                example: {
-                  groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-                  response: 'member',
-                },
-              },
-            },
-          },
-        },
-        responses: {
-          '201': {
-            description: 'The user membershhip has been updated',
-            content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '400': {
-            description: 'The user has already responded',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '401': {
-            description: "User can't respond to this invitation",
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/groups/invitation/send': {
-      post: {
-        operationId: 'sendGroupInvitation',
-        tags: ['groups'],
-        description: 'Invite a musician in a group',
-        security: [{ BearerAuth: [] }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['groupId', 'musicianId', 'instrumentId', 'role'],
-                properties: {
-                  groupId: { type: 'string' },
-                  musicianId: { type: 'string' },
-                  instrumentId: { type: 'string' },
-                  role: { type: 'string', enum: ['lite_admin', 'member'] },
-                },
-              },
-              example: {
-                groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-                musicianId: '8c9a685a-2be9-4cf0-a03c-0b316fc4b515',
-                instrumentId: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-                role: 'member',
-              },
-            },
-          },
-        },
-        responses: {
-          '201': {
-            description: 'The user has been invited',
-            content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '400': {
-            description: 'The user is already invited',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '401': {
-            description: "User that invite doesn't have the access",
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-        },
-      },
-    },
     '/groups/{groupId}/kick/{musicianId}': {
       delete: {
         operationId: 'groupKickMusician',
@@ -1612,13 +1512,7 @@ const openApiDocs: OpenAPIV3.Document = {
                               },
                               membership: {
                                 type: 'string',
-                                enum: [
-                                  'admin',
-                                  'member',
-                                  'declined',
-                                  'pending',
-                                  'lite_admin',
-                                ],
+                                enum: ['admin', 'member', 'lite_admin'],
                               },
                               group: {
                                 $ref: '#/components/schemas/groupDescription',
@@ -1867,7 +1761,7 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           membership: {
             type: 'string',
-            enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
+            enum: ['admin', 'member', 'lite_admin'],
           },
         },
       },

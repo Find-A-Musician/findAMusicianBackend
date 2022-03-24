@@ -61,18 +61,10 @@ export const leaveGroupById = async (
        */
 
       const otherMembers = musicianGroup.group.members.filter(
-        (musicianGroup) =>
-          (musicianGroup.membership == 'member' ||
-            musicianGroup.membership == 'lite_admin') &&
-          musicianGroup.musician.id !== req.userId,
+        (musicianGroup) => musicianGroup.musician.id !== req.userId,
       );
 
       if (otherMembers.length === 0) {
-        /* 
-        We are going to delete the group because the admin leave the group
-        and all the other "members" are either declined or pending
-         */
-
         await getRepository(Groups).remove(musicianGroup.group);
 
         return res.sendStatus(200);

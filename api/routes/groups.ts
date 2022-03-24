@@ -32,6 +32,4 @@ router.delete(
   groupController.kickMusicianFromGroup,
 );
 
-// router.use('/invitation', invitationRouter);
-
 export default router;

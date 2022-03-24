@@ -76,14 +76,6 @@ export interface paths {
     /** Create a new group */
     post: operations["createGroup"];
   };
-  "/groups/invitation/response": {
-    /** Respond to a group invitation */
-    post: operations["responseGroupInvitation"];
-  };
-  "/groups/invitation/send": {
-    /** Invite a musician in a group */
-    post: operations["sendGroupInvitation"];
-  };
   "/groups/{groupId}/kick/{musicianId}": {
     /** Kick a member from a group */
     delete: operations["groupKickMusician"];
@@ -177,7 +169,7 @@ export interface components {
     groupMember: {
       musician?: components["schemas"]["musicianMinimized"];
       instruments?: components["schemas"]["instrument"][];
-      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
+      membership?: "admin" | "member" | "lite_admin";
     };
     instrument: {
       id: string;
@@ -870,70 +862,6 @@ export interface operations {
       };
     };
   };
-  /** Respond to a group invitation */
-  responseGroupInvitation: {
-    responses: {
-      /** The user membershhip has been updated */
-      201: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The user has already responded */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** User can't respond to this invitation */
-      401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          groupId: string;
-          response: "declined" | "member";
-        };
-      };
-    };
-  };
-  /** Invite a musician in a group */
-  sendGroupInvitation: {
-    responses: {
-      /** The user has been invited */
-      201: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The user is already invited */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** User that invite doesn't have the access */
-      401: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          groupId: string;
-          musicianId: string;
-          instrumentId: string;
-          role: "lite_admin" | "member";
-        };
-      };
-    };
-  };
   /** Kick a member from a group */
   groupKickMusician: {
     parameters: {
@@ -1131,12 +1059,7 @@ export interface operations {
           "application/json": components["schemas"]["musician"] & {
             groups: {
               instruments?: components["schemas"]["instrument"][];
-              membership?:
-                | "admin"
-                | "member"
-                | "declined"
-                | "pending"
-                | "lite_admin";
+              membership?: "admin" | "member" | "lite_admin";
               group?: components["schemas"]["groupDescription"];
             }[];
           };
