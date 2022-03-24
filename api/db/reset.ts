@@ -13,6 +13,7 @@ import {
   EventGroupKickNotification,
   GroupDeletedNotification,
   // GroupDeletedNotification,
+  Invitation,
 } from '../entity';
 import Logger from '../log/logger';
 import { createConnection, getConnection, getRepository } from 'typeorm';
@@ -32,6 +33,7 @@ import { exit } from 'process';
     const musGrouRep = connection.getRepository(MusicianGroup);
     const eveRep = connection.getRepository(Event);
     const notRep = connection.getRepository(Notification);
+    const invRep = connection.getRepository(Invitation);
 
     // Reset all the database for the moment
     insRep.query('DELETE FROM instrument');
@@ -285,6 +287,24 @@ import { exit } from 'process';
     await getRepository(EventGroupKickNotification).save(notif5);
     await getRepository(GroupDeletedNotification).save(notif6);
     Logger.info('📬 Notifications saved');
+
+    const invitation1 = invRep.create({
+      type: 'musicianToGroup',
+      musician: dorian,
+      group: slipknot,
+      instruments: [guitare],
+    });
+
+    const invitation2 = invRep.create({
+      type: 'groupToMusician',
+      musician: alexandre,
+      group: slipknot,
+      instruments: [piano],
+      invitor: romain,
+    });
+
+    await invRep.save([invitation1, invitation2]);
+    Logger.info('✉️ invitations saved ');
 
     exit();
   } catch (err) {
