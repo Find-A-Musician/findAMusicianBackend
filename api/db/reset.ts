@@ -219,7 +219,7 @@ import config from './config';
 
     Logger.info('🎫 events saved');
   } catch (err) {
-    Logger.info("❌ Couldn't reset the db data", err);
+    Logger.info(`❌ Couldn't reset the db data\n ${err.stack}`);
     throw err;
   }
 })();

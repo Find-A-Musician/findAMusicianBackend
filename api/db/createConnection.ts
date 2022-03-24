@@ -7,7 +7,7 @@ export default async function createConnection(): Promise<void> {
     await createDbConnection(config);
     Logger.info('💾 Connection to DB successfull');
   } catch (e) {
-    Logger.error(`❌ Couldn't connect to the DB\n${e}`);
+    Logger.error(`❌ Couldn't connect to the DB\n${e.stack}`);
     throw e;
   }
 }

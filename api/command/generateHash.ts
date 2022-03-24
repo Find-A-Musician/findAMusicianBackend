@@ -11,7 +11,7 @@ rl.question('What is your password ', function (password) {
   const saltRound = 10;
   bcrypt.hash(password, saltRound, async function (err, hash) {
     if (err) {
-      Logger.error(`An error has occured when creating a hash \n ${err}`);
+      Logger.error(`An error has occured when creating a hash \n ${err.stack}`);
       rl.close();
     }
     Logger.info('-------------------HASH-----------------\n' + hash);

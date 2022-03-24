@@ -61,7 +61,7 @@ prettierOptions = {
           },
         )
         .catch((err) => {
-          Logger.error(`couldn't import an openAPiSchema \n ${err}`);
+          Logger.error(`couldn't import an openAPiSchema \n ${err.stack}`);
           throw new Error(err);
         });
     }
@@ -100,7 +100,7 @@ prettierOptions = {
 
     Logger.info('✅ API Types have been generated ! ');
   } catch (err) {
-    Logger.error(`❌ Generate types failed\n${err}`);
+    Logger.error(`❌ Generate types failed\n${err.stack}`);
     throw new Error(err);
   }
 })();
