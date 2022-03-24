@@ -54,6 +54,10 @@ export interface paths {
     /** Remove a group member the lite_admin membership */
     delete: operations["removeGroupLiteAdmin"];
   };
+  "/groups/{groupId}/admins/lite_admins": {
+    /** Give a group member the lite_admin membership */
+    put: operations["addGroupLiteAdmins"];
+  };
   "/groups/event/join": {
     /** A group joins an event */
     post: operations["groupJoinEvent"];
@@ -636,6 +640,42 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Give a group member the lite_admin membership */
+  addGroupLiteAdmins: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The musician became a lite_admin */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The musician is not a member of the group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          lite_admins: string[];
         };
       };
     };

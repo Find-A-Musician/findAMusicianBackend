@@ -12,13 +12,14 @@ router.delete('/:groupId', groupController.deleteGroupById);
 
 router.post('/event/join', groupController.groupJoinEvent);
 
+router.put('/:groupId/admins/lite_admins', groupController.addGroupLiteAdmins);
 router.post(
   '/:groupId/admins/lite_admins/:musicianId',
-  groupController.addGroupLiteAdmin,
+  groupController.addGroupLiteAdminById,
 );
 router.delete(
   '/:groupId/admins/lite_admins/:musicianId',
-  groupController.removeGroupLiteAdmin,
+  groupController.removeGroupLiteAdminById,
 );
 
 router.post(
