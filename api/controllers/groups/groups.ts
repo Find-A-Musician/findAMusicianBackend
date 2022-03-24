@@ -261,7 +261,7 @@ export const modifyGroupById = async (
       return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
     }
 
-    const { membership } = await getRepository(MusicianGroup).findOne({
+    const musicianGroup = await getRepository(MusicianGroup).findOne({
       where: {
         musician: {
           id: req.userId,
@@ -272,7 +272,12 @@ export const modifyGroupById = async (
       },
     });
 
-    if (!(membership == 'admin' || membership == 'lite_admin')) {
+    if (
+      !(
+        musicianGroup.membership == 'admin' ||
+        musicianGroup.membership == 'lite_admin'
+      )
+    ) {
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 
@@ -328,7 +333,7 @@ export const deleteGroupById = async (
       return res.status(404).json({ msg: 'E_GROUP_DOES_NOT_EXIST' });
     }
 
-    const { membership } = await getRepository(MusicianGroup).findOne({
+    const musicianGroup = await getRepository(MusicianGroup).findOne({
       where: {
         musician: {
           id: req.userId,
@@ -339,7 +344,7 @@ export const deleteGroupById = async (
       },
     });
 
-    if (!(membership == 'admin')) {
+    if (!(musicianGroup.membership == 'admin')) {
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 

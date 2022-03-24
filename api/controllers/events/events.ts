@@ -254,16 +254,16 @@ export const modifyEventById = async (
   >
 > => {
   try {
-    const { admins } = await getRepository(Event).findOne({
+    const event = await getRepository(Event).findOne({
       where: { id: req.params.eventId },
       relations: ['admins'],
     });
 
-    if (admins.length === 0) {
+    if (event.admins.length === 0) {
       return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
     }
 
-    if (!admins.some((musician) => musician.id === req.userId)) {
+    if (!event.admins.some((musician) => musician.id === req.userId)) {
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 
@@ -310,16 +310,16 @@ export const deleteEventById = async (
   >
 > => {
   try {
-    const { admins } = await getRepository(Event).findOne({
+    const event = await getRepository(Event).findOne({
       where: { id: req.params.eventId },
       relations: ['admins'],
     });
 
-    if (admins.length === 0) {
+    if (event.admins.length === 0) {
       return res.status(404).json({ msg: 'E_EVENT_DOES_NOT_EXIST' });
     }
 
-    if (!admins.some((musician) => musician.id === req.userId)) {
+    if (!event.admins.some((musician) => musician.id === req.userId)) {
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 
