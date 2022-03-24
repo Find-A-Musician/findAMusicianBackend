@@ -35,8 +35,6 @@ export const getNotifications = async (
       relations: ['group', 'group.genres', 'event', 'event.genres'],
     });
 
-    // console.log(notications[0]);
-
     return res.status(200).json(notications);
   } catch (err) {
     next(err);

@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { Event } from '../../entity';
+import { Event, EventGroupKickNotification, MusicianGroup } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { operations } from '@schema';
@@ -55,6 +55,27 @@ export const kickGroupFromEvent = async (
     event.groups = event.groups.filter(({ id }) => id != groupIdToKick);
 
     await eventRepository.save(event);
+
+    const members = await getRepository(MusicianGroup).find({
+      where: {
+        group: {
+          id: groupIdToKick,
+        },
+      },
+      relations: ['musician'],
+    });
+
+    const notifications = members.map((member) =>
+      getRepository(EventGroupKickNotification).create({
+        musician: member.musician,
+        event: event,
+        group: {
+          id: groupIdToKick,
+        },
+      }),
+    );
+
+    await getRepository(EventGroupKickNotification).save(notifications);
 
     return res.sendStatus(204);
   } catch (err) {
