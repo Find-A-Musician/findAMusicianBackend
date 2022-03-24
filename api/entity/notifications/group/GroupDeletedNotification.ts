@@ -6,6 +6,7 @@ import { Location } from '../../Musician';
  * @description This notification is used when a group
  * has been deleted
  */
+
 @ChildEntity()
 export class GroupDeletedNotification extends Notification {
   @Column('varchar')

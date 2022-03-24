@@ -8,9 +8,9 @@ import { Membership } from '../../MusicianGroup';
  */
 @ChildEntity()
 export class MembershipNotification extends Notification {
-  @ManyToOne(() => Groups, (groups) => groups.id, {
-    primary: true,
+  @ManyToOne(() => Groups, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   group: Groups;
 

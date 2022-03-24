@@ -27,7 +27,7 @@ export const getNotifications = async (
 > => {
   try {
     const notications = await getRepository(Notification).find({
-      relations: ['group', 'group.genres'],
+      relations: ['group', 'group.genres', 'event', 'event.genres'],
     });
 
     // console.log(notications[0]);

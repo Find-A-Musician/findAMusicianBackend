@@ -3,9 +3,9 @@ import { ChildEntity, ManyToOne } from 'typeorm';
 
 @ChildEntity()
 export class GroupKickNotification extends Notification {
-  @ManyToOne(() => Groups, (groups) => groups.id, {
-    primary: true,
+  @ManyToOne(() => Groups, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   group: Groups;
 }

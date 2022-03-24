@@ -8,11 +8,15 @@ import {
   Notification,
   MembershipNotification,
   GroupKickNotification,
+  EventGroupJoin,
+  EventDeletedNotification,
+  EventGroupKickNotification,
   // GroupDeletedNotification,
 } from '../entity';
 import Logger from '../log/logger';
-import { createConnection, getConnection } from 'typeorm';
+import { createConnection, getConnection, getRepository } from 'typeorm';
 import config from './config';
+import { exit } from 'process';
 
 (async function () {
   try {
@@ -27,11 +31,6 @@ import config from './config';
     const musGrouRep = connection.getRepository(MusicianGroup);
     const eveRep = connection.getRepository(Event);
     const notRep = connection.getRepository(Notification);
-    const notMembershipRep = connection.getRepository(MembershipNotification);
-    // const notGroupDeletedRep = connection.getRepository(
-    //   GroupDeletedNotification,
-    // );
-    const notGroupKickRep = connection.getRepository(GroupKickNotification);
 
     // Reset all the database for the moment
     insRep.query('DELETE FROM instrument');
@@ -237,23 +236,49 @@ import config from './config';
     await eveRep.save([imtTremplin, laPioche]);
     Logger.info('🎫 events saved');
 
-    const notif1 = notMembershipRep.create({
+    const notif1 = getRepository(MembershipNotification).create({
       musician: romain,
       group: spiritbox,
       membership: 'admin',
     });
 
-    const notif3 = notGroupKickRep.create({
+    const notif2 = getRepository(EventGroupJoin).create({
+      event: imtTremplin,
       musician: romain,
       group: spiritbox,
     });
 
-    notMembershipRep.save(notif1);
-    notGroupKickRep.save(notif3);
+    const notif3 = getRepository(GroupKickNotification).create({
+      musician: romain,
+      group: spiritbox,
+    });
 
+    const notif4 = getRepository(EventDeletedNotification).create({
+      name: laPioche.name,
+      description: laPioche.description,
+      startDate: laPioche.startDate,
+      endDate: laPioche.endDate,
+      adress: laPioche.adress,
+      musician: romain,
+      genres: laPioche.genres,
+    });
+
+    const notif5 = getRepository(EventGroupKickNotification).create({
+      musician: romain,
+      group: slipknot,
+      event: laPioche,
+    });
+
+    await getRepository(MembershipNotification).save(notif1);
+    await getRepository(EventGroupJoin).save(notif2);
+    await getRepository(GroupKickNotification).save(notif3);
+    await getRepository(EventDeletedNotification).save(notif4);
+    await getRepository(EventGroupKickNotification).save(notif5);
     Logger.info('📬 Notifications saved');
+
+    exit();
   } catch (err) {
     Logger.info(`❌ Couldn't reset the db data\n ${err.stack}`);
-    throw err;
+    exit(1);
   }
 })();

@@ -7,9 +7,15 @@ import { ChildEntity, ManyToOne } from 'typeorm';
  */
 @ChildEntity()
 export class EventGroupKickNotification extends Notification {
-  @ManyToOne(() => Groups, (group) => group.id)
+  @ManyToOne(() => Groups, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   group: Groups;
 
-  @ManyToOne(() => Event, (event) => event.id)
+  @ManyToOne(() => Event, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   event: Event;
 }
