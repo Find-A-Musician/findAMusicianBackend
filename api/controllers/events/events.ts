@@ -6,7 +6,13 @@ import {
   LessThanOrEqual,
   MoreThanOrEqual,
 } from 'typeorm';
-import { Event, Genre, Musician } from '../../entity';
+import {
+  Event,
+  EventDeletedNotification,
+  Genre,
+  Groups,
+  Musician,
+} from '../../entity';
 import type core from 'express-serve-static-core';
 import type {
   getHTTPCode,
@@ -312,7 +318,12 @@ export const deleteEventById = async (
   try {
     const event = await getRepository(Event).findOne({
       where: { id: req.params.eventId },
-      relations: ['admins'],
+      relations: [
+        'admins',
+        'groups',
+        'groups.members',
+        'groups.members.musician',
+      ],
     });
 
     if (event.admins.length === 0) {
@@ -323,7 +334,39 @@ export const deleteEventById = async (
       return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
     }
 
-    await getRepository(Event).delete({ id: req.params.eventId });
+    // await getRepository(Event).delete({ id: req.params.eventId });
+
+    const members: Musician[] = [];
+
+    event.groups.forEach((group) => {
+      group.members.forEach((member) => {
+        members.push(member.musician);
+      });
+    });
+
+    const membersSet = members.reduce((acc, current) => {
+      const x = acc.find((item) => item.id === current.id);
+      if (!x) {
+        return acc.concat([current]);
+      } else {
+        return acc;
+      }
+    }, [] as Musician[]);
+
+    const notifications = membersSet.map((member) =>
+      getRepository(EventDeletedNotification).create({
+        musician: member,
+        name: event.name,
+        description: event.description,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        adress: event.adress,
+        genres: event.genres,
+      }),
+    );
+
+    await getRepository(EventDeletedNotification).save(notifications);
+
     return res.sendStatus(200);
   } catch (err) {
     next(err);
