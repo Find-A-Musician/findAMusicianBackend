@@ -11,6 +11,7 @@ import {
   EventGroupJoin,
   EventDeletedNotification,
   EventGroupKickNotification,
+  GroupDeletedNotification,
   // GroupDeletedNotification,
 } from '../entity';
 import Logger from '../log/logger';
@@ -269,11 +270,20 @@ import { exit } from 'process';
       event: laPioche,
     });
 
+    const notif6 = getRepository(GroupDeletedNotification).create({
+      musician: romain,
+      name: slipknot.name,
+      description: slipknot.description,
+      location: slipknot.location,
+      genres: slipknot.genres,
+    });
+
     await getRepository(MembershipNotification).save(notif1);
     await getRepository(EventGroupJoin).save(notif2);
     await getRepository(GroupKickNotification).save(notif3);
     await getRepository(EventDeletedNotification).save(notif4);
     await getRepository(EventGroupKickNotification).save(notif5);
+    await getRepository(GroupDeletedNotification).save(notif6);
     Logger.info('📬 Notifications saved');
 
     exit();
