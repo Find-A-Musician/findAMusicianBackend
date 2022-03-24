@@ -27,6 +27,11 @@ export const getNotifications = async (
 > => {
   try {
     const notications = await getRepository(Notification).find({
+      where: {
+        musician: {
+          id: req.userId,
+        },
+      },
       relations: ['group', 'group.genres', 'event', 'event.genres'],
     });
 

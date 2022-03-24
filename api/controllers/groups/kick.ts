@@ -1,5 +1,5 @@
 import { getRepository, Not } from 'typeorm';
-import { MusicianGroup } from '../../entity';
+import { GroupKickNotification, MusicianGroup } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { FindConditions } from 'typeorm';
@@ -94,6 +94,13 @@ export const kickMusicianFromGroup = async (
         id: groupId,
       },
     });
+
+    const notification = getRepository(GroupKickNotification).create({
+      group: musicianToKick.group,
+      musician: musicianToKick.musician,
+    });
+
+    await getRepository(GroupKickNotification).save(notification);
 
     return res.sendStatus(204);
   } catch (err) {
