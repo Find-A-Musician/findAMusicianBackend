@@ -142,7 +142,7 @@ import config from './config';
     const spiritboxMusician2 = musGrouRep.create({
       musician: dorian,
       group: spiritbox,
-      membership: 'member',
+      membership: 'lite_admin',
       instruments: [guitare],
     });
 
@@ -153,10 +153,17 @@ import config from './config';
       instruments: [piano],
     });
 
-    const peripheryMusician = musGrouRep.create({
+    const peripheryMusician1 = musGrouRep.create({
       musician: romain,
       group: periphery,
-      membership: 'pending',
+      membership: 'lite_admin',
+      instruments: [guitare, piano],
+    });
+
+    const peripheryMusician2 = musGrouRep.create({
+      musician: dorian,
+      group: periphery,
+      membership: 'lite_admin',
       instruments: [guitare, piano],
     });
 
@@ -185,7 +192,8 @@ import config from './config';
       spiritboxMusician1,
       spiritboxMusician2,
       spiritboxMusician3,
-      peripheryMusician,
+      peripheryMusician1,
+      peripheryMusician2,
       slipknotMusician,
       allMusician,
       jazzMusician,
