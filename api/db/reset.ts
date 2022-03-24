@@ -215,7 +215,7 @@ import { exit } from 'process';
       name: 'IMTremplin',
       description: "Tremplin musical de l'IMT",
       adress: 'Residence Lavoisier',
-      groups: [periphery, spiritbox],
+      groups: [periphery],
       genres: [metal, rock, jazz],
       admins: [romain],
       startDate: new Date('2022-12-01:24:00'),
