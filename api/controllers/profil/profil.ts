@@ -33,6 +33,10 @@ export const getUserProfil = async (
           musician: profil,
           membership: 'member',
         },
+        {
+          musician: profil,
+          membership: 'lite_admin',
+        },
       ],
       relations: ['group', 'group.genres'],
     });
