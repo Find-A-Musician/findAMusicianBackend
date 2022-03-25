@@ -1,5 +1,5 @@
 import { getConnection, getRepository } from 'typeorm';
-import { MusicianGroup } from '../../entity';
+import { MusicianGroup, MembershipNotification } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { FindConditions } from 'typeorm';
@@ -64,37 +64,12 @@ export const addGroupLiteAdmins = async (
       relations: ['musician'],
     });
 
-    try {
-      await connexion.manager.transaction(async (entityManager) => {
-        for (let i = 0; i < new_lite_admins_id.length; i++) {
-          const musicianToMakeLiteAdmin = await entityManager.findOne(
-            MusicianGroup,
-            {
-              where: {
-                musician: {
-                  id: new_lite_admins_id[i],
-                },
-                group: {
-                  id: groupId,
-                },
-              },
-            },
-          );
-          if (
-            !musicianToMakeLiteAdmin ||
-            musicianToMakeLiteAdmin.membership == 'declined' ||
-            musicianToMakeLiteAdmin.membership == 'pending'
-          ) {
-            const err = new Error(`E_MUSICIAN_NOT_MEMBER`);
-            err['musicianId'] = new_lite_admins_id[i];
-            err['name'] = 'E_MUSICIAN_NOT_MEMBER';
-            throw err;
-          }
-
-          musicianToMakeLiteAdmin.membership = 'lite_admin';
-          await entityManager.update(
-            MusicianGroup,
-            {
+    await connexion.manager.transaction(async (entityManager) => {
+      for (let i = 0; i < new_lite_admins_id.length; i++) {
+        const musicianToMakeLiteAdmin = await entityManager.findOne(
+          MusicianGroup,
+          {
+            where: {
               musician: {
                 id: new_lite_admins_id[i],
               },
@@ -102,42 +77,82 @@ export const addGroupLiteAdmins = async (
                 id: groupId,
               },
             },
+          },
+        );
+
+        if (
+          !musicianToMakeLiteAdmin ||
+          musicianToMakeLiteAdmin.membership == 'declined' ||
+          musicianToMakeLiteAdmin.membership == 'pending'
+        ) {
+          const err = new Error(`E_MUSICIAN_NOT_MEMBER`);
+          err['musicianId'] = new_lite_admins_id[i];
+          err['name'] = 'E_MUSICIAN_NOT_MEMBER';
+          throw err;
+        }
+
+        musicianToMakeLiteAdmin.membership = 'lite_admin';
+        await entityManager.update(
+          MusicianGroup,
+          {
+            musician: {
+              id: new_lite_admins_id[i],
+            },
+            group: {
+              id: groupId,
+            },
+          },
+          {
+            membership: 'lite_admin',
+          },
+        );
+
+        const notification = getRepository(MembershipNotification).create({
+          musician: {
+            id: new_lite_admins_id[i],
+          },
+          group: { id: groupId },
+          membership: 'lite_admin',
+        });
+
+        await getRepository(MembershipNotification).save(notification);
+      }
+
+      for (let i = 0; i < lite_admins.length; i++) {
+        if (!new_lite_admins_id.includes(lite_admins[i].musician.id)) {
+          await getRepository(MusicianGroup).update(
             {
-              membership: 'lite_admin',
+              musician: {
+                id: lite_admins[i].musician.id,
+              },
+              group: {
+                id: groupId,
+              },
+            },
+            {
+              membership: 'member',
             },
           );
-        }
 
-        for (let i = 0; i < lite_admins.length; i++) {
-          if (!new_lite_admins_id.includes(lite_admins[i].musician.id)) {
-            await getRepository(MusicianGroup).update(
-              {
-                musician: {
-                  id: lite_admins[i].musician.id,
-                },
-                group: {
-                  id: groupId,
-                },
-              },
-              {
-                membership: 'member',
-              },
-            );
-          }
-        }
-      });
+          const notification = getRepository(MembershipNotification).create({
+            musician: lite_admins[i].musician,
+            group: { id: groupId },
+            membership: 'member',
+          });
 
-      return res.sendStatus(204);
-    } catch (err) {
-      if (err.name == 'E_MUSICIAN_NOT_MEMBER') {
-        return res
-          .status(404)
-          .json({ msg: `E_MUSICIAN_NOT_MEMBER`, stack: err.musicianId });
+          await getRepository(MembershipNotification).save(notification);
+        }
       }
-      next(err);
-    }
-    return res.status(204);
+    });
+
+    return res.sendStatus(204);
   } catch (err) {
+    if (err.name == 'E_MUSICIAN_NOT_MEMBER') {
+      return res
+        .status(404)
+        .json({ msg: `E_MUSICIAN_NOT_MEMBER`, stack: err.musicianId });
+    }
+
     next(err);
   }
 };

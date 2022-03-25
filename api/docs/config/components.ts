@@ -196,6 +196,19 @@ const components: OpenAPIV3.Document['components'] = {
         next: { type: 'string' },
       },
     },
+    notification: {
+      type: 'object',
+      required: ['created_at', 'type'],
+      properties: {
+        type: { type: 'string' },
+        created_at: { type: 'string', format: 'date-time' },
+        group: { $ref: '#/components/schemas/groupDescription' },
+        membership: {
+          type: 'string',
+          enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
+        },
+      },
+    },
   },
   securitySchemes: {
     BearerAuth: {

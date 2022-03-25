@@ -9,4 +9,11 @@ router.delete('/', profilController.deleteUserProfil);
 
 router.use('/groups/:groupId/leave', profilController.leaveGroupById);
 
+router.get('/notifications', profilController.getNotifications);
+router.delete('/notifications', profilController.deleteAllNotifications);
+router.delete(
+  '/notifications/:notificationId',
+  profilController.deleteNotificationById,
+);
+
 export default router;

@@ -11,6 +11,7 @@ import {
   MusicianGroup,
   Genre,
   Instrument,
+  GroupDeletedNotification,
 } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
@@ -326,7 +327,8 @@ export const deleteGroupById = async (
 > => {
   try {
     const group = await getRepository(Groups).findOne({
-      id: req.params.groupId,
+      where: { id: req.params.groupId },
+      relations: ['members', 'members.musician'],
     });
 
     if (!group) {
@@ -349,6 +351,19 @@ export const deleteGroupById = async (
     }
 
     await getRepository(Groups).delete({ id: req.params.groupId });
+
+    const notifications = group.members.map(({ musician }) =>
+      getRepository(GroupDeletedNotification).create({
+        musician,
+        name: group.name,
+        description: group.description,
+        location: group.location,
+        genres: group.genres,
+      }),
+    );
+
+    await getRepository(GroupDeletedNotification).save(notifications);
+
     res.sendStatus(200);
   } catch (err) {
     next(err);

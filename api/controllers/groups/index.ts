@@ -6,9 +6,10 @@ export {
   deleteGroupById,
 } from './groups';
 
-export { groupJoinEvent } from './groupEvents';
+export { groupJoinEvent } from './event';
 
 export { kickMusicianFromGroup } from './kick';
+
 export {
   addGroupLiteAdminById,
   removeGroupLiteAdminById,

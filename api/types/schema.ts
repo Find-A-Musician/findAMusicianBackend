@@ -106,6 +106,16 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/profil/notifications/{notificationId}": {
+    /** Delete a notification by its id */
+    delete: operations["deleteNotificationById"];
+  };
+  "/profil/notifications": {
+    /** Get all the notications of the user */
+    get: operations["getNotifications"];
+    /** Delete all the notications of the user */
+    delete: operations["deleteAllNotifications"];
+  };
   "/profil": {
     /** Get the user connected profil */
     get: operations["getProfil"];
@@ -203,6 +213,13 @@ export interface components {
       first: string;
       previous?: string;
       next?: string;
+    };
+    notification: {
+      type: string;
+      /** Format: date-time */
+      created_at: Date;
+      group?: components["schemas"]["groupDescription"];
+      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
     };
   };
 }
@@ -1056,6 +1073,51 @@ export interface operations {
             start: number;
             total: number;
           };
+        };
+      };
+    };
+  };
+  /** Delete a notification by its id */
+  deleteNotificationById: {
+    parameters: {
+      path: {
+        /** the id of the notification */
+        notificationId: string;
+      };
+    };
+    responses: {
+      /** The notification has been deleted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The notification does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get all the notications of the user */
+  getNotifications: {
+    responses: {
+      /** The user notifications */
+      200: {
+        content: {
+          "application/json": components["schemas"]["notification"][];
+        };
+      };
+    };
+  };
+  /** Delete all the notications of the user */
+  deleteAllNotifications: {
+    responses: {
+      /** All the notifications has been deleted */
+      204: {
+        content: {
+          "application/json": string;
         };
       };
     };
