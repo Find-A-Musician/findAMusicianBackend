@@ -21,5 +21,6 @@ router.get(
   '/invitations/received',
   profilController.getUserInvitationsReceived,
 );
+router.post('/invitations', profilController.postUserToGroupInvitation);
 
 export default router;

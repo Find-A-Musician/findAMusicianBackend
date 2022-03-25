@@ -64,7 +64,7 @@ app.use(
   OpenApiValidator.middleware({
     apiSpec: openApiDocs,
     validateRequests: true,
-    validateResponses: true,
+    validateResponses: false,
   }),
 );
 

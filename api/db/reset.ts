@@ -159,12 +159,12 @@ import { exit } from 'process';
       instruments: [guitare],
     });
 
-    const spiritboxMusician3 = musGrouRep.create({
-      musician: alexandre,
-      group: spiritbox,
-      membership: 'lite_admin',
-      instruments: [piano],
-    });
+    // const spiritboxMusician3 = musGrouRep.create({
+    //   musician: alexandre,
+    //   group: spiritbox,
+    //   membership: 'lite_admin',
+    //   instruments: [piano],
+    // });
 
     const peripheryMusician1 = musGrouRep.create({
       musician: romain,
@@ -204,7 +204,6 @@ import { exit } from 'process';
     await musGrouRep.save([
       spiritboxMusician1,
       spiritboxMusician2,
-      spiritboxMusician3,
       peripheryMusician1,
       peripheryMusician2,
       slipknotMusician,

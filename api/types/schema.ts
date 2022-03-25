@@ -114,6 +114,10 @@ export interface paths {
     /** Get all the invitation received by the logged user */
     get: operations["getUserInvitationReceived"];
   };
+  "/profil/invitations": {
+    /** Post a new invitation from the logged user to a group */
+    post: operations["postUserToGroupInvitation"];
+  };
   "/profil/invitations/sent": {
     /** Get all the invitation sent by the logged user */
     get: operations["getUserInvitationSent"];
@@ -1131,6 +1135,43 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["invitation"][];
+        };
+      };
+    };
+  };
+  /** Post a new invitation from the logged user to a group */
+  postUserToGroupInvitation: {
+    responses: {
+      /** The invitation has been updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The invitation has been sent */
+      201: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the user is already in the group */
+      422: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId: string;
+          instruments: components["schemas"]["instrument"][];
         };
       };
     };

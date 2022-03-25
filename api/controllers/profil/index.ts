@@ -9,4 +9,5 @@ export {
 export {
   getUserInvitationsReceived,
   getUserInvitationsSent,
+  postUserToGroupInvitation,
 } from './invitation';
