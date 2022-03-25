@@ -76,6 +76,10 @@ export interface paths {
     /** Create a new group */
     post: operations["createGroup"];
   };
+  "/groups/{groupId}/invitations/received": {
+    /** Get all the invitation received for a group */
+    get: operations["getGroupInvitationReceived"];
+  };
   "/groups/{groupId}/kick/{musicianId}": {
     /** Kick a member from a group */
     delete: operations["groupKickMusician"];
@@ -212,6 +216,14 @@ export interface components {
       created_at: Date;
       group?: components["schemas"]["groupDescription"];
       membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
+    };
+    invitation: {
+      id: string;
+      type: "musicianToGroup" | "groupToMusician";
+      group?: components["schemas"]["groupDescription"];
+      musician?: components["schemas"]["musicianMinimized"];
+      invitor?: components["schemas"]["musicianMinimized"];
+      instruments: components["schemas"]["instrument"][];
     };
   };
 }
@@ -858,6 +870,35 @@ export interface operations {
         "application/json": {
           group: components["schemas"]["groupDescription"];
           instruments: components["schemas"]["instrument"][];
+        };
+      };
+    };
+  };
+  /** Get all the invitation received for a group */
+  getGroupInvitationReceived: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations received by the group */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };

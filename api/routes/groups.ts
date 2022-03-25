@@ -32,4 +32,9 @@ router.delete(
   groupController.kickMusicianFromGroup,
 );
 
+router.get(
+  '/:groupId/invitations/received',
+  groupController.getGroupInvitations,
+);
+
 export default router;

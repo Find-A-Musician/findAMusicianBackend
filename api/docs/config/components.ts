@@ -209,6 +209,21 @@ const components: OpenAPIV3.Document['components'] = {
         },
       },
     },
+    invitation: {
+      type: 'object',
+      required: ['type', 'id', 'instruments'],
+      properties: {
+        id: { type: 'string' },
+        type: { type: 'string', enum: ['musicianToGroup', 'groupToMusician'] },
+        group: { $ref: '#/components/schemas/groupDescription' },
+        musician: { $ref: '#/components/schemas/musicianMinimized' },
+        invitor: { $ref: '#/components/schemas/musicianMinimized' },
+        instruments: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/instrument' },
+        },
+      },
+    },
   },
   securitySchemes: {
     BearerAuth: {

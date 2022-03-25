@@ -16,3 +16,5 @@ export {
   transferGroupAdmin,
   addGroupLiteAdmins,
 } from './admin';
+
+export { getGroupInvitations } from './invitation';
