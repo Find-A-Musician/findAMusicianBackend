@@ -1508,6 +1508,104 @@ const openApiDocs: OpenAPIV3.Document = {
         },
       },
     },
+    '/profil/groups/{groupId}/leave': {
+      post: {
+        description: 'Leave a group',
+        operationId: 'leaveGroup',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The id of the group to leave',
+          },
+        ],
+        requestBody: {
+          required: false,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  musicianId: {
+                    type: 'string',
+                    description:
+                      "The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'The user have leaved the group',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '400': {
+            description: 'The body is required for an admin leaving an event',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'This user is not in this group',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/received': {
+      get: {
+        operationId: 'getUserInvitationReceived',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Get all the invitation received by the logged user',
+        responses: {
+          '200': {
+            description: 'The invitations received by the logged user',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/invitation' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/sent': {
+      get: {
+        operationId: 'getUserInvitationSent',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Get all the invitation sent by the logged user',
+        responses: {
+          '200': {
+            description: 'The invitations sent by the logged user',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/invitation' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/profil/notifications/{notificationId}': {
       delete: {
         description: 'Delete a notification by its id',
@@ -1671,62 +1769,6 @@ const openApiDocs: OpenAPIV3.Document = {
           '200': {
             description: 'The musician information has been updated',
             content: { 'application/json': { schema: { type: 'string' } } },
-          },
-        },
-      },
-    },
-    '/profil/groups/{groupId}/leave': {
-      post: {
-        description: 'Leave a group',
-        operationId: 'leaveGroup',
-        tags: ['profil'],
-        security: [{ BearerAuth: [] }],
-        parameters: [
-          {
-            in: 'path',
-            name: 'groupId',
-            schema: { type: 'string' },
-            required: true,
-            description: 'The id of the group to leave',
-          },
-        ],
-        requestBody: {
-          required: false,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  musicianId: {
-                    type: 'string',
-                    description:
-                      "The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group",
-                  },
-                },
-              },
-            },
-          },
-        },
-        responses: {
-          '200': {
-            description: 'The user have leaved the group',
-            content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '400': {
-            description: 'The body is required for an admin leaving an event',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '404': {
-            description: 'This user is not in this group',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
           },
         },
       },

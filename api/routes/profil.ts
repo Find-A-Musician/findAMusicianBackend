@@ -16,4 +16,10 @@ router.delete(
   profilController.deleteNotificationById,
 );
 
+router.get('/invitations/sent', profilController.getUserInvitationsSent);
+router.get(
+  '/invitations/received',
+  profilController.getUserInvitationsReceived,
+);
+
 export default router;

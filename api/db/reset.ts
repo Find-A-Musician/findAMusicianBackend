@@ -303,7 +303,15 @@ import { exit } from 'process';
       invitor: romain,
     });
 
-    await invRep.save([invitation1, invitation2]);
+    const invitation3 = invRep.create({
+      type: 'groupToMusician',
+      musician: dorian,
+      group: allThatRemains,
+      instruments: [guitare],
+      invitor: romain,
+    });
+
+    await invRep.save([invitation1, invitation2, invitation3]);
     Logger.info('✉️ invitations saved ');
 
     exit();

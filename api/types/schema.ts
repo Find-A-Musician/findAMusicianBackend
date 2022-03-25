@@ -106,6 +106,18 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/profil/groups/{groupId}/leave": {
+    /** Leave a group */
+    post: operations["leaveGroup"];
+  };
+  "/profil/invitations/received": {
+    /** Get all the invitation received by the logged user */
+    get: operations["getUserInvitationReceived"];
+  };
+  "/profil/invitations/sent": {
+    /** Get all the invitation sent by the logged user */
+    get: operations["getUserInvitationSent"];
+  };
   "/profil/notifications/{notificationId}": {
     /** Delete a notification by its id */
     delete: operations["deleteNotificationById"];
@@ -121,10 +133,6 @@ export interface paths {
     get: operations["getProfil"];
     delete: operations["deleteProfil"];
     patch: operations["patchProfil"];
-  };
-  "/profil/groups/{groupId}/leave": {
-    /** Leave a group */
-    post: operations["leaveGroup"];
   };
 }
 
@@ -1079,6 +1087,65 @@ export interface operations {
       };
     };
   };
+  /** Leave a group */
+  leaveGroup: {
+    parameters: {
+      path: {
+        /** The id of the group to leave */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The user have leaved the group */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The body is required for an admin leaving an event */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** This user is not in this group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
+          musicianId?: string;
+        };
+      };
+    };
+  };
+  /** Get all the invitation received by the logged user */
+  getUserInvitationReceived: {
+    responses: {
+      /** The invitations received by the logged user */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+    };
+  };
+  /** Get all the invitation sent by the logged user */
+  getUserInvitationSent: {
+    responses: {
+      /** The invitations sent by the logged user */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+    };
+  };
   /** Delete a notification by its id */
   deleteNotificationById: {
     parameters: {
@@ -1173,43 +1240,6 @@ export interface operations {
           location?: "Douai" | "Lille";
           genres?: components["schemas"]["genre"][];
           instruments?: components["schemas"]["instrument"][];
-        };
-      };
-    };
-  };
-  /** Leave a group */
-  leaveGroup: {
-    parameters: {
-      path: {
-        /** The id of the group to leave */
-        groupId: string;
-      };
-    };
-    responses: {
-      /** The user have leaved the group */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The body is required for an admin leaving an event */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** This user is not in this group */
-      404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
-          musicianId?: string;
         };
       };
     };
