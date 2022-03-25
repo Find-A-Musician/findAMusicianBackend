@@ -110,6 +110,10 @@ export interface paths {
     /** Leave a group */
     post: operations["leaveGroup"];
   };
+  "/profil/invitations/{invitationId}": {
+    /** Delete a musician to group invitation by its id */
+    delete: operations["deleteProfilInvitationById"];
+  };
   "/profil/invitations/received": {
     /** Get all the invitation received by the logged user */
     get: operations["getUserInvitationReceived"];
@@ -1124,6 +1128,29 @@ export interface operations {
         "application/json": {
           /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
           musicianId?: string;
+        };
+      };
+    };
+  };
+  /** Delete a musician to group invitation by its id */
+  deleteProfilInvitationById: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      /** The invitations hbas been deleted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };

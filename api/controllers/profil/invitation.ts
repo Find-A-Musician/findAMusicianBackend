@@ -4,11 +4,17 @@ import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { NextFunction } from 'express';
 import type { operations } from '@schema';
-import type { getHTTPCode, getRequestBody, getResponsesBody } from '@typing';
+import type {
+  getHTTPCode,
+  getPathParams,
+  getRequestBody,
+  getResponsesBody,
+} from '@typing';
 
 type GetUserInvitationReceived = operations['getUserInvitationReceived'];
 type GetUserInvitationSent = operations['getUserInvitationSent'];
 type PostUserToGroupInvitation = operations['postUserToGroupInvitation'];
+type DeleteProfilInvitationById = operations['deleteProfilInvitationById'];
 
 export const getUserInvitationsReceived = async (
   req: Request<{}, getResponsesBody<GetUserInvitationReceived>, {}, {}>,
@@ -188,6 +194,49 @@ export const postUserToGroupInvitation = async (
     await invitationRepo.save(newInvition);
 
     return res.sendStatus(201);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteInvitationById = async (
+  req: Request<
+    getPathParams<DeleteProfilInvitationById>,
+    getResponsesBody<DeleteProfilInvitationById>,
+    {},
+    {}
+  >,
+  res: core.Response<
+    getResponsesBody<DeleteProfilInvitationById>,
+    {},
+    getHTTPCode<DeleteProfilInvitationById>
+  >,
+  next: NextFunction,
+): Promise<
+  core.Response<
+    getResponsesBody<DeleteProfilInvitationById>,
+    {},
+    getHTTPCode<DeleteProfilInvitationById>
+  >
+> => {
+  try {
+    const invationId = req.params.invitationId;
+    const invitationRepository = getRepository(Invitation);
+
+    const invitation = await invitationRepository.findOne({
+      id: invationId,
+      type: 'musicianToGroup',
+    });
+
+    if (!invitation) {
+      return res.status(404).json({ msg: 'E_INVITATION_DOES_NOT_EXIST' });
+    }
+
+    await invitationRepository.delete({
+      id: invationId,
+    });
+
+    return res.sendStatus(204);
   } catch (err) {
     next(err);
   }

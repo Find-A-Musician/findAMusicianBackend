@@ -22,5 +22,9 @@ router.get(
   profilController.getUserInvitationsReceived,
 );
 router.post('/invitations', profilController.postUserToGroupInvitation);
+router.delete(
+  '/invitations/:invitationId',
+  profilController.deleteInvitationById,
+);
 
 export default router;
