@@ -34,7 +34,11 @@ router.delete(
 
 router.get(
   '/:groupId/invitations/received',
-  groupController.getGroupInvitations,
+  groupController.getGroupInvitationsReceived,
+);
+router.get(
+  '/:groupId/invitations/sent',
+  groupController.getGroupInvitationsSent,
 );
 
 export default router;

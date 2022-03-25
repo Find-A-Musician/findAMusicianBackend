@@ -17,4 +17,7 @@ export {
   addGroupLiteAdmins,
 } from './admin';
 
-export { getGroupInvitations } from './invitation';
+export {
+  getGroupInvitationsReceived,
+  getGroupInvitationsSent,
+} from './invitation';

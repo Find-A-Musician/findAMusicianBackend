@@ -80,6 +80,10 @@ export interface paths {
     /** Get all the invitation received for a group */
     get: operations["getGroupInvitationReceived"];
   };
+  "/groups/{groupId}/invitations/sent": {
+    /** Get all the invitation that the group sent to musicians */
+    get: operations["getGroupInvitationSent"];
+  };
   "/groups/{groupId}/kick/{musicianId}": {
     /** Kick a member from a group */
     delete: operations["groupKickMusician"];
@@ -884,6 +888,35 @@ export interface operations {
     };
     responses: {
       /** The invitations received by the group */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get all the invitation that the group sent to musicians */
+  getGroupInvitationSent: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations sent by the group */
       200: {
         content: {
           "application/json": components["schemas"]["invitation"][];
