@@ -95,6 +95,10 @@ export interface paths {
   "/instruments": {
     get: operations["getInstruments"];
   };
+  "/musicians/{musicianId}/groups": {
+    /** Get all the groups a musician belongs to */
+    get: operations["getMusicianGroups"];
+  };
   "/musicians/{musicianId}/groups/{groupId}/membership": {
     /** Get the membership of a musician in a group */
     get: operations["getMusicianGroupMembership"];
@@ -986,6 +990,29 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["instrument"][];
+        };
+      };
+    };
+  };
+  /** Get all the groups a musician belongs to */
+  getMusicianGroups: {
+    parameters: {
+      path: {
+        /** The ID of the muscician */
+        musicianId: string;
+      };
+    };
+    responses: {
+      /** List of groups a musician belongs to */
+      200: {
+        content: {
+          "application/json": components["schemas"]["group"][];
+        };
+      };
+      /** The musician does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
