@@ -20,6 +20,7 @@ const schema: HandlerDefinition = {
                 type: 'array',
                 items: { $ref: '#/components/schemas/instrument' },
               },
+              description: { type: 'string', nullable: true },
             },
           },
         },

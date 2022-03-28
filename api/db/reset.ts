@@ -292,6 +292,7 @@ import { exit } from 'process';
       musician: dorian,
       group: slipknot,
       instruments: [guitare],
+      description: "J'aimerais bcp rejoindre slipknot pcq c bien",
     });
 
     const invitation2 = invRep.create({
@@ -308,6 +309,7 @@ import { exit } from 'process';
       group: allThatRemains,
       instruments: [guitare],
       invitor: romain,
+      description: 'Rejoins nous fréro, tu verras c lourd',
     });
 
     await invRep.save([invitation1, invitation2, invitation3]);

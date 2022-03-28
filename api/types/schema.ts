@@ -244,6 +244,7 @@ export interface components {
       musician?: components["schemas"]["musicianMinimized"];
       invitor?: components["schemas"]["musicianMinimized"];
       instruments: components["schemas"]["instrument"][];
+      description?: string;
     };
   };
 }
@@ -1199,6 +1200,7 @@ export interface operations {
         "application/json": {
           groupId: string;
           instruments: components["schemas"]["instrument"][];
+          description?: string | null;
         };
       };
     };

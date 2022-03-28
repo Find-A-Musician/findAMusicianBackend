@@ -46,4 +46,7 @@ export class Invitation {
   })
   @JoinTable()
   instruments: Instrument[];
+
+  @Column('text', { nullable: true })
+  description: string;
 }

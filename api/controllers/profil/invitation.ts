@@ -103,6 +103,7 @@ export const postUserToGroupInvitation = async (
   try {
     const groupId = req.body.groupId;
     const instruments = req.body.instruments;
+    const description = req.body.description;
 
     const invitationRepo = getRepository(Invitation);
 
@@ -138,7 +139,8 @@ export const postUserToGroupInvitation = async (
         .map(({ name }) => name)
         .every((name) =>
           invitation.instruments.map(({ name }) => name).includes(name),
-        )
+        ) &&
+      invitation.description == description
     ) {
       return res.sendStatus(200);
     }
@@ -155,6 +157,7 @@ export const postUserToGroupInvitation = async (
 
     if (invitation) {
       invitation.instruments = invitationInstruments;
+      invitation.description = description;
       await invitationRepo.save(invitation);
       return res.sendStatus(200);
     }
@@ -189,6 +192,7 @@ export const postUserToGroupInvitation = async (
       },
       type: 'musicianToGroup',
       instruments: invitationInstruments,
+      description,
     });
 
     await invitationRepo.save(newInvition);
