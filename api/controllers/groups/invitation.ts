@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 import {
+  GroupDeclineInvitationNotification,
   Instrument,
   Invitation,
   Musician,
@@ -469,6 +470,7 @@ export const declineGroupInvitation = async (
         id: invationId,
         type: 'musicianToGroup',
       },
+      relations: ['musician', 'group'],
     });
 
     if (!invitation) {
@@ -478,6 +480,15 @@ export const declineGroupInvitation = async (
     await invitationRepository.delete({
       id: invationId,
     });
+
+    const notification = getRepository(
+      GroupDeclineInvitationNotification,
+    ).create({
+      musician: invitation.musician,
+      group: invitation.group,
+    });
+
+    await getRepository(GroupDeclineInvitationNotification).save(notification);
 
     return res.sendStatus(204);
   } catch (err) {
