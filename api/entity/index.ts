@@ -15,4 +15,5 @@ export { EventGroupKickNotification } from './notifications/event/EventGroupKick
 export { GroupReceiveInvitationNotification } from './notifications/invitation/GroupReceiveInvitationNotification';
 export { MusicianJoinedGroupNotification } from './notifications/invitation/MusicianJoinedGroupNotification';
 export { GroupDeclineInvitationNotification } from './notifications/invitation/GroupDeclineInvitationNotification';
+export { MusicianDeclineInvitationNotification } from './notifications/invitation/MusicianDeclineInvitationNotification';
 export { Invitation } from './Invitation';

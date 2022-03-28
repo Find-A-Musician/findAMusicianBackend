@@ -6,6 +6,7 @@ import {
   MusicianGroup,
   GroupReceiveInvitationNotification,
   MusicianJoinedGroupNotification,
+  MusicianDeclineInvitationNotification,
 } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
@@ -342,6 +343,7 @@ export const declineProfilInvitation = async (
         id: invationId,
         type: 'groupToMusician',
       },
+      relations: ['group', 'group.members', 'group.members.musician'],
     });
 
     if (!invitation) {
@@ -351,6 +353,20 @@ export const declineProfilInvitation = async (
     await invitationRepository.delete({
       id: invationId,
     });
+
+    const notifications = invitation.group.members.map((member) =>
+      getRepository(MusicianDeclineInvitationNotification).create({
+        group: invitation.group,
+        musician: member.musician,
+        newMusician: {
+          id: req.userId,
+        },
+      }),
+    );
+
+    await getRepository(MusicianDeclineInvitationNotification).save(
+      notifications,
+    );
 
     return res.sendStatus(204);
   } catch (err) {
