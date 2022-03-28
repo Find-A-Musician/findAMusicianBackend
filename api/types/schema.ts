@@ -76,6 +76,10 @@ export interface paths {
     /** Create a new group */
     post: operations["createGroup"];
   };
+  "/groups/{groupId}/invitations/{invitationId}": {
+    /** Delete a musician to group invitation by its id */
+    delete: operations["deleteGroupInvitationById"];
+  };
   "/groups/{groupId}/invitations/received": {
     /** Get all the invitation received for a group */
     get: operations["getGroupInvitationReceived"];
@@ -895,6 +899,37 @@ export interface operations {
         "application/json": {
           group: components["schemas"]["groupDescription"];
           instruments: components["schemas"]["instrument"][];
+        };
+      };
+    };
+  };
+  /** Delete a musician to group invitation by its id */
+  deleteGroupInvitationById: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations has been deleted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };

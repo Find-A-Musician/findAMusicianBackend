@@ -1,11 +1,5 @@
 import { getRepository } from 'typeorm';
-import {
-  Groups,
-  Instrument,
-  Invitation,
-  Musician,
-  MusicianGroup,
-} from '../../entity';
+import { Instrument, Invitation, Musician, MusicianGroup } from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { NextFunction } from 'express';
@@ -20,6 +14,7 @@ import type {
 type GetGroupInvitationReceived = operations['getGroupInvitationReceived'];
 type GetGroupInvitationSent = operations['getGroupInvitationSent'];
 type PostGroupToUserInvitation = operations['postGroupToUserInvitation'];
+type DeleteGroupInvitationById = operations['deleteGroupInvitationById'];
 
 export const getGroupInvitationsReceived = async (
   req: Request<
@@ -262,6 +257,64 @@ export const postGroupToUserInvitation = async (
     await invitationRepo.save(newInvition);
 
     return res.sendStatus(201);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteGroupInvitationById = async (
+  req: Request<
+    getPathParams<DeleteGroupInvitationById>,
+    getResponsesBody<DeleteGroupInvitationById>,
+    {},
+    {}
+  >,
+  res: core.Response<
+    getResponsesBody<DeleteGroupInvitationById>,
+    {},
+    getHTTPCode<DeleteGroupInvitationById>
+  >,
+  next: NextFunction,
+): Promise<
+  core.Response<
+    getResponsesBody<DeleteGroupInvitationById>,
+    {},
+    getHTTPCode<DeleteGroupInvitationById>
+  >
+> => {
+  try {
+    const invationId = req.params.invitationId;
+    const groupId = req.params.groupId;
+    const invitationRepository = getRepository(Invitation);
+    const musicianGroupRepository = getRepository(MusicianGroup);
+
+    const member = await musicianGroupRepository.findOne({
+      musician: {
+        id: req.userId,
+      },
+      group: {
+        id: groupId,
+      },
+    });
+
+    if (!member) {
+      return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+    }
+
+    const invitation = await invitationRepository.findOne({
+      id: invationId,
+      type: 'groupToMusician',
+    });
+
+    if (!invitation) {
+      return res.status(404).json({ msg: 'E_INVITATION_DOES_NOT_EXIST' });
+    }
+
+    await invitationRepository.delete({
+      id: invationId,
+    });
+
+    return res.sendStatus(204);
   } catch (err) {
     next(err);
   }

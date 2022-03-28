@@ -21,4 +21,5 @@ export {
   getGroupInvitationsReceived,
   getGroupInvitationsSent,
   postGroupToUserInvitation,
+  deleteGroupInvitationById,
 } from './invitation';

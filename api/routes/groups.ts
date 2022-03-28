@@ -41,5 +41,9 @@ router.get(
   groupController.getGroupInvitationsSent,
 );
 router.post('/:groupId/invitations', groupController.postGroupToUserInvitation);
+router.delete(
+  '/:groupId/invitations/:invitationId',
+  groupController.deleteGroupInvitationById,
+);
 
 export default router;
