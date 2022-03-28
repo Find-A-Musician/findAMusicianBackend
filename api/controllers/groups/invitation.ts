@@ -15,6 +15,7 @@ type GetGroupInvitationReceived = operations['getGroupInvitationReceived'];
 type GetGroupInvitationSent = operations['getGroupInvitationSent'];
 type PostGroupToUserInvitation = operations['postGroupToUserInvitation'];
 type DeleteGroupInvitationById = operations['deleteGroupInvitationById'];
+type AcceptGroupInvitation = operations['acceptGroupInvitation'];
 
 export const getGroupInvitationsReceived = async (
   req: Request<
@@ -313,6 +314,83 @@ export const deleteGroupInvitationById = async (
     await invitationRepository.delete({
       id: invationId,
     });
+
+    return res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const acceptGroupInvitation = async (
+  req: Request<
+    getPathParams<AcceptGroupInvitation>,
+    getResponsesBody<AcceptGroupInvitation>,
+    {},
+    {}
+  >,
+  res: core.Response<
+    getResponsesBody<AcceptGroupInvitation>,
+    {},
+    getHTTPCode<AcceptGroupInvitation>
+  >,
+  next: NextFunction,
+): Promise<
+  core.Response<
+    getResponsesBody<AcceptGroupInvitation>,
+    {},
+    getHTTPCode<AcceptGroupInvitation>
+  >
+> => {
+  try {
+    const invationId = req.params.invitationId;
+    const groupId = req.params.groupId;
+
+    const invitationRepository = getRepository(Invitation);
+    const musicianGroupRepository = getRepository(MusicianGroup);
+
+    const member = await musicianGroupRepository.findOne({
+      musician: {
+        id: req.userId,
+      },
+      group: {
+        id: groupId,
+      },
+    });
+
+    if (!member) {
+      return res.status(403).json({ msg: 'E_UNAUTHORIZED_USER' });
+    }
+
+    const invitation = await invitationRepository.findOne({
+      where: {
+        id: invationId,
+        type: 'musicianToGroup',
+      },
+      relations: ['instruments', 'group', 'musician'],
+    });
+
+    if (!invitation) {
+      return res.status(404).json({ msg: 'E_INVITATION_DOES_NOT_EXIST' });
+    }
+
+    const invitationInstruments: Instrument[] = [];
+
+    for (let i = 0; i < invitation.instruments.length; i++) {
+      invitationInstruments.push(
+        await getRepository(Instrument).findOne({
+          name: invitation.instruments[i].name,
+        }),
+      );
+    }
+
+    const newMusicianGroup = musicianGroupRepository.create({
+      musician: invitation.musician,
+      group: invitation.group,
+      membership: 'member',
+      instruments: invitationInstruments,
+    });
+
+    await musicianGroupRepository.save(newMusicianGroup);
 
     return res.sendStatus(204);
   } catch (err) {
