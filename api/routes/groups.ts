@@ -40,5 +40,6 @@ router.get(
   '/:groupId/invitations/sent',
   groupController.getGroupInvitationsSent,
 );
+router.post('/:groupId/invitations', groupController.postGroupToUserInvitation);
 
 export default router;

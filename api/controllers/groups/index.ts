@@ -20,4 +20,5 @@ export {
 export {
   getGroupInvitationsReceived,
   getGroupInvitationsSent,
+  postGroupToUserInvitation,
 } from './invitation';

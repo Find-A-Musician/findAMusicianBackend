@@ -80,6 +80,10 @@ export interface paths {
     /** Get all the invitation received for a group */
     get: operations["getGroupInvitationReceived"];
   };
+  "/groups/{groupId}/invitations": {
+    /** Post a new invitation from a group to a user */
+    post: operations["postGroupToUserInvitation"];
+  };
   "/groups/{groupId}/invitations/sent": {
     /** Get all the invitation that the group sent to musicians */
     get: operations["getGroupInvitationSent"];
@@ -244,7 +248,7 @@ export interface components {
       musician?: components["schemas"]["musicianMinimized"];
       invitor?: components["schemas"]["musicianMinimized"];
       instruments: components["schemas"]["instrument"][];
-      description?: string;
+      description?: string | null;
     };
   };
 }
@@ -920,6 +924,56 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Post a new invitation from a group to a user */
+  postGroupToUserInvitation: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitation has been updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The invitation has been sent */
+      201: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the musician does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the user is already in the group */
+      422: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          musicianId: string;
+          instruments: components["schemas"]["instrument"][];
+          description?: string | null;
         };
       };
     };

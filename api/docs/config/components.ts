@@ -222,7 +222,7 @@ const components: OpenAPIV3.Document['components'] = {
           type: 'array',
           items: { $ref: '#/components/schemas/instrument' },
         },
-        description: { type: 'string' },
+        description: { type: 'string', nullable: true },
       },
     },
   },
