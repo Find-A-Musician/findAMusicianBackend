@@ -1,12 +1,12 @@
 import { HandlerDefinition } from '@typing';
 
 const schema: HandlerDefinition = {
-  path: '/groups/{groupId}/invitations/{invitationId}/accept',
-  post: {
-    operationId: 'acceptGroupInvitation',
+  path: '/groups/{groupId}/invitations/{invitationId}/decline',
+  delete: {
+    operationId: 'declineGroupInvitation',
     tags: ['groups'],
     security: [{ BearerAuth: [] }],
-    description: 'Accept an invitation than a group received',
+    description: 'Decline an invitation than a group received',
     parameters: [
       {
         in: 'path',
@@ -29,7 +29,7 @@ const schema: HandlerDefinition = {
     ],
     responses: {
       204: {
-        description: 'The invitations has been accepted',
+        description: 'The invitations has been declined',
         content: {
           'application/json': {
             schema: {

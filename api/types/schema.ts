@@ -77,8 +77,12 @@ export interface paths {
     post: operations["createGroup"];
   };
   "/groups/{groupId}/invitations/{invitationId}/accept": {
-    /** Accept an invitation than the logged user received */
+    /** Accept an invitation than a group received */
     post: operations["acceptGroupInvitation"];
+  };
+  "/groups/{groupId}/invitations/{invitationId}/decline": {
+    /** Decline an invitation than a group received */
+    delete: operations["declineGroupInvitation"];
   };
   "/groups/{groupId}/invitations/{invitationId}": {
     /** Delete a musician to group invitation by its id */
@@ -915,7 +919,7 @@ export interface operations {
       };
     };
   };
-  /** Accept an invitation than the logged user received */
+  /** Accept an invitation than a group received */
   acceptGroupInvitation: {
     parameters: {
       path: {
@@ -927,6 +931,37 @@ export interface operations {
     };
     responses: {
       /** The invitations has been accepted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Decline an invitation than a group received */
+  declineGroupInvitation: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations has been declined */
       204: {
         content: {
           "application/json": string;

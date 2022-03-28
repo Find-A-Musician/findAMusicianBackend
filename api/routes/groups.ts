@@ -49,5 +49,9 @@ router.post(
   '/:groupId/invitations/:invitationId/accept',
   groupController.acceptGroupInvitation,
 );
+router.delete(
+  '/:groupId/invitations/:invitationId/decline',
+  groupController.declineGroupInvitation,
+);
 
 export default router;
