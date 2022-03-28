@@ -15,6 +15,7 @@ type GetUserInvitationReceived = operations['getUserInvitationReceived'];
 type GetUserInvitationSent = operations['getUserInvitationSent'];
 type PostUserToGroupInvitation = operations['postUserToGroupInvitation'];
 type DeleteProfilInvitationById = operations['deleteProfilInvitationById'];
+type AcceptProfilInvitation = operations['acceptProfilInvitation'];
 
 export const getUserInvitationsReceived = async (
   req: Request<{}, getResponsesBody<GetUserInvitationReceived>, {}, {}>,
@@ -198,6 +199,72 @@ export const postUserToGroupInvitation = async (
     await invitationRepo.save(newInvition);
 
     return res.sendStatus(201);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const acceptProfilInvitation = async (
+  req: Request<
+    getPathParams<AcceptProfilInvitation>,
+    getResponsesBody<AcceptProfilInvitation>,
+    {},
+    {}
+  >,
+  res: core.Response<
+    getResponsesBody<AcceptProfilInvitation>,
+    {},
+    getHTTPCode<AcceptProfilInvitation>
+  >,
+  next: NextFunction,
+): Promise<
+  core.Response<
+    getResponsesBody<AcceptProfilInvitation>,
+    {},
+    getHTTPCode<AcceptProfilInvitation>
+  >
+> => {
+  try {
+    const invationId = req.params.invitationId;
+    const invitationRepository = getRepository(Invitation);
+    const musicianGroupRepository = getRepository(MusicianGroup);
+
+    const invitation = await invitationRepository.findOne({
+      where: {
+        id: invationId,
+        type: 'groupToMusician',
+      },
+      relations: ['instruments', 'group'],
+    });
+
+    if (!invitation) {
+      return res.status(404).json({ msg: 'E_INVITATION_DOES_NOT_EXIST' });
+    }
+
+    const invitationInstruments: Instrument[] = [];
+
+    for (let i = 0; i < invitation.instruments.length; i++) {
+      invitationInstruments.push(
+        await getRepository(Instrument).findOne({
+          name: invitation.instruments[i].name,
+        }),
+      );
+    }
+
+    const newMusicianGroup = musicianGroupRepository.create({
+      musician: {
+        id: req.userId,
+      },
+      group: {
+        id: invitation.group.id,
+      },
+      membership: 'member',
+      instruments: invitationInstruments,
+    });
+
+    await musicianGroupRepository.save(newMusicianGroup);
+
+    return res.sendStatus(204);
   } catch (err) {
     next(err);
   }

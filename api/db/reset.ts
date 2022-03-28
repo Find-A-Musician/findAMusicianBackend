@@ -43,6 +43,7 @@ import { exit } from 'process';
     musGrouRep.query('DELETE FROM musician_group');
     eveRep.query('DELETE FROM event');
     notRep.query('DELETE FROM notification');
+    invRep.query('DELETE FROM invitation');
 
     Logger.info('🚮 Reset all the DB tables');
 
@@ -312,7 +313,16 @@ import { exit } from 'process';
       description: 'Rejoins nous fréro, tu verras c lourd',
     });
 
-    await invRep.save([invitation1, invitation2, invitation3]);
+    const invitation4 = invRep.create({
+      type: 'groupToMusician',
+      musician: romain,
+      group: jazzGroup,
+      instruments: [batterie],
+      invitor: dorian,
+      description: 'Rejoins nous fréro, tu verras c lourd',
+    });
+
+    await invRep.save([invitation1, invitation2, invitation3, invitation4]);
     Logger.info('✉️ invitations saved ');
 
     exit();

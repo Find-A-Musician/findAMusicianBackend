@@ -26,5 +26,9 @@ router.delete(
   '/invitations/:invitationId',
   profilController.deleteInvitationById,
 );
+router.post(
+  '/invitations/:invitationId/accept',
+  profilController.acceptProfilInvitation,
+);
 
 export default router;
