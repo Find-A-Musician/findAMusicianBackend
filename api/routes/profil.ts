@@ -30,5 +30,9 @@ router.post(
   '/invitations/:invitationId/accept',
   profilController.acceptProfilInvitation,
 );
+router.delete(
+  '/invitations/:invitationId/decline',
+  profilController.declineProfilInvitation,
+);
 
 export default router;

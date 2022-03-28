@@ -12,4 +12,5 @@ export {
   postUserToGroupInvitation,
   deleteInvitationById,
   acceptProfilInvitation,
+  declineProfilInvitation,
 } from './invitation';

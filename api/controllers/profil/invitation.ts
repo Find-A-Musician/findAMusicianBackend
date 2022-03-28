@@ -16,6 +16,7 @@ type GetUserInvitationSent = operations['getUserInvitationSent'];
 type PostUserToGroupInvitation = operations['postUserToGroupInvitation'];
 type DeleteProfilInvitationById = operations['deleteProfilInvitationById'];
 type AcceptProfilInvitation = operations['acceptProfilInvitation'];
+type DeclineProfilInvitation = operations['declineProfilInvitation'];
 
 export const getUserInvitationsReceived = async (
   req: Request<{}, getResponsesBody<GetUserInvitationReceived>, {}, {}>,
@@ -263,6 +264,51 @@ export const acceptProfilInvitation = async (
     });
 
     await musicianGroupRepository.save(newMusicianGroup);
+
+    return res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const declineProfilInvitation = async (
+  req: Request<
+    getPathParams<DeclineProfilInvitation>,
+    getResponsesBody<DeclineProfilInvitation>,
+    {},
+    {}
+  >,
+  res: core.Response<
+    getResponsesBody<DeclineProfilInvitation>,
+    {},
+    getHTTPCode<DeclineProfilInvitation>
+  >,
+  next: NextFunction,
+): Promise<
+  core.Response<
+    getResponsesBody<DeclineProfilInvitation>,
+    {},
+    getHTTPCode<DeclineProfilInvitation>
+  >
+> => {
+  try {
+    const invationId = req.params.invitationId;
+    const invitationRepository = getRepository(Invitation);
+
+    const invitation = await invitationRepository.findOne({
+      where: {
+        id: invationId,
+        type: 'groupToMusician',
+      },
+    });
+
+    if (!invitation) {
+      return res.status(404).json({ msg: 'E_INVITATION_DOES_NOT_EXIST' });
+    }
+
+    await invitationRepository.delete({
+      id: invationId,
+    });
 
     return res.sendStatus(204);
   } catch (err) {

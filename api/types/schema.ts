@@ -122,6 +122,10 @@ export interface paths {
     /** Accept an invitation than the logged user received */
     post: operations["acceptProfilInvitation"];
   };
+  "/profil/invitations/{invitationId}/decline": {
+    /** Decline an invitation than the logged user received */
+    delete: operations["declineProfilInvitation"];
+  };
   "/profil/invitations/{invitationId}": {
     /** Delete a musician to group invitation by its id */
     delete: operations["deleteProfilInvitationById"];
@@ -1236,6 +1240,29 @@ export interface operations {
     };
     responses: {
       /** The invitations has been accepted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Decline an invitation than the logged user received */
+  declineProfilInvitation: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      /** The invitations has been declined */
       204: {
         content: {
           "application/json": string;
