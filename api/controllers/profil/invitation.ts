@@ -1,5 +1,11 @@
 import { getRepository } from 'typeorm';
-import { Groups, Instrument, Invitation, MusicianGroup } from '../../entity';
+import {
+  Groups,
+  Instrument,
+  Invitation,
+  MusicianGroup,
+  GroupReceiveInvitationNotification,
+} from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { NextFunction } from 'express';
@@ -165,7 +171,10 @@ export const postUserToGroupInvitation = async (
     }
 
     const group = await getRepository(Groups).findOne({
-      id: groupId,
+      where: {
+        id: groupId,
+      },
+      relations: ['members', 'members.musician'],
     });
 
     if (!group) {
@@ -198,6 +207,15 @@ export const postUserToGroupInvitation = async (
     });
 
     await invitationRepo.save(newInvition);
+
+    const notifications = group.members.map((member) =>
+      getRepository(GroupReceiveInvitationNotification).create({
+        musician: member.musician,
+        group: group,
+      }),
+    );
+
+    await getRepository(GroupReceiveInvitationNotification).save(notifications);
 
     return res.sendStatus(201);
   } catch (err) {
