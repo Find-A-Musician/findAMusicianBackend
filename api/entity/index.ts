@@ -13,4 +13,5 @@ export { EventDeletedNotification } from './notifications/event/EventDeletedNoti
 export { EventGroupJoin } from './notifications/event/EventGroupJoin';
 export { EventGroupKickNotification } from './notifications/event/EventGroupKickNotification';
 export { GroupReceiveInvitationNotification } from './notifications/invitation/GroupReceiveInvitationNotification';
+export { MusicianJoinedGroupNotification } from './notifications/invitation/MusicianJoinedGroupNotification';
 export { Invitation } from './Invitation';

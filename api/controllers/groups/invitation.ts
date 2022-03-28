@@ -1,5 +1,11 @@
 import { getRepository } from 'typeorm';
-import { Instrument, Invitation, Musician, MusicianGroup } from '../../entity';
+import {
+  Instrument,
+  Invitation,
+  Musician,
+  MusicianGroup,
+  MusicianJoinedGroupNotification,
+} from '../../entity';
 import type core from 'express-serve-static-core';
 import type { Request } from 'express';
 import type { NextFunction } from 'express';
@@ -367,7 +373,13 @@ export const acceptGroupInvitation = async (
         id: invationId,
         type: 'musicianToGroup',
       },
-      relations: ['instruments', 'group', 'musician'],
+      relations: [
+        'instruments',
+        'group',
+        'musician',
+        'group.members',
+        'group.members.musician',
+      ],
     });
 
     if (!invitation) {
@@ -397,6 +409,16 @@ export const acceptGroupInvitation = async (
       musician: invitation.musician,
       group: invitation.group,
     });
+
+    const notifications = invitation.group.members.map((member) =>
+      getRepository(MusicianJoinedGroupNotification).create({
+        musician: member.musician,
+        group: invitation.group,
+        newMusician: invitation.musician,
+      }),
+    );
+
+    await getRepository(MusicianJoinedGroupNotification).save(notifications);
 
     return res.sendStatus(204);
   } catch (err) {

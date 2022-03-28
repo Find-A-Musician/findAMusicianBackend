@@ -32,7 +32,13 @@ export const getNotifications = async (
           id: req.userId,
         },
       },
-      relations: ['group', 'group.genres', 'event', 'event.genres'],
+      relations: [
+        'group',
+        'group.genres',
+        'event',
+        'event.genres',
+        'newMusician',
+      ],
     });
 
     return res.status(200).json(notications);
