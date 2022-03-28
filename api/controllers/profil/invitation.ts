@@ -39,7 +39,7 @@ export const getUserInvitationsReceived = async (
         type: 'groupToMusician',
         musician: req.userId,
       },
-      relations: ['group', 'instruments', 'group.genres'],
+      relations: ['group', 'instruments', 'group.genres', 'invitor'],
     });
 
     return res.status(200).json(invitations);
