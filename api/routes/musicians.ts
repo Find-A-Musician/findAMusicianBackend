@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get('/', musicianController.getAllMusicians);
 
+router.get('/:musicianId/groups', musicianController.getMusicianGroups);
+
 router.get('/:musicianId', musicianController.getMusicianById);
 
 router.get(
