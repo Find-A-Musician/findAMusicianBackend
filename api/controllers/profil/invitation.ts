@@ -265,6 +265,13 @@ export const acceptProfilInvitation = async (
 
     await musicianGroupRepository.save(newMusicianGroup);
 
+    await invitationRepository.delete({
+      musician: {
+        id: req.userId,
+      },
+      group: invitation.group,
+    });
+
     return res.sendStatus(204);
   } catch (err) {
     next(err);

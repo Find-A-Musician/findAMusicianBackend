@@ -393,6 +393,11 @@ export const acceptGroupInvitation = async (
 
     await musicianGroupRepository.save(newMusicianGroup);
 
+    await invitationRepository.delete({
+      musician: invitation.musician,
+      group: invitation.group,
+    });
+
     return res.sendStatus(204);
   } catch (err) {
     next(err);

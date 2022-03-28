@@ -298,7 +298,7 @@ import { exit } from 'process';
 
     const invitation2 = invRep.create({
       type: 'groupToMusician',
-      musician: alexandre,
+      musician: dorian,
       group: slipknot,
       instruments: [piano],
       invitor: romain,
