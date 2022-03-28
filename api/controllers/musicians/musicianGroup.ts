@@ -29,7 +29,6 @@ export const getMusicianGroups = async (
         },
       },
       relations: [
-        'musician',
         'group.members',
         'group.members.musician',
         'group.genres',
