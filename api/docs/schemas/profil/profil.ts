@@ -31,13 +31,7 @@ const schema: HandlerDefinition = {
                           },
                           membership: {
                             type: 'string',
-                            enum: [
-                              'admin',
-                              'member',
-                              'declined',
-                              'pending',
-                              'lite_admin',
-                            ],
+                            enum: ['admin', 'member', 'lite_admin'],
                           },
                           group: {
                             $ref: '#/components/schemas/groupDescription',

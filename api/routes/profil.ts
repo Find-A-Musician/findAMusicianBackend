@@ -16,4 +16,23 @@ router.delete(
   profilController.deleteNotificationById,
 );
 
+router.get('/invitations/sent', profilController.getUserInvitationsSent);
+router.get(
+  '/invitations/received',
+  profilController.getUserInvitationsReceived,
+);
+router.post('/invitations', profilController.postUserToGroupInvitation);
+router.delete(
+  '/invitations/:invitationId',
+  profilController.deleteInvitationById,
+);
+router.post(
+  '/invitations/:invitationId/accept',
+  profilController.acceptProfilInvitation,
+);
+router.delete(
+  '/invitations/:invitationId/decline',
+  profilController.declineProfilInvitation,
+);
+
 export default router;

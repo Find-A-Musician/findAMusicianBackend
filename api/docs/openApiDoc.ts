@@ -1124,45 +1124,43 @@ const openApiDocs: OpenAPIV3.Document = {
         },
       },
     },
-    '/groups/invitation/response': {
+    '/groups/{groupId}/invitations/{invitationId}/accept': {
       post: {
-        operationId: 'responseGroupInvitation',
+        operationId: 'acceptGroupInvitation',
         tags: ['groups'],
-        description: 'Respond to a group invitation',
         security: [{ BearerAuth: [] }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['groupId', 'response'],
-                properties: {
-                  groupId: { type: 'string' },
-                  response: { type: 'string', enum: ['declined', 'member'] },
-                },
-                example: {
-                  groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-                  response: 'member',
-                },
-              },
-            },
+        description: 'Accept an invitation than a group received',
+        parameters: [
+          {
+            in: 'path',
+            description: 'the invitation id',
+            name: 'invitationId',
+            schema: { type: 'string' },
+            required: true,
           },
-        },
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
         responses: {
-          '201': {
-            description: 'The user membershhip has been updated',
+          '204': {
+            description: 'The invitations has been accepted',
             content: { 'application/json': { schema: { type: 'string' } } },
           },
-          '400': {
-            description: 'The user has already responded',
+          '403': {
+            description: 'The user does not have the right',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
               },
             },
           },
-          '401': {
-            description: "User can't respond to this invitation",
+          '404': {
+            description: 'the invitation does not exist',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1172,49 +1170,259 @@ const openApiDocs: OpenAPIV3.Document = {
         },
       },
     },
-    '/groups/invitation/send': {
-      post: {
-        operationId: 'sendGroupInvitation',
+    '/groups/{groupId}/invitations/{invitationId}/decline': {
+      delete: {
+        operationId: 'declineGroupInvitation',
         tags: ['groups'],
-        description: 'Invite a musician in a group',
         security: [{ BearerAuth: [] }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['groupId', 'musicianId', 'instrumentId', 'role'],
-                properties: {
-                  groupId: { type: 'string' },
-                  musicianId: { type: 'string' },
-                  instrumentId: { type: 'string' },
-                  role: { type: 'string', enum: ['lite_admin', 'member'] },
-                },
-              },
-              example: {
-                groupId: '0bc1164f-c92b-48f3-aadf-a2be610819d8',
-                musicianId: '8c9a685a-2be9-4cf0-a03c-0b316fc4b515',
-                instrumentId: 'cd836a31-1663-4a11-8a88-0a249aa70793',
-                role: 'member',
-              },
-            },
+        description: 'Decline an invitation than a group received',
+        parameters: [
+          {
+            in: 'path',
+            description: 'the invitation id',
+            name: 'invitationId',
+            schema: { type: 'string' },
+            required: true,
           },
-        },
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
         responses: {
-          '201': {
-            description: 'The user has been invited',
+          '204': {
+            description: 'The invitations has been declined',
             content: { 'application/json': { schema: { type: 'string' } } },
           },
-          '400': {
-            description: 'The user is already invited',
+          '403': {
+            description: 'The user does not have the right',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
               },
             },
           },
-          '401': {
-            description: "User that invite doesn't have the access",
+          '404': {
+            description: 'the invitation does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/groups/{groupId}/invitations/{invitationId}': {
+      delete: {
+        operationId: 'deleteGroupInvitationById',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Delete a musician to group invitation by its id',
+        parameters: [
+          {
+            in: 'path',
+            description: 'the invitation id',
+            name: 'invitationId',
+            schema: { type: 'string' },
+            required: true,
+          },
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The invitations has been deleted',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'the invitation does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/groups/{groupId}/invitations/received': {
+      get: {
+        operationId: 'getGroupInvitationReceived',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Get all the invitation received for a group',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'The invitations received by the group',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/invitation' },
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The group does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/groups/{groupId}/invitations': {
+      post: {
+        operationId: 'postGroupToUserInvitation',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Post a new invitation from a group to a user',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['musicianId', 'instruments'],
+                properties: {
+                  musicianId: { type: 'string' },
+                  instruments: {
+                    type: 'array',
+                    items: { $ref: '#/components/schemas/instrument' },
+                  },
+                  description: { type: 'string', nullable: true },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'The invitation has been updated',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '201': {
+            description: 'The invitation has been sent',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'the musician does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '422': {
+            description: 'the user is already in the group',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/groups/{groupId}/invitations/sent': {
+      get: {
+        operationId: 'getGroupInvitationSent',
+        tags: ['groups'],
+        security: [{ BearerAuth: [] }],
+        description: 'Get all the invitation that the group sent to musicians',
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The ID of the group',
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'The invitations sent by the group',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/invitation' },
+                },
+              },
+            },
+          },
+          '403': {
+            description: 'The user does not have the right',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'The group does not exist',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/httpError' },
@@ -1516,6 +1724,258 @@ const openApiDocs: OpenAPIV3.Document = {
         },
       },
     },
+    '/profil/groups/{groupId}/leave': {
+      post: {
+        description: 'Leave a group',
+        operationId: 'leaveGroup',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        parameters: [
+          {
+            in: 'path',
+            name: 'groupId',
+            schema: { type: 'string' },
+            required: true,
+            description: 'The id of the group to leave',
+          },
+        ],
+        requestBody: {
+          required: false,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  musicianId: {
+                    type: 'string',
+                    description:
+                      "The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'The user have leaved the group',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '400': {
+            description: 'The body is required for an admin leaving an event',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'This user is not in this group',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/{invitationId}/accept': {
+      post: {
+        operationId: 'acceptProfilInvitation',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Accept an invitation than the logged user received',
+        parameters: [
+          {
+            in: 'path',
+            description: 'the invitation id',
+            name: 'invitationId',
+            schema: { type: 'string' },
+            required: true,
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The invitations has been accepted',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '404': {
+            description: 'the invitation does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/{invitationId}/decline': {
+      delete: {
+        operationId: 'declineProfilInvitation',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Decline an invitation than the logged user received',
+        parameters: [
+          {
+            in: 'path',
+            description: 'the invitation id',
+            name: 'invitationId',
+            schema: { type: 'string' },
+            required: true,
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The invitations has been declined',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '404': {
+            description: 'the invitation does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/{invitationId}': {
+      delete: {
+        operationId: 'deleteProfilInvitationById',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Delete a musician to group invitation by its id',
+        parameters: [
+          {
+            in: 'path',
+            description: 'the invitation id',
+            name: 'invitationId',
+            schema: { type: 'string' },
+            required: true,
+          },
+        ],
+        responses: {
+          '204': {
+            description: 'The invitations hbas been deleted',
+            content: { 'application/json': { schema: { type: 'string' } } },
+          },
+          '404': {
+            description: 'the invitation does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/received': {
+      get: {
+        operationId: 'getUserInvitationReceived',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Get all the invitation received by the logged user',
+        responses: {
+          '200': {
+            description: 'The invitations received by the logged user',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/invitation' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations': {
+      post: {
+        operationId: 'postUserToGroupInvitation',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Post a new invitation from the logged user to a group',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['groupId', 'instruments'],
+                properties: {
+                  groupId: { type: 'string' },
+                  instruments: {
+                    type: 'array',
+                    items: { $ref: '#/components/schemas/instrument' },
+                  },
+                  description: { type: 'string', nullable: true },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'The invitation has been updated',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '201': {
+            description: 'The invitation has been sent',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '404': {
+            description: 'the group does not exist',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+          '422': {
+            description: 'the user is already in the group',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/httpError' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/profil/invitations/sent': {
+      get: {
+        operationId: 'getUserInvitationSent',
+        tags: ['profil'],
+        security: [{ BearerAuth: [] }],
+        description: 'Get all the invitation sent by the logged user',
+        responses: {
+          '200': {
+            description: 'The invitations sent by the logged user',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: { $ref: '#/components/schemas/invitation' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     '/profil/notifications/{notificationId}': {
       delete: {
         description: 'Delete a notification by its id',
@@ -1612,13 +2072,7 @@ const openApiDocs: OpenAPIV3.Document = {
                               },
                               membership: {
                                 type: 'string',
-                                enum: [
-                                  'admin',
-                                  'member',
-                                  'declined',
-                                  'pending',
-                                  'lite_admin',
-                                ],
+                                enum: ['admin', 'member', 'lite_admin'],
                               },
                               group: {
                                 $ref: '#/components/schemas/groupDescription',
@@ -1685,62 +2139,6 @@ const openApiDocs: OpenAPIV3.Document = {
           '200': {
             description: 'The musician information has been updated',
             content: { 'application/json': { schema: { type: 'string' } } },
-          },
-        },
-      },
-    },
-    '/profil/groups/{groupId}/leave': {
-      post: {
-        description: 'Leave a group',
-        operationId: 'leaveGroup',
-        tags: ['profil'],
-        security: [{ BearerAuth: [] }],
-        parameters: [
-          {
-            in: 'path',
-            name: 'groupId',
-            schema: { type: 'string' },
-            required: true,
-            description: 'The id of the group to leave',
-          },
-        ],
-        requestBody: {
-          required: false,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  musicianId: {
-                    type: 'string',
-                    description:
-                      "The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group",
-                  },
-                },
-              },
-            },
-          },
-        },
-        responses: {
-          '200': {
-            description: 'The user have leaved the group',
-            content: { 'application/json': { schema: { type: 'string' } } },
-          },
-          '400': {
-            description: 'The body is required for an admin leaving an event',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
-          },
-          '404': {
-            description: 'This user is not in this group',
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/httpError' },
-              },
-            },
           },
         },
       },
@@ -1867,7 +2265,7 @@ const openApiDocs: OpenAPIV3.Document = {
           },
           membership: {
             type: 'string',
-            enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
+            enum: ['admin', 'member', 'lite_admin'],
           },
         },
       },
@@ -1948,6 +2346,25 @@ const openApiDocs: OpenAPIV3.Document = {
             type: 'string',
             enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
           },
+        },
+      },
+      invitation: {
+        type: 'object',
+        required: ['type', 'id', 'instruments'],
+        properties: {
+          id: { type: 'string' },
+          type: {
+            type: 'string',
+            enum: ['musicianToGroup', 'groupToMusician'],
+          },
+          group: { $ref: '#/components/schemas/groupDescription' },
+          musician: { $ref: '#/components/schemas/musicianMinimized' },
+          invitor: { $ref: '#/components/schemas/musicianMinimized' },
+          instruments: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/instrument' },
+          },
+          description: { type: 'string', nullable: true },
         },
       },
     },

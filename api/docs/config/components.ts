@@ -117,7 +117,7 @@ const components: OpenAPIV3.Document['components'] = {
         },
         membership: {
           type: 'string',
-          enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
+          enum: ['admin', 'member', 'lite_admin'],
         },
       },
     },
@@ -207,6 +207,22 @@ const components: OpenAPIV3.Document['components'] = {
           type: 'string',
           enum: ['admin', 'member', 'declined', 'pending', 'lite_admin'],
         },
+      },
+    },
+    invitation: {
+      type: 'object',
+      required: ['type', 'id', 'instruments'],
+      properties: {
+        id: { type: 'string' },
+        type: { type: 'string', enum: ['musicianToGroup', 'groupToMusician'] },
+        group: { $ref: '#/components/schemas/groupDescription' },
+        musician: { $ref: '#/components/schemas/musicianMinimized' },
+        invitor: { $ref: '#/components/schemas/musicianMinimized' },
+        instruments: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/instrument' },
+        },
+        description: { type: 'string', nullable: true },
       },
     },
   },

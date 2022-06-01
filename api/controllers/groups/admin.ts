@@ -80,11 +80,7 @@ export const addGroupLiteAdmins = async (
           },
         );
 
-        if (
-          !musicianToMakeLiteAdmin ||
-          musicianToMakeLiteAdmin.membership == 'declined' ||
-          musicianToMakeLiteAdmin.membership == 'pending'
-        ) {
+        if (!musicianToMakeLiteAdmin) {
           const err = new Error(`E_MUSICIAN_NOT_MEMBER`);
           err['musicianId'] = new_lite_admins_id[i];
           err['name'] = 'E_MUSICIAN_NOT_MEMBER';

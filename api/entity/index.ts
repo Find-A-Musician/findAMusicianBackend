@@ -12,3 +12,8 @@ export { GroupKickNotification } from './notifications/group/GroupKickNotificati
 export { EventDeletedNotification } from './notifications/event/EventDeletedNotification';
 export { EventGroupJoin } from './notifications/event/EventGroupJoin';
 export { EventGroupKickNotification } from './notifications/event/EventGroupKickNotification';
+export { GroupReceiveInvitationNotification } from './notifications/invitation/GroupReceiveInvitationNotification';
+export { MusicianJoinedGroupNotification } from './notifications/invitation/MusicianJoinedGroupNotification';
+export { GroupDeclineInvitationNotification } from './notifications/invitation/GroupDeclineInvitationNotification';
+export { MusicianDeclineInvitationNotification } from './notifications/invitation/MusicianDeclineInvitationNotification';
+export { Invitation } from './Invitation';
