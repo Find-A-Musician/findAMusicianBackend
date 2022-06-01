@@ -45,7 +45,6 @@
         }
       }
     ],
-    "no-console": "error",
 
     "@typescript-eslint/ban-types": [
       "error",
