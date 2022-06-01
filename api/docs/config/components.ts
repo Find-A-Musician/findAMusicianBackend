@@ -92,6 +92,10 @@ const components: OpenAPIV3.Document['components'] = {
           type: 'array',
           items: { $ref: '#/components/schemas/groupMember' },
         },
+        events: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/event' },
+        },
       },
     },
     groupDescription: {
@@ -139,16 +143,7 @@ const components: OpenAPIV3.Document['components'] = {
     },
     event: {
       type: 'object',
-      required: [
-        'name',
-        'description',
-        'startDate',
-        'endDate',
-        'adress',
-        'genres',
-        'groups',
-        'admins',
-      ],
+      required: ['name', 'description', 'startDate', 'endDate', 'adress'],
       properties: {
         id: { type: 'string' },
         name: { type: 'string' },

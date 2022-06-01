@@ -143,7 +143,7 @@ export const getGroupById = async (
   try {
     const group = await getRepository(Groups).findOne({
       where: { id: req.params.groupId },
-      relations: ['members', 'genres', 'members.musician'],
+      relations: ['members', 'genres', 'members.musician', 'events'],
     });
 
     if (!group) {
