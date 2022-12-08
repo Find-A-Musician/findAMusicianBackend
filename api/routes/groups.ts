@@ -32,6 +32,26 @@ router.delete(
   groupController.kickMusicianFromGroup,
 );
 
-// router.use('/invitation', invitationRouter);
+router.get(
+  '/:groupId/invitations/received',
+  groupController.getGroupInvitationsReceived,
+);
+router.get(
+  '/:groupId/invitations/sent',
+  groupController.getGroupInvitationsSent,
+);
+router.post('/:groupId/invitations', groupController.postGroupToUserInvitation);
+router.delete(
+  '/:groupId/invitations/:invitationId',
+  groupController.deleteGroupInvitationById,
+);
+router.post(
+  '/:groupId/invitations/:invitationId/accept',
+  groupController.acceptGroupInvitation,
+);
+router.delete(
+  '/:groupId/invitations/:invitationId/decline',
+  groupController.declineGroupInvitation,
+);
 
 export default router;

@@ -76,13 +76,29 @@ export interface paths {
     /** Create a new group */
     post: operations["createGroup"];
   };
-  "/groups/invitation/response": {
-    /** Respond to a group invitation */
-    post: operations["responseGroupInvitation"];
+  "/groups/{groupId}/invitations/{invitationId}/accept": {
+    /** Accept an invitation than a group received */
+    post: operations["acceptGroupInvitation"];
   };
-  "/groups/invitation/send": {
-    /** Invite a musician in a group */
-    post: operations["sendGroupInvitation"];
+  "/groups/{groupId}/invitations/{invitationId}/decline": {
+    /** Decline an invitation than a group received */
+    delete: operations["declineGroupInvitation"];
+  };
+  "/groups/{groupId}/invitations/{invitationId}": {
+    /** Delete a musician to group invitation by its id */
+    delete: operations["deleteGroupInvitationById"];
+  };
+  "/groups/{groupId}/invitations/received": {
+    /** Get all the invitation received for a group */
+    get: operations["getGroupInvitationReceived"];
+  };
+  "/groups/{groupId}/invitations": {
+    /** Post a new invitation from a group to a user */
+    post: operations["postGroupToUserInvitation"];
+  };
+  "/groups/{groupId}/invitations/sent": {
+    /** Get all the invitation that the group sent to musicians */
+    get: operations["getGroupInvitationSent"];
   };
   "/groups/{groupId}/kick/{musicianId}": {
     /** Kick a member from a group */
@@ -106,6 +122,34 @@ export interface paths {
   "/musicians": {
     get: operations["getMusicians"];
   };
+  "/profil/groups/{groupId}/leave": {
+    /** Leave a group */
+    post: operations["leaveGroup"];
+  };
+  "/profil/invitations/{invitationId}/accept": {
+    /** Accept an invitation than the logged user received */
+    post: operations["acceptProfilInvitation"];
+  };
+  "/profil/invitations/{invitationId}/decline": {
+    /** Decline an invitation than the logged user received */
+    delete: operations["declineProfilInvitation"];
+  };
+  "/profil/invitations/{invitationId}": {
+    /** Delete a musician to group invitation by its id */
+    delete: operations["deleteProfilInvitationById"];
+  };
+  "/profil/invitations/received": {
+    /** Get all the invitation received by the logged user */
+    get: operations["getUserInvitationReceived"];
+  };
+  "/profil/invitations": {
+    /** Post a new invitation from the logged user to a group */
+    post: operations["postUserToGroupInvitation"];
+  };
+  "/profil/invitations/sent": {
+    /** Get all the invitation sent by the logged user */
+    get: operations["getUserInvitationSent"];
+  };
   "/profil/notifications/{notificationId}": {
     /** Delete a notification by its id */
     delete: operations["deleteNotificationById"];
@@ -121,10 +165,6 @@ export interface paths {
     get: operations["getProfil"];
     delete: operations["deleteProfil"];
     patch: operations["patchProfil"];
-  };
-  "/profil/groups/{groupId}/leave": {
-    /** Leave a group */
-    post: operations["leaveGroup"];
   };
 }
 
@@ -177,7 +217,7 @@ export interface components {
     groupMember: {
       musician?: components["schemas"]["musicianMinimized"];
       instruments?: components["schemas"]["instrument"][];
-      membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
+      membership?: "admin" | "member" | "lite_admin";
     };
     instrument: {
       id: string;
@@ -220,6 +260,15 @@ export interface components {
       created_at: Date;
       group?: components["schemas"]["groupDescription"];
       membership?: "admin" | "member" | "declined" | "pending" | "lite_admin";
+    };
+    invitation: {
+      id: string;
+      type: "musicianToGroup" | "groupToMusician";
+      group?: components["schemas"]["groupDescription"];
+      musician?: components["schemas"]["musicianMinimized"];
+      invitor?: components["schemas"]["musicianMinimized"];
+      instruments: components["schemas"]["instrument"][];
+      description?: string | null;
     };
   };
 }
@@ -870,54 +919,163 @@ export interface operations {
       };
     };
   };
-  /** Respond to a group invitation */
-  responseGroupInvitation: {
+  /** Accept an invitation than a group received */
+  acceptGroupInvitation: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
     responses: {
-      /** The user membershhip has been updated */
-      201: {
+      /** The invitations has been accepted */
+      204: {
         content: {
           "application/json": string;
         };
       };
-      /** The user has already responded */
-      400: {
+      /** The user does not have the right */
+      403: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** User can't respond to this invitation */
-      401: {
+      /** the invitation does not exist */
+      404: {
         content: {
           "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          groupId: string;
-          response: "declined" | "member";
         };
       };
     };
   };
-  /** Invite a musician in a group */
-  sendGroupInvitation: {
+  /** Decline an invitation than a group received */
+  declineGroupInvitation: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
     responses: {
-      /** The user has been invited */
-      201: {
+      /** The invitations has been declined */
+      204: {
         content: {
           "application/json": string;
         };
       };
-      /** The user is already invited */
-      400: {
+      /** The user does not have the right */
+      403: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
       };
-      /** User that invite doesn't have the access */
-      401: {
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Delete a musician to group invitation by its id */
+  deleteGroupInvitationById: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations has been deleted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get all the invitation received for a group */
+  getGroupInvitationReceived: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations received by the group */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Post a new invitation from a group to a user */
+  postGroupToUserInvitation: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitation has been updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The invitation has been sent */
+      201: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the musician does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the user is already in the group */
+      422: {
         content: {
           "application/json": components["schemas"]["httpError"];
         };
@@ -926,10 +1084,38 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          groupId: string;
           musicianId: string;
-          instrumentId: string;
-          role: "lite_admin" | "member";
+          instruments: components["schemas"]["instrument"][];
+          description?: string | null;
+        };
+      };
+    };
+  };
+  /** Get all the invitation that the group sent to musicians */
+  getGroupInvitationSent: {
+    parameters: {
+      path: {
+        /** The ID of the group */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The invitations sent by the group */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+      /** The user does not have the right */
+      403: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
         };
       };
     };
@@ -1077,6 +1263,172 @@ export interface operations {
       };
     };
   };
+  /** Leave a group */
+  leaveGroup: {
+    parameters: {
+      path: {
+        /** The id of the group to leave */
+        groupId: string;
+      };
+    };
+    responses: {
+      /** The user have leaved the group */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** The body is required for an admin leaving an event */
+      400: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** This user is not in this group */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
+          musicianId?: string;
+        };
+      };
+    };
+  };
+  /** Accept an invitation than the logged user received */
+  acceptProfilInvitation: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      /** The invitations has been accepted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Decline an invitation than the logged user received */
+  declineProfilInvitation: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      /** The invitations has been declined */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Delete a musician to group invitation by its id */
+  deleteProfilInvitationById: {
+    parameters: {
+      path: {
+        /** the invitation id */
+        invitationId: string;
+      };
+    };
+    responses: {
+      /** The invitations hbas been deleted */
+      204: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** the invitation does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+  };
+  /** Get all the invitation received by the logged user */
+  getUserInvitationReceived: {
+    responses: {
+      /** The invitations received by the logged user */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+    };
+  };
+  /** Post a new invitation from the logged user to a group */
+  postUserToGroupInvitation: {
+    responses: {
+      /** The invitation has been updated */
+      200: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** The invitation has been sent */
+      201: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the group does not exist */
+      404: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+      /** the user is already in the group */
+      422: {
+        content: {
+          "application/json": components["schemas"]["httpError"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          groupId: string;
+          instruments: components["schemas"]["instrument"][];
+          description?: string | null;
+        };
+      };
+    };
+  };
+  /** Get all the invitation sent by the logged user */
+  getUserInvitationSent: {
+    responses: {
+      /** The invitations sent by the logged user */
+      200: {
+        content: {
+          "application/json": components["schemas"]["invitation"][];
+        };
+      };
+    };
+  };
   /** Delete a notification by its id */
   deleteNotificationById: {
     parameters: {
@@ -1131,12 +1483,7 @@ export interface operations {
           "application/json": components["schemas"]["musician"] & {
             groups: {
               instruments?: components["schemas"]["instrument"][];
-              membership?:
-                | "admin"
-                | "member"
-                | "declined"
-                | "pending"
-                | "lite_admin";
+              membership?: "admin" | "member" | "lite_admin";
               group?: components["schemas"]["groupDescription"];
             }[];
           };
@@ -1176,43 +1523,6 @@ export interface operations {
           location?: "Douai" | "Lille";
           genres?: components["schemas"]["genre"][];
           instruments?: components["schemas"]["instrument"][];
-        };
-      };
-    };
-  };
-  /** Leave a group */
-  leaveGroup: {
-    parameters: {
-      path: {
-        /** The id of the group to leave */
-        groupId: string;
-      };
-    };
-    responses: {
-      /** The user have leaved the group */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** The body is required for an admin leaving an event */
-      400: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-      /** This user is not in this group */
-      404: {
-        content: {
-          "application/json": components["schemas"]["httpError"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          /** @description The id of the musician that will become the new admin of the group, only if it's the admin that is leaving the group */
-          musicianId?: string;
         };
       };
     };

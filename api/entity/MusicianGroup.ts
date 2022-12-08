@@ -7,12 +7,7 @@ import { Musician } from './Musician';
  * - **lite_admin** : Can modify the group and kick members
  * - **admin** : lite_admin rights && can delete the group
  */
-export type Membership =
-  | 'pending'
-  | 'member'
-  | 'admin'
-  | 'lite_admin'
-  | 'declined';
+export type Membership = 'member' | 'admin' | 'lite_admin';
 
 @Entity()
 export class MusicianGroup {
@@ -30,8 +25,8 @@ export class MusicianGroup {
 
   @Column({
     type: 'enum',
-    enum: ['pending', 'member', 'admin', 'declined', 'lite_admin'],
-    default: 'pending',
+    enum: ['member', 'admin', 'lite_admin'],
+    default: 'member',
   })
   membership: Membership;
 

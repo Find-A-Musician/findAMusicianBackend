@@ -13,6 +13,7 @@ import {
   EventGroupKickNotification,
   GroupDeletedNotification,
   // GroupDeletedNotification,
+  Invitation,
 } from '../entity';
 import Logger from '../log/logger';
 import { createConnection, getConnection, getRepository } from 'typeorm';
@@ -32,6 +33,7 @@ import { exit } from 'process';
     const musGrouRep = connection.getRepository(MusicianGroup);
     const eveRep = connection.getRepository(Event);
     const notRep = connection.getRepository(Notification);
+    const invRep = connection.getRepository(Invitation);
 
     // Reset all the database for the moment
     insRep.query('DELETE FROM instrument');
@@ -41,6 +43,7 @@ import { exit } from 'process';
     musGrouRep.query('DELETE FROM musician_group');
     eveRep.query('DELETE FROM event');
     notRep.query('DELETE FROM notification');
+    invRep.query('DELETE FROM invitation');
 
     Logger.info('🚮 Reset all the DB tables');
 
@@ -157,12 +160,12 @@ import { exit } from 'process';
       instruments: [guitare],
     });
 
-    const spiritboxMusician3 = musGrouRep.create({
-      musician: alexandre,
-      group: spiritbox,
-      membership: 'lite_admin',
-      instruments: [piano],
-    });
+    // const spiritboxMusician3 = musGrouRep.create({
+    //   musician: alexandre,
+    //   group: spiritbox,
+    //   membership: 'lite_admin',
+    //   instruments: [piano],
+    // });
 
     const peripheryMusician1 = musGrouRep.create({
       musician: romain,
@@ -202,7 +205,6 @@ import { exit } from 'process';
     await musGrouRep.save([
       spiritboxMusician1,
       spiritboxMusician2,
-      spiritboxMusician3,
       peripheryMusician1,
       peripheryMusician2,
       slipknotMusician,
@@ -285,6 +287,43 @@ import { exit } from 'process';
     await getRepository(EventGroupKickNotification).save(notif5);
     await getRepository(GroupDeletedNotification).save(notif6);
     Logger.info('📬 Notifications saved');
+
+    const invitation1 = invRep.create({
+      type: 'musicianToGroup',
+      musician: dorian,
+      group: slipknot,
+      instruments: [guitare],
+      description: "J'aimerais bcp rejoindre slipknot pcq c bien",
+    });
+
+    const invitation2 = invRep.create({
+      type: 'groupToMusician',
+      musician: dorian,
+      group: slipknot,
+      instruments: [piano],
+      invitor: romain,
+    });
+
+    const invitation3 = invRep.create({
+      type: 'groupToMusician',
+      musician: dorian,
+      group: allThatRemains,
+      instruments: [guitare],
+      invitor: romain,
+      description: 'Rejoins nous fréro, tu verras c lourd',
+    });
+
+    const invitation4 = invRep.create({
+      type: 'groupToMusician',
+      musician: romain,
+      group: jazzGroup,
+      instruments: [batterie],
+      invitor: dorian,
+      description: 'Rejoins nous fréro, tu verras c lourd',
+    });
+
+    await invRep.save([invitation1, invitation2, invitation3, invitation4]);
+    Logger.info('✉️ invitations saved ');
 
     exit();
   } catch (err) {

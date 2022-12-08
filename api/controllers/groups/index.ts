@@ -16,3 +16,12 @@ export {
   transferGroupAdmin,
   addGroupLiteAdmins,
 } from './admin';
+
+export {
+  getGroupInvitationsReceived,
+  getGroupInvitationsSent,
+  postGroupToUserInvitation,
+  deleteGroupInvitationById,
+  acceptGroupInvitation,
+  declineGroupInvitation,
+} from './invitation';
